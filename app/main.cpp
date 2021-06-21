@@ -1,4 +1,3 @@
-#include "Problem.h"
 #include "Reactor.h"
 #include "Output.h"
 #include "Input.h"
@@ -22,11 +21,4 @@ int main(int argc, char** argv)
 	std::cout << "Main, Timing: " 
 			  << std::chrono::duration <double, std::milli> (diff).count() / 1000.0 
 			  << std::endl;
-
-	
-	// input.printData();
-	// input.readData();
-	// Problem problem(reactor, library, input.getSolvers());
-	// problem.solve();
-	// out.printEnd();
 }

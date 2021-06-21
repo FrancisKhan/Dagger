@@ -13,7 +13,7 @@ version_from_git(
 
 project(almost
     VERSION ${VERSION}
-    DESCRIPTION "ALMOST"
+    DESCRIPTION "DragLibReader"
     LANGUAGES CXX)
 	
 # Let's ensure -std=c++xx instead of -std=g++xx
@@ -50,18 +50,6 @@ add_subdirectory(external)
 # Backbone directory
 add_subdirectory(Backbone)
 
-# Transport directory
-add_subdirectory(CPM)
-
-# Point kinetics directory
-add_subdirectory(CORE)
-
-# Heat transfer directory
-add_subdirectory(Heat)
-
-# Heat transfer directory
-add_subdirectory(Diffusion)
-
 # Utilities files are here
 add_subdirectory(Utilities)
 
@@ -72,13 +60,3 @@ add_subdirectory(app)
 if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING) AND BUILD_TESTING)
     add_subdirectory(tests)
 endif()
-
-# experimental stuff
-
-#install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/
-#    DESTINATION ${CMAKE_SOURCE_DIR}/include
-#    FILES_MATCHING PATTERN "*.h*")
-	
-#install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/
-#    DESTINATION ${CMAKE_SOURCE_DIR}/lib
-#    FILES_MATCHING PATTERN "*.a")
