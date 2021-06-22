@@ -1,7 +1,6 @@
 #ifndef NUCLIDE_H
 #define NUCLIDE_H
 
-#include "PolynomialFunction.h"
 #include "numeric_tools.h"
 #include "CrossSectionSet.h"
 #include "CrossSectionMatrixSet.h"

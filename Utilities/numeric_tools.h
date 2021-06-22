@@ -18,47 +18,11 @@
 
 namespace Numerics
 {
-
-    // Constants
-
     const double DINF = std::numeric_limits<double>::max();
-
-    typedef struct SourceIterResults_
-    { 
-        const Eigen::VectorXd meshNeutronFluxes;
-        const double kFactor;
-
-        SourceIterResults_(const Eigen::VectorXd& flux, const double& kFactor): 
-        meshNeutronFluxes(flux), 
-        kFactor(kFactor) {}
-
-        const Eigen::VectorXd getNeutronFLux() {return meshNeutronFluxes;}
-        const double getKFactor() {return kFactor;}
-
-    } SourceIterResults;
 
     typedef Eigen::Tensor<double, 2> Tensor2d;
     typedef Eigen::Tensor<double, 3> Tensor3d;
     typedef Eigen::Tensor<double, 4> Tensor4d;
-
-    double bickley3f(double x);
-    double bickley3f_old(const double x);
-    double delk(int a, int b);
-
-    void diagonalDominanceCheck(Eigen::MatrixXd &matrix);
-
-    std::vector<double> multiply_poly(std::vector<double> &a, 
-                                  std::vector<double> &b);
-    std::vector<double> prod_poly(std::vector<double> &a);
-    std::vector<double> prod_poly_i(std::vector<double> &a, size_t i);
-    std::vector<double> poly_roots(std::vector<double> &p);
-
-    template <typename T>
-    T round_to(const T &number, const int precision)
-    {
-        int decimals = std::pow(10, precision);
-        return (std::round(number * decimals)) / decimals;
-    }
 
     template <typename T>
     inline bool is_equal(const T &x, const T &y)
@@ -73,27 +37,9 @@ namespace Numerics
     }
 
     template <typename T>
-    inline bool is_greater(const T &x, const T &y)
-    {
-    	return x > y + 10.0 * std::numeric_limits<double>::epsilon();
-    }
-
-    template <typename T>
-    inline bool is_greater_equal(const T &x, const T &y)
-    {
-    	return x > y - 10.0 * std::numeric_limits<double>::epsilon();
-    }
-
-    template <typename T>
     inline bool is_lower(const T &x, const T &y)
     {
     	return x < y - 10.0 * std::numeric_limits<double>::epsilon();
-    }
-
-    template <typename T>
-    inline bool is_lower_equal(const T &x, const T &y)
-    {
-    	return x < y + 10.0 * std::numeric_limits<double>::epsilon();
     }
 
     template <typename T>
@@ -193,22 +139,6 @@ namespace Numerics
         return a;
     }
 
-    // template <typename T>
-    // inline Eigen::VectorXd operator-(const Eigen::VectorXd& a, const T m)
-    // {
-    //     Eigen::VectorXd result = Eigen::VectorXd::Zero(a.size());
-    //     std::transform(a.begin(), a.end(), result.begin(), [m](auto i){return i - m;});
-    //     return result;
-    // }
-
-    template <typename T>
-    inline Eigen::VectorXd operator+(const Eigen::VectorXd& a, const T p)
-    {
-        Eigen::VectorXd result = Eigen::VectorXd::Zero(a.size());
-        std::transform(a.begin(), a.end(), result.begin(), [p](auto i){return i + p;});
-        return result;
-    }
-
     template<typename T>
     std::vector<T> slice(std::vector<T> const &v, int m, int n) 
     {
@@ -217,13 +147,6 @@ namespace Numerics
        std::vector<T> vector(first, last);
        return vector;
     }
-
-    Eigen::VectorXd tridiag_solver(const Eigen::VectorXd &a, 
-                                   const Eigen::VectorXd &b, 
-                  	               const Eigen::VectorXd &c, 
-                                   const Eigen::VectorXd &d);
-
-    Eigen::VectorXd ConcatenateEigenVectors(Eigen::VectorXd a, Eigen::VectorXd b);
 }
 
 #endif

@@ -5,75 +5,6 @@
 
 using namespace Numerics;
 
-TEST(bickey, bickeyTests)
-{
-	EXPECT_DOUBLE_EQ(bickley3f(0.97612246652610635), 0.24447301841277816);
-	EXPECT_DOUBLE_EQ(bickley3f(0.25237528469791648), 0.57412250598751469);
-    EXPECT_DOUBLE_EQ(bickley3f(1.1481454791121939),  0.2006952223249025);
-	EXPECT_DOUBLE_EQ(bickley3f(1.8330029835349728),  0.092687656082251893);
-} 
-
-TEST(delk, delkTests)
-{
-    EXPECT_DOUBLE_EQ(delk(1, 1), 1.0);
-	EXPECT_DOUBLE_EQ(delk(0, 0), 1.0);
-	EXPECT_DOUBLE_EQ(delk(-1, -1), 1.0);
-	EXPECT_DOUBLE_EQ(delk(0, 1), 0.0);
-	EXPECT_DOUBLE_EQ(delk(1, 0), 0.0);
-	EXPECT_DOUBLE_EQ(delk(-1, 0), 0.0);
-}
-
-TEST(multPolyTests, test1)
-{
-    std::vector<double> ref = {1, 2, 4, 0};
-
-	std::vector<double> a = {1, 0}; 
-	std::vector<double> b = {1, 2, 4}; 
-
-	std::vector<double> result = multiply_poly(a, b);
-
-	bool areEqual = std::equal(ref.begin(), ref.end(), result.begin());
-    EXPECT_TRUE(areEqual);
-}
-
-TEST(multPolyTests, test2)
-{
-    std::vector<double> ref = {5, 10, 30, 26, 52, 24};
-
-	std::vector<double> a = {5, 0, 10, 6}; 
-	std::vector<double> b = {1, 2, 4}; 
-
-	std::vector<double> result = multiply_poly(a, b);
-
-	bool areEqual = std::equal(ref.begin(), ref.end(), result.begin());
-    EXPECT_TRUE(areEqual);
-}
-
-TEST(multPolyTests, test3)
-{
-    std::vector<double> ref = {0, 5, 1, 10, 6};
-
-	std::vector<double> a = {5, 1, 10, 6}; 
-	std::vector<double> b = {0, 1}; 
-
-	std::vector<double> result = multiply_poly(a, b);
-
-	bool areEqual = std::equal(ref.begin(), ref.end(), result.begin());
-    EXPECT_TRUE(areEqual);
-}
-
-TEST(ProdPoly, test1)
-{
-    std::vector<double> ref = {6, 11, 6, 1};
-
-	std::vector<double> a = {1, 2, 3}; 
-
-	std::vector<double> result = prod_poly(a);
-
-	bool areEqual = std::equal(ref.begin(), ref.end(), result.begin());
-    EXPECT_TRUE(areEqual);
-}
-
 TEST(vectorOpOverloading, plusEqual)
 {
     std::vector<double> ref = {5, 7, 9};
@@ -246,26 +177,4 @@ TEST(vectorOpOverloading, divEqual2)
 	{
         FAIL() << "Expected std::overflow_error";
     }
-}
-
-TEST(polyRoots, test1)
-{
-    std::vector<double> ref = {-0.5, -0.5};
-	std::vector<double> a = {1.0, 1.0, 1.0};
-
-    std::vector<double> result = poly_roots(a);
-
-    bool areEqual = std::equal(ref.begin(), ref.end(), result.begin());
-    EXPECT_TRUE(areEqual);
-}
-
-TEST(polyRoots, test2)
-{
-    std::vector<double> ref = {-0.25, -0.25};
-	std::vector<double> a = {1.0, 1.0, 2.0};
-
-    std::vector<double> result = poly_roots(a);
-
-    bool areEqual = std::equal(ref.begin(), ref.end(), result.begin());
-    EXPECT_TRUE(areEqual);
 }

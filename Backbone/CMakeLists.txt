@@ -1,7 +1,6 @@
 cmake_minimum_required (VERSION 3.10)
 # Make an automatic library - will be static or dynamic based on user setting
-add_library(backbone_library Datamodel/Material.cpp
-			IO/Output.cpp IO/Input.cpp Datamodel/KineticsSet.cpp
+add_library(backbone_library IO/Output.cpp IO/Input.cpp Datamodel/KineticsSet.cpp
 			Datamodel/Reactor.cpp Library/Library.cpp Library/NuclideBlock.cpp
 			Datamodel/Nuclide.cpp Datamodel/CrossSection.cpp Datamodel/CrossSectionSet.cpp
 			Datamodel/CrossSectionMatrix.cpp Datamodel/CrossSectionMatrixSet.cpp)
@@ -11,13 +10,6 @@ target_include_directories(backbone_library PUBLIC Datamodel)
 target_include_directories(backbone_library PUBLIC IO)
 target_include_directories(backbone_library PUBLIC Library)
 target_include_directories(backbone_library PUBLIC ../Utilities)
-target_include_directories(backbone_library PUBLIC ../CPM)
-target_include_directories(backbone_library PUBLIC ../CORE)
-target_include_directories(backbone_library PUBLIC ../Heat)
-target_include_directories(backbone_library PUBLIC ../Diffusion)
-
-# This depends on (header only) boost
-#target_link_libraries(cpm_library PRIVATE Boost::boost)
 
 # Experimental/filesystem C++ library
 target_link_libraries(backbone_library -lstdc++fs utilities_library)
