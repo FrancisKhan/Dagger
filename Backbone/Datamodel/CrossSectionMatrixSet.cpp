@@ -16,8 +16,6 @@ void CrossSectionMatrixSet::calcXS()
             Eigen::MatrixXd dilValues = getXSMatrix(i).getValues();
             Eigen::MatrixXd newValues = infValues + dilValues;
 
-            //debugCalcXS(newValues, infValues, dilValues, temp, sigma0);
-
             CrossSectionMatrix matrix(temp, sigma0, newValues);
             setXS(i, matrix);
         }
@@ -43,7 +41,3 @@ CrossSectionMatrix CrossSectionMatrixSet::getXSMatrix(unsigned i)
     else
         return CrossSectionMatrix {};
 }
-
-// void CrossSectionMatrixSet::calcXS() 
-// {
-// }

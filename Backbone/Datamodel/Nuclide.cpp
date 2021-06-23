@@ -2,8 +2,6 @@
 #include "Output.h"
 #include "additionalPrintFuncs.h"
 
-
-
 CrossSectionSet Nuclide::populateXS(CrossSectionSet &xsSet) 
 {
     CrossSectionSet crossSectionSet(xsSet.getKind());
@@ -94,9 +92,11 @@ void Nuclide::setXSMatrix(CrossSectionMatrixSet &xsMatrixSet)
     {
         case XSMatrixKind::SCAT00:
             m_scattMatrix00 = xsMatrixSet;
+            m_scattMatrix00.calcXS();
             break;
         case XSMatrixKind::SCAT01:
             m_scattMatrix01 = xsMatrixSet;
+            m_scattMatrix01.calcXS();
             break;
         default:
             out.print(TraceLevel::CRITICAL, "Error {} XS matrix not recognized!", get_name(xsMatrixSet.getKind()));
