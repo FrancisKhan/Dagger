@@ -84,12 +84,22 @@ void Library::getNuclides()
     //std::vector<std::string> nucVec = {"La139"};
     std::vector<std::string> nucVec = {"Pu239", "La139"};
 
+    setNumberOfEnergyGroups();
+
 	for(const auto &nuc : nucVec)
 	{
 		std::pair<unsigned, unsigned> blockLines = getXSNuclideBLock(nuc);
 		std::vector<std::string> dataVec = Numerics::slice(m_xsDataFileLines, blockLines.first, blockLines.second);
-		NuclideBlock nuclideBlock(dataVec);
+		NuclideBlock nuclideBlock(dataVec, getNumberOfEnergyGroups());
         Nuclide* nuclide = nuclideBlock.getNuclide();
         nuclide->printDebugData();
 	}
+}
+
+void Library::setNumberOfEnergyGroups()
+{
+    std::vector<unsigned> lines = InputParser::findLine(m_xsDataFileLines, "SUBTMP0001", 0, 100);
+    std::string line = InputParser::getLine(m_xsDataFileLines, lines[0] + 1);   
+    std::vector<std::string> lineVec = InputParser::splitLine(line);
+    m_numberOfEnergyGroups = std::stoi(lineVec.end()[-1]);
 }

@@ -70,6 +70,12 @@ std::vector<double> NuclideBlock::readParameters(const std::string &key, unsigne
     return result;
 }
 
+void NuclideBlock::setNumberOfEnergyGroups()
+{
+    m_nuclide.setEnergyGroupsNumber(m_numberOfEnergyGroups);   
+}
+
+
 void NuclideBlock::readName()
 {
     m_nuclide.setName(InputParser::getLine(m_xsDataLines, 1));   
@@ -188,6 +194,31 @@ std::pair<unsigned, unsigned> NuclideBlock::readInfDilutionBlock(std::pair<unsig
     return std::make_pair(key2Lines.front(), block.second);
 }
 
+std::vector<double> NuclideBlock::populateXS(std::vector<double> &xsVec) 
+{
+    std::vector<double> result;
+    size_t inputSize = xsVec.size(); 
+
+        if (inputSize < getNumberOfEnergyGroups())
+        {
+            std::vector<double> temp(getNumberOfEnergyGroups() - inputSize, 0.0);
+            temp.insert(temp.end(), xsVec.begin(), xsVec.end()); 
+            result = temp;
+        }
+        else if(inputSize == getNumberOfEnergyGroups())
+        {
+            result = xsVec;
+        }
+        else
+        {
+            out.print(TraceLevel::CRITICAL, "Error {} read in the XS library!", int(inputSize));
+            exit(-1);
+        }
+
+    return result;
+}
+
+
 CrossSectionSet NuclideBlock::readXS(XSKind xsKind)
 {
     std::vector< std::pair<unsigned, unsigned> > tempBlocks = readTemperatureBlocks();
@@ -202,7 +233,8 @@ CrossSectionSet NuclideBlock::readXS(XSKind xsKind)
         {
             for(size_t i = 0; i < temperatures.size(); i++)
             {
-                std::vector<double> xsVec = readParameters(get_name(xsKind), tempBlocks[i].first, tempBlocks[i].second);
+                std::vector<double> xsVecPartial = readParameters(get_name(xsKind), tempBlocks[i].first, tempBlocks[i].second);
+                std::vector<double> xsVec = populateXS(xsVecPartial);
                 CrossSection crossSection(temperatures[i], Numerics::DINF, xsVec);
                 crossSectionSet.addXS(crossSection);
             }
@@ -212,7 +244,8 @@ CrossSectionSet NuclideBlock::readXS(XSKind xsKind)
             for(size_t i = 0; i < temperatures.size(); i++)
             {
                 std::pair<unsigned, unsigned> infDilutionBlock = readInfDilutionBlock(tempBlocks[i]);
-                std::vector<double> xsVec = readParameters(get_name(xsKind), infDilutionBlock.first, infDilutionBlock.second);
+                std::vector<double> xsVecPartial = readParameters(get_name(xsKind), infDilutionBlock.first, infDilutionBlock.second);
+                std::vector<double> xsVec = populateXS(xsVecPartial);
                 CrossSection crossSection(temperatures[i], Numerics::DINF, xsVec);
                 crossSectionSet.addXS(crossSection);
             }
@@ -227,7 +260,8 @@ CrossSectionSet NuclideBlock::readXS(XSKind xsKind)
 
             for(size_t j = 0; j < dilutions.size(); j++)
             {
-                std::vector<double> xsVec = readParameters(get_name(xsKind), dilutionBlocks[j].first, dilutionBlocks[j].second);
+                std::vector<double> xsVecPartial = readParameters(get_name(xsKind), dilutionBlocks[j].first, dilutionBlocks[j].second);
+                std::vector<double> xsVec = populateXS(xsVecPartial);
                 CrossSection crossSection(temperatures[i], dilutions[j], xsVec);
                 crossSectionSet.addXS(crossSection);
             }
@@ -237,7 +271,8 @@ CrossSectionSet NuclideBlock::readXS(XSKind xsKind)
     {
         for(size_t i = 0; i < temperatures.size(); i++)
         {
-            std::vector<double> xsVec = readParameters(get_name(xsKind), tempBlocks[i].first, tempBlocks[i].second);
+            std::vector<double> xsVecPartial = readParameters(get_name(xsKind), tempBlocks[i].first, tempBlocks[i].second);
+            std::vector<double> xsVec = populateXS(xsVecPartial);
             CrossSection crossSection(temperatures[i], Numerics::DINF, xsVec);
             crossSectionSet.addXS(crossSection);
         }
@@ -386,6 +421,7 @@ Nuclide* NuclideBlock::getNuclide()
     readName();
     readAWR();
     isNuclideResonant();
+    setNumberOfEnergyGroups();
 	readTemperatureBlocks();
 	readGroupConstants();
     return &m_nuclide;

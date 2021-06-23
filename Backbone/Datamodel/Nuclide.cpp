@@ -2,82 +2,48 @@
 #include "Output.h"
 #include "additionalPrintFuncs.h"
 
-CrossSectionSet Nuclide::populateXS(CrossSectionSet &xsSet) 
-{
-    CrossSectionSet crossSectionSet(xsSet.getKind());
-
-    for(size_t i = 0; i < getXSsNumber(); i++)
-    {
-        size_t inputSize = xsSet.getXS(i).getSize(); 
-
-        if (inputSize < getEnergyGroupsNumber())
-        {
-            std::vector<double> xsVec(getEnergyGroupsNumber() - inputSize, 0.0);
-            std::vector<double> xsInputVec(xsSet.getXS(i).getValues());
-
-            xsVec.insert(xsVec.end(), xsInputVec.begin(), xsInputVec.end()); 
-            CrossSection crossSection(xsSet.getXS(i).getTemperature(), xsSet.getXS(i).getBackgroundXS(), xsVec);
-            crossSectionSet.addXS(crossSection);
-        }
-        else if(inputSize == getEnergyGroupsNumber())
-        {
-            std::vector<double> xsVec = xsSet.getXS(i).getValues();
-            CrossSection crossSection(xsSet.getXS(i).getTemperature(), xsSet.getXS(i).getBackgroundXS(), xsVec);
-            crossSectionSet.addXS(crossSection);
-        }
-        else
-        {
-            out.print(TraceLevel::CRITICAL, "Error {} read in the XS library!", int(inputSize));
-            exit(-1);
-        }
-    }
-
-    return crossSectionSet;
-}
-
 void Nuclide::setXS(CrossSectionSet &xsSet) 
 {
     switch(xsSet.getKind()) 
     {
         case XSKind::NTOT0:
-            setEnergyGroupsNumber(xsSet.getXS(0).getSize());
-            m_totXS = populateXS(xsSet);
+            m_totXS = xsSet;
             m_totXS.calcXS();
             break;
         case XSKind::NINEL:
-            m_inelasticXS = populateXS(xsSet);
+            m_inelasticXS = xsSet;
             m_inelasticXS.calcXS();
             break;
         case XSKind::N2N:
-            m_n2nXS = populateXS(xsSet);
+            m_n2nXS = xsSet;
             m_n2nXS.calcXS();
             break;
         case XSKind::N3N:
-            m_n3nXS = populateXS(xsSet);
+            m_n3nXS = xsSet;
             m_n3nXS.calcXS();
             break;
         case XSKind::NNP:
-            m_nnpXS = populateXS(xsSet);
+            m_nnpXS = xsSet;
             m_nnpXS.calcXS();
             break;
         case XSKind::NG:
-            m_ngXS = populateXS(xsSet);
+            m_ngXS = xsSet;
             m_ngXS.calcXS();
             break;
         case XSKind::NP:
-            m_npXS = populateXS(xsSet);
+            m_npXS = xsSet;
             m_npXS.calcXS();
             break;
         case XSKind::ND:
-            m_ndXS = populateXS(xsSet);
+            m_ndXS = xsSet;
             m_ndXS.calcXS();
             break;
         case XSKind::NT:
-            m_ntXS = populateXS(xsSet);
+            m_ntXS = xsSet;
             m_ntXS.calcXS();
             break;
         case XSKind::NA:
-            m_naXS = populateXS(xsSet);
+            m_naXS = xsSet;
             m_naXS.calcXS();
             break;
         default:

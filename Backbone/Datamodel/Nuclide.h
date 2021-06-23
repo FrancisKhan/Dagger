@@ -27,6 +27,7 @@ public:
     void setDilutions(std::vector<double> &values) {m_dilutions = values;}
     std::vector<double> getDilutions() {return m_dilutions;}
     double getDilution(unsigned i) {return m_dilutions.at(i);}
+    void setEnergyGroupsNumber(unsigned n) {m_energyGroupsNumber = n;}
     unsigned getEnergyGroupsNumber() {return m_energyGroupsNumber;}
     unsigned getXSsNumber() {return isResonant() ? (getDilutions().size() * getTemperatures().size()) : getTemperatures().size();}
 
@@ -43,8 +44,6 @@ public:
     void printMatrixXSs(XSMatrixKind xsKind);
 
 private:
-    void setEnergyGroupsNumber(unsigned n) {m_energyGroupsNumber = n;}
-    CrossSectionSet populateXS(CrossSectionSet &xsSet);
 
     std::string m_name;
     double m_awr;

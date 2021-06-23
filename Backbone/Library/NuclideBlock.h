@@ -13,7 +13,8 @@ using namespace PrintFuncs;
 class NuclideBlock
 {
 public:
-	NuclideBlock(std::vector<std::string> &dataVec) : m_xsDataLines(dataVec) {}
+	NuclideBlock(std::vector<std::string> &dataVec, unsigned numberOfEnergyGroups) : 
+	m_xsDataLines(dataVec), m_numberOfEnergyGroups(numberOfEnergyGroups) {}
 	Nuclide* getNuclide();
 	
 private:
@@ -32,6 +33,9 @@ private:
 	CrossSectionSet readXS(XSKind xsKind);
 	CrossSectionMatrixSet readMatrix(XSMatrixKind xsKind);
 	void isNuclideResonant();
+	void setNumberOfEnergyGroups();
+	unsigned getNumberOfEnergyGroups() {return m_numberOfEnergyGroups;}
+	std::vector<double> populateXS(std::vector<double> &xsVec);
 
 	std::tuple< std::vector<double>, std::vector<int32_t>, std::vector<int32_t> > 
 	readMatrixComponents(XSMatrixKind xsKind, unsigned lowBound, unsigned upperBound);
@@ -40,6 +44,7 @@ private:
 
 	std::vector<std::string> m_xsDataLines;
 	Nuclide m_nuclide;
+	unsigned m_numberOfEnergyGroups;
 };
 
 #endif
