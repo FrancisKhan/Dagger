@@ -18,7 +18,7 @@ CrossSection CrossSectionSet::getXS(double t, double b)
         return CrossSection {};
 }
 
-void CrossSectionSet::calcXS() 
+void CrossSectionSet::calcXSs() 
 {
     for(unsigned i = 0; i < getSize(); i++)
     {

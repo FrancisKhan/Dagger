@@ -30,7 +30,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/app/almost",
-            "args": ["inputs/Coupled1.txt", "outputs/Out_trytry.txt", "DEBUG"],
+            "args": ["./dummy_input.txt", "./output.txt", "CRITICAL"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

@@ -2,53 +2,15 @@
 #include "Output.h"
 #include "additionalPrintFuncs.h"
 
-void Nuclide::setXS(CrossSectionSet &xsSet) 
+Nuclide::Nuclide() 
 {
-    switch(xsSet.getKind()) 
+    m_isResonant = false; 
+
+    for (const auto& xsKind : XSKind())
     {
-        case XSKind::NTOT0:
-            m_totXS = xsSet;
-            m_totXS.calcXS();
-            break;
-        case XSKind::NINEL:
-            m_inelasticXS = xsSet;
-            m_inelasticXS.calcXS();
-            break;
-        case XSKind::N2N:
-            m_n2nXS = xsSet;
-            m_n2nXS.calcXS();
-            break;
-        case XSKind::N3N:
-            m_n3nXS = xsSet;
-            m_n3nXS.calcXS();
-            break;
-        case XSKind::NNP:
-            m_nnpXS = xsSet;
-            m_nnpXS.calcXS();
-            break;
-        case XSKind::NG:
-            m_ngXS = xsSet;
-            m_ngXS.calcXS();
-            break;
-        case XSKind::NP:
-            m_npXS = xsSet;
-            m_npXS.calcXS();
-            break;
-        case XSKind::ND:
-            m_ndXS = xsSet;
-            m_ndXS.calcXS();
-            break;
-        case XSKind::NT:
-            m_ntXS = xsSet;
-            m_ntXS.calcXS();
-            break;
-        case XSKind::NA:
-            m_naXS = xsSet;
-            m_naXS.calcXS();
-            break;
-        default:
-            out.print(TraceLevel::CRITICAL, "Error {} XS not recognized!", get_name(xsSet.getKind()));
-            exit(-1);
+        CrossSectionSet crossSectionSet(xsKind);
+        Nuclide::XSSetType tempPair = std::make_pair(xsKind, crossSectionSet);
+        m_crossSectionSets.push_back(tempPair);
     }
 }
 
@@ -70,22 +32,30 @@ void Nuclide::setXSMatrix(CrossSectionMatrixSet &xsMatrixSet)
     }
 }
 
-CrossSectionSet Nuclide::getXSSet(XSKind kind) 
+CrossSectionSet& Nuclide::getXSSet(XSKind kind) 
 {
-    switch(kind) 
-    {
-        case XSKind::NTOT0:  return m_totXS;
-        case XSKind::NINEL:  return m_inelasticXS;
-        case XSKind::N2N:    return m_n2nXS;
-        case XSKind::N3N:    return m_n3nXS;
-        case XSKind::NNP:    return m_nnpXS;
-        case XSKind::NG:     return m_ngXS;
-        case XSKind::NP:     return m_npXS;
-        case XSKind::ND:     return m_ndXS;
-        case XSKind::NT:     return m_ntXS;
-        case XSKind::NA:     return m_naXS;
-        default: return CrossSectionSet {};
-    }
+    static CrossSectionSet crossSectionSet;
+
+    std::vector<Nuclide::XSSetType>::iterator it = std::find_if(m_crossSectionSets.begin(), m_crossSectionSets.end(), 
+    [kind] (Nuclide::XSSetType &p) {return p.first == kind;});
+
+    if (it != m_crossSectionSets.end()) 
+        return it->second;
+    else
+        return crossSectionSet;
+}
+
+CrossSectionSet& Nuclide::getXSSet(XSKind kind, std::vector<XSSetType>& crossSectionSets) 
+{
+    static CrossSectionSet crossSectionSet;
+
+    std::vector<Nuclide::XSSetType>::iterator it = std::find_if(crossSectionSets.begin(), crossSectionSets.end(), 
+    [kind, &crossSectionSets] (Nuclide::XSSetType &p) {return p.first == kind;});
+
+    if (it != crossSectionSets.end()) 
+        return it->second;
+    else
+        return crossSectionSet;
 }
 
 CrossSectionMatrixSet Nuclide::getXSMatrixSet(XSMatrixKind kind) 
@@ -96,6 +66,12 @@ CrossSectionMatrixSet Nuclide::getXSMatrixSet(XSMatrixKind kind)
         case XSMatrixKind::SCAT01:  return m_scattMatrix01;
         default: return CrossSectionMatrixSet {};
     }
+}
+
+void Nuclide::calcXSSets()
+{
+    for(auto& xsSet : m_crossSectionSets)
+       xsSet.second.calcXSs();
 }
 
 void Nuclide::printXSs(XSKind xsKind)

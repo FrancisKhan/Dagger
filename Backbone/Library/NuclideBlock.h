@@ -31,6 +31,7 @@ private:
 	std::vector<double> readDilutions(unsigned firstLine, unsigned lastLine);
 	void readGroupConstants();
 	CrossSectionSet readXS(XSKind xsKind);
+	std::vector<Nuclide::XSSetType> readXSs();
 	CrossSectionMatrixSet readMatrix(XSMatrixKind xsKind);
 	void isNuclideResonant();
 	void setNumberOfEnergyGroups();

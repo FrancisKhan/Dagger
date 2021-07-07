@@ -19,7 +19,7 @@ public:
     unsigned getSize() {return m_XSSet.size();}
     XSKind getKind() {return m_kind;}
     void setKind(XSKind xsKind) {m_kind = xsKind;}
-    void calcXS();
+    void calcXSs();
 
     void debugCalcXS(std::vector<double> &newValues, std::vector<double> &infValues,
     std::vector<double> &dilValues, double temp, double sigma0);

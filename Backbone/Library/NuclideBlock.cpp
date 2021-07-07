@@ -75,7 +75,6 @@ void NuclideBlock::setNumberOfEnergyGroups()
     m_nuclide.setEnergyGroupsNumber(m_numberOfEnergyGroups);   
 }
 
-
 void NuclideBlock::readName()
 {
     m_nuclide.setName(InputParser::getLine(m_xsDataLines, 1));   
@@ -218,12 +217,71 @@ std::vector<double> NuclideBlock::populateXS(std::vector<double> &xsVec)
     return result;
 }
 
+std::vector<Nuclide::XSSetType> NuclideBlock::readXSs()
+{
+    std::vector< std::pair<unsigned, unsigned> > tempBlocks = readTemperatureBlocks();
+    std::vector<double> temperatures = m_nuclide.getTemperatures();
+
+    std::vector<Nuclide::XSSetType> crossSectionSets = m_nuclide.getCopyOfXSSets();
+
+    for (const auto& xsKind : XSKind())
+    {
+        CrossSectionSet& crossSectionSet = Nuclide::getXSSet(xsKind, crossSectionSets);
+
+        for(size_t i = 0; i < temperatures.size(); i++)
+        {
+            if(m_nuclide.isResonant())
+            {
+                // Infinite dilution XSs
+
+                if(xsKind == XSKind::NTOT0)
+                {
+                    std::vector<double> xsVecPartial = readParameters(get_name(xsKind), tempBlocks[i].first, tempBlocks[i].second);
+                    std::vector<double> xsVec = populateXS(xsVecPartial);
+                    CrossSection crossSection(temperatures[i], Numerics::DINF, xsVec);
+                    crossSectionSet.addXS(crossSection);
+                }
+                else
+                {
+                    std::pair<unsigned, unsigned> infDilutionBlock = readInfDilutionBlock(tempBlocks[i]);
+                    std::vector<double> xsVecPartial = readParameters(get_name(xsKind), infDilutionBlock.first, infDilutionBlock.second);
+                    std::vector<double> xsVec = populateXS(xsVecPartial);
+                    CrossSection crossSection(temperatures[i], Numerics::DINF, xsVec);
+                    crossSectionSet.addXS(crossSection);
+                }
+
+                // other dilutions XSs
+
+                std::vector< std::pair<unsigned, unsigned> > dilutionBlocks = readDilutionBlocks(tempBlocks[i]);
+                std::vector<double> dilutions = readDilutions(tempBlocks[i].first, tempBlocks[i].second);
+
+                for(size_t j = 0; j < dilutions.size(); j++)
+                {
+                    std::vector<double> xsVecPartial = readParameters(get_name(xsKind), dilutionBlocks[j].first, dilutionBlocks[j].second);
+                    std::vector<double> xsVec = populateXS(xsVecPartial);
+                    CrossSection crossSection(temperatures[i], dilutions[j], xsVec);
+                    crossSectionSet.addXS(crossSection);
+                }
+            }
+            else // resonant isotope
+            {
+                std::vector<double> xsVecPartial = readParameters(get_name(xsKind), tempBlocks[i].first, tempBlocks[i].second);
+                std::vector<double> xsVec = populateXS(xsVecPartial);
+                CrossSection crossSection(temperatures[i], Numerics::DINF, xsVec);
+                crossSectionSet.addXS(crossSection);
+            }
+        }
+    }
+
+   return crossSectionSets;
+}
 
 CrossSectionSet NuclideBlock::readXS(XSKind xsKind)
 {
     std::vector< std::pair<unsigned, unsigned> > tempBlocks = readTemperatureBlocks();
     std::vector<double> temperatures = m_nuclide.getTemperatures();
     CrossSectionSet crossSectionSet(xsKind);
+
 
     if(m_nuclide.isResonant())
     {
@@ -395,11 +453,9 @@ std::tuple< std::vector<double>, std::vector<int32_t>, std::vector<int32_t> >
 
 void NuclideBlock::readGroupConstants()
 {
-    for (const auto& xsKind : XSKind())
-    {
-        CrossSectionSet xs = readXS(xsKind);
-        m_nuclide.setXS(xs);
-    }
+    std::vector<Nuclide::XSSetType> crossSectionSets = readXSs();
+    m_nuclide.setXSSets(crossSectionSets);
+    m_nuclide.calcXSSets();
 
     for (const auto& xsKind : XSMatrixKind())
     {

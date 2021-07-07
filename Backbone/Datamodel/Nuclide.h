@@ -12,7 +12,10 @@
 class Nuclide
 {
 public:
-	Nuclide() : m_isResonant(false) {}
+
+    typedef std::pair<XSKind, CrossSectionSet> XSSetType;
+
+	Nuclide();
     Nuclide(std::string name) : m_name(name), m_isResonant(false) {}
 
     void setName(std::string name) {m_name = name;}
@@ -33,11 +36,15 @@ public:
 
     void setXS(CrossSectionSet &xsSet);
     void setXSMatrix(CrossSectionMatrixSet &xsMatrixSet);
-    CrossSectionSet getXSSet(XSKind xsKind);
+    CrossSectionSet& getXSSet(XSKind xsKind);
+    static CrossSectionSet& getXSSet(XSKind xsKind, std::vector<XSSetType>& crossSectionSets);
     CrossSectionMatrixSet getXSMatrixSet(XSMatrixKind kind);
 
+    std::vector<XSSetType>& getXSSets() {return m_crossSectionSets;}
+    std::vector<XSSetType> getCopyOfXSSets() {return m_crossSectionSets;}
+    void setXSSets(std::vector<XSSetType>& crossSectionSets) {m_crossSectionSets = crossSectionSets;}
 
-    void calcXS(CrossSectionSet &xsSet);
+    void calcXSSets();
 
     void printDebugData();
     void printXSs(XSKind kind);
@@ -52,18 +59,7 @@ private:
     unsigned m_energyGroupsNumber;
     bool m_isResonant;
 
-    CrossSectionSet m_totXS;
-    CrossSectionSet m_elasticXS;
-    CrossSectionSet m_inelasticXS;
-    CrossSectionSet m_n2nXS;
-    CrossSectionSet m_n3nXS;
-    CrossSectionSet m_nnpXS;
-    CrossSectionSet m_ngXS;
-    CrossSectionSet m_npXS;
-    CrossSectionSet m_ndXS;
-    CrossSectionSet m_ntXS;
-    CrossSectionSet m_naXS;
-    CrossSectionSet m_scattXS;
+    std::vector<XSSetType> m_crossSectionSets;
 
     CrossSectionMatrixSet m_scattMatrix00;
     CrossSectionMatrixSet m_scattMatrix01;
