@@ -17,15 +17,8 @@ public:
 
     KineticsSet getKineticsSet() {return m_kineticsSet;}
 
-	// to be placed elsewere
-	void setLogLevel(TraceLevel level) {m_logLevel = level;}
-	TraceLevel getLogLevel() {return m_logLevel;}
-
 private:
 	KineticsSet m_kineticsSet;
-
-	// to be placed elsewere
-	TraceLevel m_logLevel;
 };
 
 #endif

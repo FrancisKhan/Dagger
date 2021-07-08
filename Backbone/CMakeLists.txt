@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.10)
 # Make an automatic library - will be static or dynamic based on user setting
-add_library(backbone_library IO/Output.cpp IO/Input.cpp Datamodel/KineticsSet.cpp
+add_library(backbone_library IO/Output.cpp Datamodel/KineticsSet.cpp
 			Datamodel/Reactor.cpp Library/Library.cpp Library/NuclideBlock.cpp
 			Datamodel/Nuclide.cpp Datamodel/CrossSection.cpp Datamodel/CrossSectionSet.cpp
 			Datamodel/CrossSectionMatrix.cpp Datamodel/CrossSectionMatrixSet.cpp)

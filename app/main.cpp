@@ -1,6 +1,6 @@
 #include "Reactor.h"
+#include "Library.h"
 #include "Output.h"
-#include "Input.h"
 
 #include <iostream>
 #include <chrono>
@@ -10,11 +10,10 @@ int main(int argc, char** argv)
 	Reactor reactor;
 	Library library;
 
-	Input input(reactor, library);
-	input.getArguments(argc, argv);
-	out.printStart();
-
 	auto start = std::chrono::steady_clock::now();
+
+	//library.printLogsOnFile("output.txt", "CRITICAL");
+	library.printLogsOnConsole("CRITICAL");
 
 	std::string inputPath = "/home/why/ALMOST_libs/draglibendfb7r0.txt";
 	library.setXSLibraryPath(inputPath);

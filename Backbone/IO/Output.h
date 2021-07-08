@@ -4,6 +4,7 @@
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/spdlog.h"
 #include "TraceLevel.h"
+#include "Sink.h"
 
 class Output
 {
@@ -13,7 +14,7 @@ public:
 
     void printStart();
 	void printEnd();
-	void createLogger(std::string loggerName = "ALMOST");
+	void createLogger(Sink sink, std::string loggerName = "DRAGLIBREADER");
 	std::shared_ptr<spdlog::logger> getLogger();
 	void setInputPath(std::string inputPath);
 	void setOutputPath(std::string ioutputPathName);

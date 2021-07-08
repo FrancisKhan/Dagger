@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <experimental/filesystem>
+#include "spdlog/sinks/stdout_color_sinks.h"
 
 Output out;
 
@@ -12,15 +13,15 @@ namespace fs = std::experimental::filesystem;
 void Output::printStart()
 {
 	out.getLogger()->set_pattern("[%D %T] [%n] %v");
-	out.getLogger()->critical("Start simulation");
-    out.getLogger()->critical("ALMOST Version: {} \n", get_version_all());
+	out.getLogger()->critical("Start reading");
+    out.getLogger()->critical("DRAGON Library Reader, Version: {} \n", get_version_all());
 	out.getLogger()->set_pattern("%v");
 }
 
 void Output::printEnd()
 {
 	out.getLogger()->set_pattern("[%D %T] [%n] %v");
-	out.getLogger()->critical("End simulation");
+	out.getLogger()->critical("End of reading");
 }
 
 void Output::setLevel(std::string level) 
@@ -99,9 +100,30 @@ void Output::setOutputPath(std::string outputPathName)
 	removeOldOutputFile();
 }
 
-void Output::createLogger(std::string loggerName)
+void Output::createLogger(Sink sink, std::string loggerName)
 {
-	mp_logger = spdlog::basic_logger_mt(loggerName, m_outputFullName);
+	spdlog::sinks_init_list sink_list;
+
+	if(sink == Sink::CONSOLE)
+	{
+		auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+		spdlog::sinks_init_list sink_list = {console_sink};
+		mp_logger = std::make_shared<spdlog::logger>(loggerName, sink_list);
+	}
+	else if (sink == Sink::FILE)
+	{
+		auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(m_outputFullName, true);
+		spdlog::sinks_init_list sink_list = {file_sink};
+		mp_logger = std::make_shared<spdlog::logger>(loggerName, sink_list);
+	}
+	else
+	{
+		auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+		auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(m_outputFullName, true);
+		spdlog::sinks_init_list sink_list = {console_sink, file_sink};
+		mp_logger = std::make_shared<spdlog::logger>(loggerName, sink_list);
+	}
+	
 	mp_logger->flush_on(spdlog::level::info);
 }
 

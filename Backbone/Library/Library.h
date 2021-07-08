@@ -17,6 +17,12 @@ public:
 	std::vector < std::shared_ptr<Nuclide> > getNuclides(std::vector<std::string> &nucVec);
 	void setXSLibraryPath(const std::string& libraryPath);
 	std::string getXSLibraryPath() {return m_libraryPath;}
+
+	void printLogsOnConsole(const std::string& logLevel);
+	void printLogsOnFile(const std::string& logFile, const std::string& logLevel);
+	void printLogsOnBoth(const std::string& logFile, const std::string& logLevel);
+	void setLogLevel(const std::string& logLevel);
+	std::string getLogLevel();
 	
 private:
 	void setNumberOfEnergyGroups();
@@ -28,6 +34,7 @@ private:
 	std::string m_libraryPath;
 
 	std::vector < std::shared_ptr<Nuclide> > m_nuclides;
+	TraceLevel m_logLevel;
 };
 
 #endif

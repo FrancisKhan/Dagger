@@ -116,3 +116,43 @@ void Library::setXSLibraryPath(const std::string& libraryPath)
         std::cout << "ERROR: library file not found!" << std::endl;
     }
 }
+
+void Library::printLogsOnConsole(const std::string& logLevel)
+{
+    out.createLogger(Sink::CONSOLE);
+    out.setLevel(logLevel);
+    out.printStart();
+}
+
+
+void Library::printLogsOnFile(const std::string& logFile, const std::string& logLevel)
+{
+    out.setOutputPath(logFile);
+    out.createLogger(Sink::FILE);
+    out.setLevel(logLevel);
+    out.printStart();
+}
+
+void Library::printLogsOnBoth(const std::string& logFile, const std::string& logLevel)
+{
+    out.setOutputPath(logFile);
+    out.createLogger(Sink::BOTH);
+    out.setLevel(logLevel);
+    out.printStart();
+}
+
+void setLogLevel(const std::string& logLevel)
+{
+    out.setLevel(logLevel);
+}
+
+std::string Library::getLogLevel()
+{
+    return get_name(out.getLevel());
+}
+
+// void Input::printData()
+// {
+// 	out.print(TraceLevel::CRITICAL, "Input file: {}/{}",  out.getInputPath(), out.getInputName());
+// 	out.print(TraceLevel::CRITICAL, "Output file: {} \n", out.getOutputName());
+// }
