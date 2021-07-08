@@ -14,6 +14,7 @@ class Nuclide
 public:
 
     typedef std::pair<XSKind, CrossSectionSet> XSSetType;
+    typedef std::pair<XSMatrixKind, CrossSectionMatrixSet> XSMatrixSetType;
 
 	Nuclide();
     Nuclide(std::string name) : m_name(name), m_isResonant(false) {}
@@ -34,17 +35,25 @@ public:
     unsigned getEnergyGroupsNumber() {return m_energyGroupsNumber;}
     unsigned getXSsNumber() {return isResonant() ? (getDilutions().size() * getTemperatures().size()) : getTemperatures().size();}
 
-    void setXS(CrossSectionSet &xsSet);
-    void setXSMatrix(CrossSectionMatrixSet &xsMatrixSet);
+    // Cross section sets
+
     CrossSectionSet& getXSSet(XSKind xsKind);
     static CrossSectionSet& getXSSet(XSKind xsKind, std::vector<XSSetType>& crossSectionSets);
-    CrossSectionMatrixSet getXSMatrixSet(XSMatrixKind kind);
-
     std::vector<XSSetType>& getXSSets() {return m_crossSectionSets;}
     std::vector<XSSetType> getCopyOfXSSets() {return m_crossSectionSets;}
-    void setXSSets(std::vector<XSSetType>& crossSectionSets) {m_crossSectionSets = crossSectionSets;}
 
+    void setXSSets(std::vector<XSSetType>& crossSectionSets) {m_crossSectionSets = crossSectionSets;}
     void calcXSSets();
+
+    // Cross section matrix sets
+
+    CrossSectionMatrixSet& getXSMatrixSet(XSMatrixKind kind);
+    static CrossSectionMatrixSet& getXSMatrixSet(XSMatrixKind kind, std::vector<XSMatrixSetType>& crossSectionMatrixSets);
+    std::vector<XSMatrixSetType>& getXSMatrixSets() {return m_crossSectionMatrixSets;}
+    std::vector<XSMatrixSetType> getCopyOfXSMatrixSets() {return m_crossSectionMatrixSets;}
+
+    void setXSMatrixSets(std::vector<XSMatrixSetType>& crossSectionMatrixSets) {m_crossSectionMatrixSets = crossSectionMatrixSets;}
+    void calcXSMatrixSets();
 
     void printDebugData();
     void printXSs(XSKind kind);
@@ -60,9 +69,7 @@ private:
     bool m_isResonant;
 
     std::vector<XSSetType> m_crossSectionSets;
-
-    CrossSectionMatrixSet m_scattMatrix00;
-    CrossSectionMatrixSet m_scattMatrix01;
+    std::vector<XSMatrixSetType> m_crossSectionMatrixSets;
 };
 
 #endif

@@ -30,9 +30,8 @@ private:
 	std::vector<double> readTemperatures();
 	std::vector<double> readDilutions(unsigned firstLine, unsigned lastLine);
 	void readGroupConstants();
-	CrossSectionSet readXS(XSKind xsKind);
 	std::vector<Nuclide::XSSetType> readXSs();
-	CrossSectionMatrixSet readMatrix(XSMatrixKind xsKind);
+	std::vector<Nuclide::XSMatrixSetType> readXSMatrices();
 	void isNuclideResonant();
 	void setNumberOfEnergyGroups();
 	unsigned getNumberOfEnergyGroups() {return m_numberOfEnergyGroups;}

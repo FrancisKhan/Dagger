@@ -12,23 +12,12 @@ Nuclide::Nuclide()
         Nuclide::XSSetType tempPair = std::make_pair(xsKind, crossSectionSet);
         m_crossSectionSets.push_back(tempPair);
     }
-}
 
-void Nuclide::setXSMatrix(CrossSectionMatrixSet &xsMatrixSet) 
-{
-    switch(xsMatrixSet.getKind()) 
+    for (const auto& xsKind : XSMatrixKind())
     {
-        case XSMatrixKind::SCAT00:
-            m_scattMatrix00 = xsMatrixSet;
-            m_scattMatrix00.calcXS();
-            break;
-        case XSMatrixKind::SCAT01:
-            m_scattMatrix01 = xsMatrixSet;
-            m_scattMatrix01.calcXS();
-            break;
-        default:
-            out.print(TraceLevel::CRITICAL, "Error {} XS matrix not recognized!", get_name(xsMatrixSet.getKind()));
-            exit(-1);
+        CrossSectionMatrixSet crossSectionMatrixSet(xsKind);
+        Nuclide::XSMatrixSetType tempPair = std::make_pair(xsKind, crossSectionMatrixSet);
+        m_crossSectionMatrixSets.push_back(tempPair);
     }
 }
 
@@ -58,20 +47,42 @@ CrossSectionSet& Nuclide::getXSSet(XSKind kind, std::vector<XSSetType>& crossSec
         return crossSectionSet;
 }
 
-CrossSectionMatrixSet Nuclide::getXSMatrixSet(XSMatrixKind kind) 
+CrossSectionMatrixSet& Nuclide::getXSMatrixSet(XSMatrixKind kind) 
 {
-    switch(kind) 
-    {
-        case XSMatrixKind::SCAT00:  return m_scattMatrix00;
-        case XSMatrixKind::SCAT01:  return m_scattMatrix01;
-        default: return CrossSectionMatrixSet {};
-    }
+    static CrossSectionMatrixSet crossSectionMatrixSet;
+
+    std::vector<Nuclide::XSMatrixSetType>::iterator it = std::find_if(m_crossSectionMatrixSets.begin(), 
+    m_crossSectionMatrixSets.end(), [kind] (Nuclide::XSMatrixSetType &m) {return m.first == kind;});
+
+    if (it != m_crossSectionMatrixSets.end()) 
+        return it->second;
+    else
+        return crossSectionMatrixSet;
+}
+
+CrossSectionMatrixSet& Nuclide::getXSMatrixSet(XSMatrixKind kind, std::vector<XSMatrixSetType>& crossSectionMatrixSets) 
+{
+    static CrossSectionMatrixSet crossSectionMatrixSet;
+
+    std::vector<Nuclide::XSMatrixSetType>::iterator it = std::find_if(crossSectionMatrixSets.begin(), 
+    crossSectionMatrixSets.end(), [kind] (Nuclide::XSMatrixSetType &m) {return m.first == kind;});
+
+    if (it != crossSectionMatrixSets.end()) 
+        return it->second;
+    else
+        return crossSectionMatrixSet;
 }
 
 void Nuclide::calcXSSets()
 {
     for(auto& xsSet : m_crossSectionSets)
        xsSet.second.calcXSs();
+}
+
+void Nuclide::calcXSMatrixSets()
+{
+    for(auto& xsMatrixSet : m_crossSectionMatrixSets)
+       xsMatrixSet.second.calcXSs();
 }
 
 void Nuclide::printXSs(XSKind xsKind)

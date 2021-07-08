@@ -3,7 +3,7 @@
 
 using namespace Numerics;
 
-void CrossSectionMatrixSet::calcXS() 
+void CrossSectionMatrixSet::calcXSs() 
 {
     for(unsigned i = 0; i < getSize(); i++)
     {

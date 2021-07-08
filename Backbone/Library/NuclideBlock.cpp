@@ -276,113 +276,50 @@ std::vector<Nuclide::XSSetType> NuclideBlock::readXSs()
    return crossSectionSets;
 }
 
-CrossSectionSet NuclideBlock::readXS(XSKind xsKind)
+std::vector<Nuclide::XSMatrixSetType> NuclideBlock::readXSMatrices()
 {
     std::vector< std::pair<unsigned, unsigned> > tempBlocks = readTemperatureBlocks();
     std::vector<double> temperatures = m_nuclide.getTemperatures();
-    CrossSectionSet crossSectionSet(xsKind);
-
-
-    if(m_nuclide.isResonant())
-    {
-        // Infinite dilution XSs
-        
-        if(xsKind == XSKind::NTOT0)
-        {
-            for(size_t i = 0; i < temperatures.size(); i++)
-            {
-                std::vector<double> xsVecPartial = readParameters(get_name(xsKind), tempBlocks[i].first, tempBlocks[i].second);
-                std::vector<double> xsVec = populateXS(xsVecPartial);
-                CrossSection crossSection(temperatures[i], Numerics::DINF, xsVec);
-                crossSectionSet.addXS(crossSection);
-            }
-        }
-        else
-        {
-            for(size_t i = 0; i < temperatures.size(); i++)
-            {
-                std::pair<unsigned, unsigned> infDilutionBlock = readInfDilutionBlock(tempBlocks[i]);
-                std::vector<double> xsVecPartial = readParameters(get_name(xsKind), infDilutionBlock.first, infDilutionBlock.second);
-                std::vector<double> xsVec = populateXS(xsVecPartial);
-                CrossSection crossSection(temperatures[i], Numerics::DINF, xsVec);
-                crossSectionSet.addXS(crossSection);
-            }
-        }
-
-        // other dilutions XSs
-
-        for(size_t i = 0; i < temperatures.size(); i++)
-        {
-            std::vector< std::pair<unsigned, unsigned> > dilutionBlocks = readDilutionBlocks(tempBlocks[i]);
-            std::vector<double> dilutions = readDilutions(tempBlocks[i].first, tempBlocks[i].second);
-
-            for(size_t j = 0; j < dilutions.size(); j++)
-            {
-                std::vector<double> xsVecPartial = readParameters(get_name(xsKind), dilutionBlocks[j].first, dilutionBlocks[j].second);
-                std::vector<double> xsVec = populateXS(xsVecPartial);
-                CrossSection crossSection(temperatures[i], dilutions[j], xsVec);
-                crossSectionSet.addXS(crossSection);
-            }
-        }
-    }
-    else
-    {
-        for(size_t i = 0; i < temperatures.size(); i++)
-        {
-            std::vector<double> xsVecPartial = readParameters(get_name(xsKind), tempBlocks[i].first, tempBlocks[i].second);
-            std::vector<double> xsVec = populateXS(xsVecPartial);
-            CrossSection crossSection(temperatures[i], Numerics::DINF, xsVec);
-            crossSectionSet.addXS(crossSection);
-        }
-    }
     
-    return crossSectionSet;
-}
+    std::vector<Nuclide::XSMatrixSetType> crossSectionMatrixSets = m_nuclide.getCopyOfXSMatrixSets();
 
-CrossSectionMatrixSet NuclideBlock::readMatrix(XSMatrixKind xsKind)
-{
-    std::vector< std::pair<unsigned, unsigned> > tempBlocks = readTemperatureBlocks();
-    std::vector<double> temperatures = m_nuclide.getTemperatures();
-    CrossSectionMatrixSet crossSectionMatrixSet(xsKind);
-
-    if(m_nuclide.isResonant())
+    for (const auto& xsKind : XSMatrixKind())
     {
-        // Infinite dilution XSs
+        CrossSectionMatrixSet& crossSectionMatrixSet = Nuclide::getXSMatrixSet(xsKind, crossSectionMatrixSets);
 
         for(size_t i = 0; i < temperatures.size(); i++)
         {
-            std::pair<unsigned, unsigned> infDilutionBlock = readInfDilutionBlock(tempBlocks[i]);
-            MatrixXd matrix = assembleMatrixXS(xsKind, infDilutionBlock.first, infDilutionBlock.second);
-            CrossSectionMatrix crossSectionMatrix(temperatures[i], Numerics::DINF, matrix);
-            crossSectionMatrixSet.addXS(crossSectionMatrix);
-        }
-
-        // other dilutions XSs
-
-        for(size_t i = 0; i < temperatures.size(); i++)
-        {
-            std::vector< std::pair<unsigned, unsigned> > dilutionBlocks = readDilutionBlocks(tempBlocks[i]);
-            std::vector<double> dilutions = readDilutions(tempBlocks[i].first, tempBlocks[i].second);
-
-            for(size_t j = 0; j < dilutions.size(); j++)
+            if(m_nuclide.isResonant())
             {
-                MatrixXd matrix = assembleMatrixXS(xsKind, dilutionBlocks[j].first, dilutionBlocks[j].second);
-                CrossSectionMatrix crossSectionMatrix(temperatures[i], dilutions[j], matrix);
+                // Infinite dilution XSs
+
+                std::pair<unsigned, unsigned> infDilutionBlock = readInfDilutionBlock(tempBlocks[i]);
+                MatrixXd matrix = assembleMatrixXS(xsKind, infDilutionBlock.first, infDilutionBlock.second);
+                CrossSectionMatrix crossSectionMatrix(temperatures[i], Numerics::DINF, matrix);
+                crossSectionMatrixSet.addXS(crossSectionMatrix);
+
+                // other dilutions XSs
+
+                std::vector< std::pair<unsigned, unsigned> > dilutionBlocks = readDilutionBlocks(tempBlocks[i]);
+                std::vector<double> dilutions = readDilutions(tempBlocks[i].first, tempBlocks[i].second);
+
+                for(size_t j = 0; j < dilutions.size(); j++)
+                {
+                    MatrixXd matrix = assembleMatrixXS(xsKind, dilutionBlocks[j].first, dilutionBlocks[j].second);
+                    CrossSectionMatrix crossSectionMatrix(temperatures[i], dilutions[j], matrix);
+                    crossSectionMatrixSet.addXS(crossSectionMatrix);
+                }
+            }
+            else
+            {
+                MatrixXd matrix = assembleMatrixXS(xsKind, tempBlocks[i].first, tempBlocks[i].second);
+                CrossSectionMatrix crossSectionMatrix(temperatures[i], Numerics::DINF, matrix);
                 crossSectionMatrixSet.addXS(crossSectionMatrix);
             }
         }
     }
-    else
-    {
-        for(size_t i = 0; i < temperatures.size(); i++)
-        {
-            MatrixXd matrix = assembleMatrixXS(xsKind, tempBlocks[i].first, tempBlocks[i].second);
-            CrossSectionMatrix crossSectionMatrix(temperatures[i], Numerics::DINF, matrix);
-            crossSectionMatrixSet.addXS(crossSectionMatrix);
-        }
-    }
     
-    return crossSectionMatrixSet;
+    return crossSectionMatrixSets;
 }
 
 MatrixXd NuclideBlock::assembleMatrixXS(XSMatrixKind xsKind, unsigned lowBound, unsigned upperBound)
@@ -457,11 +394,9 @@ void NuclideBlock::readGroupConstants()
     m_nuclide.setXSSets(crossSectionSets);
     m_nuclide.calcXSSets();
 
-    for (const auto& xsKind : XSMatrixKind())
-    {
-        CrossSectionMatrixSet matrix = readMatrix(xsKind);
-        m_nuclide.setXSMatrix(matrix);
-    }
+    std::vector<Nuclide::XSMatrixSetType> crossSectionMatrixSets = readXSMatrices();
+    m_nuclide.setXSMatrixSets(crossSectionMatrixSets);
+    m_nuclide.calcXSMatrixSets();
 }
 
 void NuclideBlock::isNuclideResonant()
