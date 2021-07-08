@@ -6,6 +6,9 @@
 
 #include <iostream>
 #include <fstream>
+#include <experimental/filesystem>
+
+namespace fs = std::experimental::filesystem;
 
 std::vector<std::string> Library::readXSFile(std::string &input)
 {
@@ -74,15 +77,10 @@ std::pair<unsigned, unsigned> Library::getXSNuclideBLock(const std::string &nucl
 	return blockLines;
 }
 
-void Library::getNuclides()
+std::vector < std::shared_ptr<Nuclide> > Library::getNuclides(std::vector<std::string> &nucVec)
 {
-	std::string inputPath = "/home/why/ALMOST_libs/draglibendfb7r0.txt";
-    m_xsDataFileLines = readXSFile(inputPath);
+    m_xsDataFileLines = readXSFile(m_libraryPath);
     findNuclideBLocks();
-
-    std::vector<std::string> nucVec = {"Pu239"};
-    //std::vector<std::string> nucVec = {"La139"};
-    //std::vector<std::string> nucVec = {"Pu239", "La139"};
 
     setNumberOfEnergyGroups();
 
@@ -91,9 +89,12 @@ void Library::getNuclides()
 		std::pair<unsigned, unsigned> blockLines = getXSNuclideBLock(nuc);
 		std::vector<std::string> dataVec = Numerics::slice(m_xsDataFileLines, blockLines.first, blockLines.second);
 		NuclideBlock nuclideBlock(dataVec, getNumberOfEnergyGroups());
-        Nuclide* nuclide = nuclideBlock.getNuclide();
-        nuclide->printDebugData();
+
+        std::shared_ptr<Nuclide> nuclide = nuclideBlock.getNuclide();
+        m_nuclides.push_back(nuclide);
 	}
+
+    return m_nuclides;
 }
 
 void Library::setNumberOfEnergyGroups()
@@ -102,4 +103,16 @@ void Library::setNumberOfEnergyGroups()
     std::string line = InputParser::getLine(m_xsDataFileLines, lines[0] + 1);   
     std::vector<std::string> lineVec = InputParser::splitLine(line);
     m_numberOfEnergyGroups = std::stoi(lineVec.end()[-1]);
+}
+
+void Library::setXSLibraryPath(const std::string& libraryPath)
+{
+    if (fs::exists(libraryPath))
+	{
+		m_libraryPath = libraryPath;
+	}
+    else
+    {
+        std::cout << "ERROR: library file not found!" << std::endl;
+    }
 }

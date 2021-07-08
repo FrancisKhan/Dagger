@@ -15,7 +15,16 @@ int main(int argc, char** argv)
 	out.printStart();
 
 	auto start = std::chrono::steady_clock::now();
-	library.getNuclides();
+
+	std::string inputPath = "/home/why/ALMOST_libs/draglibendfb7r0.txt";
+	library.setXSLibraryPath(inputPath);
+
+	std::vector<std::string> nucVec = {"Pu239", "La139"};
+	std::vector < std::shared_ptr<Nuclide> > nuclides = library.getNuclides(nucVec);
+
+	for(const auto& nuc : nuclides)
+		nuc->printDebugData();
+
 	auto end = std::chrono::steady_clock::now();
 	auto diff = end - start;
 	std::cout << "Main, Timing: " 

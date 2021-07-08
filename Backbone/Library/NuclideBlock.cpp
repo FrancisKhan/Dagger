@@ -72,26 +72,26 @@ std::vector<double> NuclideBlock::readParameters(const std::string &key, unsigne
 
 void NuclideBlock::setNumberOfEnergyGroups()
 {
-    m_nuclide.setEnergyGroupsNumber(m_numberOfEnergyGroups);   
+    m_nuclide->setEnergyGroupsNumber(m_numberOfEnergyGroups);   
 }
 
 void NuclideBlock::readName()
 {
-    m_nuclide.setName(InputParser::getLine(m_xsDataLines, 1));   
+    m_nuclide->setName(InputParser::getLine(m_xsDataLines, 1));   
 }
 
 void NuclideBlock::readAWR()
 {
     const std::string key = "AWR"; 
     std::vector<double> results = readParameters(key);
-    m_nuclide.setAWR(results.front());   
+    m_nuclide->setAWR(results.front());   
 }
 
 std::vector<double> NuclideBlock::readTemperatures()
 {
     const std::string key = "TEMPERATURE"; 
     std::vector<double> v = readParameters(key);
-    m_nuclide.setTemperatures(v);
+    m_nuclide->setTemperatures(v);
     return v;
 }
 
@@ -131,16 +131,16 @@ std::vector<double> NuclideBlock::readDilutions(unsigned firstLine, unsigned las
     const std::string key = "DILUTION"; 
     std::vector<double> v = readParameters(key, firstLine, lastLine);
     
-    std::vector<double> dilutions = m_nuclide.getDilutions();
+    std::vector<double> dilutions = m_nuclide->getDilutions();
     if((dilutions.size() != 0) && (v != dilutions))
     {
         out.print(TraceLevel::CRITICAL, "Error {} seems to have temperature-dependent dilution values!", 
-        m_nuclide.getName());
+        m_nuclide->getName());
         
         exit(-1);
     }
 
-    m_nuclide.setDilutions(v);
+    m_nuclide->setDilutions(v);
     return v;
 }
 
@@ -220,9 +220,9 @@ std::vector<double> NuclideBlock::populateXS(std::vector<double> &xsVec)
 std::vector<Nuclide::XSSetType> NuclideBlock::readXSs()
 {
     std::vector< std::pair<unsigned, unsigned> > tempBlocks = readTemperatureBlocks();
-    std::vector<double> temperatures = m_nuclide.getTemperatures();
+    std::vector<double> temperatures = m_nuclide->getTemperatures();
 
-    std::vector<Nuclide::XSSetType> crossSectionSets = m_nuclide.getCopyOfXSSets();
+    std::vector<Nuclide::XSSetType> crossSectionSets = m_nuclide->getCopyOfXSSets();
 
     for (const auto& xsKind : XSKind())
     {
@@ -230,7 +230,7 @@ std::vector<Nuclide::XSSetType> NuclideBlock::readXSs()
 
         for(size_t i = 0; i < temperatures.size(); i++)
         {
-            if(m_nuclide.isResonant())
+            if(m_nuclide->isResonant())
             {
                 // Infinite dilution XSs
 
@@ -279,9 +279,9 @@ std::vector<Nuclide::XSSetType> NuclideBlock::readXSs()
 std::vector<Nuclide::XSMatrixSetType> NuclideBlock::readXSMatrices()
 {
     std::vector< std::pair<unsigned, unsigned> > tempBlocks = readTemperatureBlocks();
-    std::vector<double> temperatures = m_nuclide.getTemperatures();
+    std::vector<double> temperatures = m_nuclide->getTemperatures();
     
-    std::vector<Nuclide::XSMatrixSetType> crossSectionMatrixSets = m_nuclide.getCopyOfXSMatrixSets();
+    std::vector<Nuclide::XSMatrixSetType> crossSectionMatrixSets = m_nuclide->getCopyOfXSMatrixSets();
 
     for (const auto& xsKind : XSMatrixKind())
     {
@@ -289,7 +289,7 @@ std::vector<Nuclide::XSMatrixSetType> NuclideBlock::readXSMatrices()
 
         for(size_t i = 0; i < temperatures.size(); i++)
         {
-            if(m_nuclide.isResonant())
+            if(m_nuclide->isResonant())
             {
                 // Infinite dilution XSs
 
@@ -326,7 +326,7 @@ MatrixXd NuclideBlock::assembleMatrixXS(XSMatrixKind xsKind, unsigned lowBound, 
 {
     if(InputParser::isKeywordPresent(m_xsDataLines, get_name(xsKind), lowBound, upperBound))
     {
-        MatrixXd M = MatrixXd::Zero(m_nuclide.getEnergyGroupsNumber(), m_nuclide.getEnergyGroupsNumber());
+        MatrixXd M = MatrixXd::Zero(m_nuclide->getEnergyGroupsNumber(), m_nuclide->getEnergyGroupsNumber());
 
         std::tuple< std::vector<double>, std::vector<int32_t>, std::vector<int32_t> > vectors = 
         readMatrixComponents(xsKind, lowBound, upperBound);
@@ -335,7 +335,7 @@ MatrixXd NuclideBlock::assembleMatrixXS(XSMatrixKind xsKind, unsigned lowBound, 
         std::vector<int32_t> njj  = std::get<1>(vectors);
         std::vector<int32_t> ijj  = std::get<2>(vectors);
 
-        int32_t energyGroups = m_nuclide.getEnergyGroupsNumber();
+        int32_t energyGroups = m_nuclide->getEnergyGroupsNumber();
 
         for(int32_t h = 0; h < energyGroups; h++)
         {
@@ -391,12 +391,12 @@ std::tuple< std::vector<double>, std::vector<int32_t>, std::vector<int32_t> >
 void NuclideBlock::readGroupConstants()
 {
     std::vector<Nuclide::XSSetType> crossSectionSets = readXSs();
-    m_nuclide.setXSSets(crossSectionSets);
-    m_nuclide.calcXSSets();
+    m_nuclide->setXSSets(crossSectionSets);
+    m_nuclide->calcXSSets();
 
     std::vector<Nuclide::XSMatrixSetType> crossSectionMatrixSets = readXSMatrices();
-    m_nuclide.setXSMatrixSets(crossSectionMatrixSets);
-    m_nuclide.calcXSMatrixSets();
+    m_nuclide->setXSMatrixSets(crossSectionMatrixSets);
+    m_nuclide->calcXSMatrixSets();
 }
 
 void NuclideBlock::isNuclideResonant()
@@ -404,10 +404,10 @@ void NuclideBlock::isNuclideResonant()
     const std::string key = "DILUTION"; 
     std::vector<double> parVec = readParameters(key);
     bool value = parVec.size() > 0 ? true : false;
-    m_nuclide.setIsResonant(value);
+    m_nuclide->setIsResonant(value);
 }
 
-Nuclide* NuclideBlock::getNuclide()
+std::shared_ptr<Nuclide> NuclideBlock::getNuclide()
 {
     readName();
     readAWR();
@@ -415,5 +415,5 @@ Nuclide* NuclideBlock::getNuclide()
     setNumberOfEnergyGroups();
 	readTemperatureBlocks();
 	readGroupConstants();
-    return &m_nuclide;
+    return m_nuclide;
 }

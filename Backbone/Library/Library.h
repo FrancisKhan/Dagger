@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+#include "Nuclide.h"
+
 class Library
 {
 public:
@@ -12,7 +14,9 @@ public:
 	void findNuclideBLocks();
 	std::pair<unsigned, unsigned> getXSNuclideBLock(const std::string &nuclide);
 	unsigned getNumberOfEnergyGroups() {return m_numberOfEnergyGroups;}
-	void getNuclides();
+	std::vector < std::shared_ptr<Nuclide> > getNuclides(std::vector<std::string> &nucVec);
+	void setXSLibraryPath(const std::string& libraryPath);
+	std::string getXSLibraryPath() {return m_libraryPath;}
 	
 private:
 	void setNumberOfEnergyGroups();
@@ -21,6 +25,9 @@ private:
 	std::vector<std::string> m_xsNuclides;
 	std::vector<unsigned> m_xsNuclideBlocks;
 	unsigned m_numberOfEnergyGroups;
+	std::string m_libraryPath;
+
+	std::vector < std::shared_ptr<Nuclide> > m_nuclides;
 };
 
 #endif

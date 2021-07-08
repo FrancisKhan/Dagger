@@ -14,8 +14,10 @@ class NuclideBlock
 {
 public:
 	NuclideBlock(std::vector<std::string> &dataVec, unsigned numberOfEnergyGroups) : 
-	m_xsDataLines(dataVec), m_numberOfEnergyGroups(numberOfEnergyGroups) {}
-	Nuclide* getNuclide();
+	m_xsDataLines(dataVec), m_numberOfEnergyGroups(numberOfEnergyGroups),
+	m_nuclide(std::make_shared<Nuclide>()) {}
+
+	std::shared_ptr<Nuclide> getNuclide();
 	
 private:
 	std::pair<unsigned, unsigned> getNumberOfValuesToRead(unsigned line);
@@ -43,8 +45,8 @@ private:
 	Eigen::MatrixXd assembleMatrixXS(XSMatrixKind xsKind, unsigned lowBound, unsigned upperBound);
 
 	std::vector<std::string> m_xsDataLines;
-	Nuclide m_nuclide;
 	unsigned m_numberOfEnergyGroups;
+	std::shared_ptr<Nuclide> m_nuclide;
 };
 
 #endif
