@@ -42,8 +42,6 @@ if (NOT "${VERSION}" STREQUAL "${VERSION_}")
     file(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/Backbone/IO/git-version.h "${VERSION}")
 endif()
 
-include(CTest)
-
 # External library directory
 add_subdirectory(external)
 
@@ -55,8 +53,3 @@ add_subdirectory(Utilities)
 
 # The executable code is here
 add_subdirectory(app)
-
-# Tests are here
-if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING) AND BUILD_TESTING)
-    add_subdirectory(tests)
-endif()

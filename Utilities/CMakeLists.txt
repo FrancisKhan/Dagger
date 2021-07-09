@@ -7,7 +7,6 @@ target_include_directories(utilities_library PUBLIC .)
 target_include_directories(utilities_library PUBLIC ../Backbone/)
 target_include_directories(utilities_library PUBLIC ../Backbone/IO)
 target_include_directories(utilities_library PUBLIC ../Backbone/Datamodel)
-target_include_directories(utilities_library PUBLIC ../external/boost-lib/src/boost)
 target_include_directories(utilities_library PUBLIC ../external/eigen-lib/src/eigen)
 target_include_directories(utilities_library PUBLIC ../external/spdlog-lib/src/spdlog/include/)
 

@@ -12,8 +12,8 @@ int main(int argc, char** argv)
 
 	auto start = std::chrono::steady_clock::now();
 
-	//library.printLogsOnFile("output.txt", "CRITICAL");
-	library.printLogsOnConsole("CRITICAL");
+	library.printLogsOnFile("output.txt", "CRITICAL");
+	//library.printLogsOnConsole("CRITICAL");
 
 	std::string inputPath = "/home/why/ALMOST_libs/draglibendfb7r0.txt";
 	library.setXSLibraryPath(inputPath);
