@@ -14,7 +14,7 @@ public:
 
     void printStart();
 	void printEnd();
-	void createLogger(Sink sink, std::string loggerName = "DRAGLIBREADER");
+	void createLogger(Sink sink, std::string loggerName = "DRAG-LIB-READER");
 	std::shared_ptr<spdlog::logger> getLogger();
 	void setInputPath(std::string inputPath);
 	void setOutputPath(std::string ioutputPathName);

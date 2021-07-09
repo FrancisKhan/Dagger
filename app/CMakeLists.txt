@@ -8,4 +8,4 @@ IF (WIN32)
   SET(CMAKE_EXE_LINKER_FLAGS "-static")
 ENDIF()
 
-target_link_libraries(almost PRIVATE utilities_library backbone_library)
+target_link_libraries(almost PRIVATE backbone_library)

@@ -17,6 +17,7 @@ project(almost
     LANGUAGES CXX)
 	
 # Let's ensure -std=c++xx instead of -std=g++xx
+
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_FLAGS "-Wall")
 
@@ -32,24 +33,21 @@ const std::string VERSION_PATCH =\"${VERSION_PATCH}\";
 
 #endif")
 
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/Backbone/IO/git-version.h)
-    file(READ ${CMAKE_CURRENT_SOURCE_DIR}/Backbone/IO/git-version.h VERSION_)
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/Source/IO/git-version.h)
+    file(READ ${CMAKE_CURRENT_SOURCE_DIR}/Source/IO/git-version.h VERSION_)
 else()
     set(VERSION_ "")
 endif()
 
 if (NOT "${VERSION}" STREQUAL "${VERSION_}")
-    file(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/Backbone/IO/git-version.h "${VERSION}")
+    file(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/Source/IO/git-version.h "${VERSION}")
 endif()
 
 # External library directory
-add_subdirectory(external)
+add_subdirectory(External)
 
 # Backbone directory
-add_subdirectory(Backbone)
-
-# Utilities files are here
-add_subdirectory(Utilities)
+add_subdirectory(Source)
 
 # The executable code is here
 add_subdirectory(app)
