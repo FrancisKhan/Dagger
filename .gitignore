@@ -48,21 +48,10 @@ _deps
 ~$*
 
 DartConfiguration.tcl
-app/almost
-tests/test_almost
-tests/outputs
-outputs/*
-inputs_experimental/*
-outputs_experimental/*
-tests/testLog.txt
-tests/tests/
-external/eigen-lib
-external/boost-lib
-external/spdlog-lib
+app/testDLR
+External/eigen-lib
+External/spdlog-lib
 git-version.h
 **build
 **__pycache__
-almost-1.2.0-Linux.deb
-*_ALMOST.txt
 output.txt
-!/*installers/almost-1.2.0-Linux.deb

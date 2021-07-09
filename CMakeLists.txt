@@ -11,7 +11,7 @@ version_from_git(
 
 # Use the full semantic version for things like packag
 
-project(almost
+project(DragLibReader
     VERSION ${VERSION}
     DESCRIPTION "DragLibReader"
     LANGUAGES CXX)

@@ -1,4 +1,4 @@
-add_executable(almost main.cpp)
+add_executable(testDLR main.cpp)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -8,4 +8,4 @@ IF (WIN32)
   SET(CMAKE_EXE_LINKER_FLAGS "-static")
 ENDIF()
 
-target_link_libraries(almost PRIVATE backbone_library)
+target_link_libraries(testDLR PRIVATE DLR_library)

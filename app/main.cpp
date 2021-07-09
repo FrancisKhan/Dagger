@@ -1,4 +1,3 @@
-#include "Reactor.h"
 #include "Library.h"
 #include "Output.h"
 
@@ -7,7 +6,6 @@
 
 int main(int argc, char** argv)
 {
-	Reactor reactor;
 	Library library;
 
 	auto start = std::chrono::steady_clock::now();
