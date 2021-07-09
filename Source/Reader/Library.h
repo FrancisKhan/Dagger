@@ -9,7 +9,7 @@
 class Library
 {
 public:
-	Library() {}
+	Library();
 	std::vector<std::string> readXSFile(std::string &input);
 	void findNuclideBLocks();
 	std::pair<unsigned, unsigned> getXSNuclideBLock(const std::string &nuclide);

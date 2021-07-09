@@ -1,7 +1,7 @@
 #ifndef SINK_H
 #define SINK_H
 
-enum class Sink {CONSOLE = 0, FILE, BOTH};
+enum class Sink {CONSOLE = 0, FILE, BOTH, EMPTY};
 
 inline std::ostream& operator << (std::ostream& stm, Sink sink)
 {
@@ -10,6 +10,7 @@ inline std::ostream& operator << (std::ostream& stm, Sink sink)
         case Sink::CONSOLE : return stm << "CONSOLE";
         case Sink::FILE    : return stm << "FILE";
         case Sink::BOTH    : return stm << "BOTH";
+        case Sink::EMPTY   : return stm << "EMPTY";
         default : return stm << "Sink{" << int(sink) << "}"; 
     }
 }
@@ -21,6 +22,7 @@ inline std::string get_name(Sink sink)
     case Sink::CONSOLE : return std::string("CONSOLE");
     case Sink::FILE    : return std::string("FILE");
     case Sink::BOTH    : return std::string("BOTH");
+    case Sink::EMPTY   : return std::string("EMPTY");
     default : return std::string("");
   }
 }
@@ -42,7 +44,7 @@ inline Sink begin(Sink r)
 
 inline Sink end(Sink r)   
 {
-    return Sink(int(Sink::BOTH) + 1);
+    return Sink(int(Sink::EMPTY) + 1);
 }
 
 

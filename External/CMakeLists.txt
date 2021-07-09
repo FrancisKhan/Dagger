@@ -14,7 +14,7 @@ ExternalProject_Add(
 ExternalProject_Add(
     spdlog 
     PREFIX "spdlog-lib"
-    URL https://codeload.github.com/gabime/spdlog/zip/v1.5.0
+    URL https://codeload.github.com/gabime/spdlog/zip/v1.8.5
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
     INSTALL_COMMAND ""

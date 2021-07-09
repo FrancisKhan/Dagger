@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <experimental/filesystem>
+#include "spdlog/sinks/null_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
 Output out;
@@ -106,17 +107,17 @@ void Output::createLogger(Sink sink, std::string loggerName)
 
 	if(sink == Sink::CONSOLE)
 	{
-		auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-		spdlog::sinks_init_list sink_list = {console_sink};
-		mp_logger = std::make_shared<spdlog::logger>(loggerName, sink_list);
+		mp_logger = spdlog::stdout_color_mt(loggerName);
 	}
 	else if (sink == Sink::FILE)
 	{
-		auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(m_outputFullName, true);
-		spdlog::sinks_init_list sink_list = {file_sink};
-		mp_logger = std::make_shared<spdlog::logger>(loggerName, sink_list);
+		mp_logger = spdlog::basic_logger_mt(loggerName, m_outputFullName);
 	}
-	else
+	else if (sink == Sink::EMPTY)
+	{
+		mp_logger = spdlog::create<spdlog::sinks::null_sink_st>("empty");
+	}
+	else // BOTH case
 	{
 		auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
 		auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(m_outputFullName, true);

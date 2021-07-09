@@ -10,6 +10,11 @@
 
 namespace fs = std::experimental::filesystem;
 
+Library::Library() 
+{
+    out.createLogger(Sink::EMPTY);
+}
+
 std::vector<std::string> Library::readXSFile(std::string &input)
 {
 	std::vector<std::string> data;
