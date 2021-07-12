@@ -49,8 +49,11 @@ _deps
 
 DartConfiguration.tcl
 app/testDLR
-External/eigen-lib
-External/spdlog-lib
+external/eigen-lib
+external/spdlog-lib
+external/googletest-download/
+external/googletest-src/
+tests/gtest_DLR
 git-version.h
 **build
 **__pycache__

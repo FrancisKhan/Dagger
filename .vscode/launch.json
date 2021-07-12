@@ -9,7 +9,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/tests/test_almost",
+            "program": "${workspaceFolder}/tests/gtest_DLR",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -26,11 +26,11 @@
         },
 
         {
-            "name": "gdb almost",
+            "name": "gdb DLR",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/app/almost",
-            "args": ["./dummy_input.txt", "./output.txt", "CRITICAL"],
+            "program": "${workspaceFolder}/app/test_DLR",
+            "args": ["./output.txt"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

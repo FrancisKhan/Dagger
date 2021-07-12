@@ -33,21 +33,28 @@ const std::string VERSION_PATCH =\"${VERSION_PATCH}\";
 
 #endif")
 
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/Source/IO/git-version.h)
-    file(READ ${CMAKE_CURRENT_SOURCE_DIR}/Source/IO/git-version.h VERSION_)
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/source/IO/git-version.h)
+    file(READ ${CMAKE_CURRENT_SOURCE_DIR}/source/IO/git-version.h VERSION_)
 else()
     set(VERSION_ "")
 endif()
 
 if (NOT "${VERSION}" STREQUAL "${VERSION_}")
-    file(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/Source/IO/git-version.h "${VERSION}")
+    file(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/source/IO/git-version.h "${VERSION}")
 endif()
 
+include(CTest)
+
 # External library directory
-add_subdirectory(External)
+add_subdirectory(external)
 
 # Backbone directory
-add_subdirectory(Source)
+add_subdirectory(source)
 
 # The executable code is here
 add_subdirectory(app)
+
+# Tests are here
+if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING) AND BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
