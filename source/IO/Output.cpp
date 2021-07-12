@@ -103,26 +103,34 @@ void Output::setOutputPath(std::string outputPathName)
 
 void Output::createLogger(Sink sink, std::string loggerName)
 {
-	spdlog::sinks_init_list sink_list;
+	std::shared_ptr<spdlog::logger> logger = spdlog::details::registry::instance().get(loggerName);
 
-	if(sink == Sink::CONSOLE)
+	// check whether there is already a logger with the loggerName name
+	if((logger == nullptr))
 	{
-		mp_logger = spdlog::stdout_color_mt(loggerName);
+		if(sink == Sink::CONSOLE)
+		{
+			mp_logger = spdlog::stdout_color_mt(loggerName);
+		}
+		else if (sink == Sink::FILE)
+		{
+			mp_logger = spdlog::basic_logger_mt(loggerName, m_outputFullName);
+		}
+		else if (sink == Sink::EMPTY)
+		{
+			mp_logger = spdlog::create<spdlog::sinks::null_sink_st>(loggerName);
+		}
+		else // BOTH case
+		{
+			auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+			auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(m_outputFullName, true);
+			spdlog::sinks_init_list sink_list = {console_sink, file_sink};
+			mp_logger = std::make_shared<spdlog::logger>(loggerName, sink_list);
+		}
 	}
-	else if (sink == Sink::FILE)
+	else
 	{
-		mp_logger = spdlog::basic_logger_mt(loggerName, m_outputFullName);
-	}
-	else if (sink == Sink::EMPTY)
-	{
-		mp_logger = spdlog::create<spdlog::sinks::null_sink_st>("empty");
-	}
-	else // BOTH case
-	{
-		auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-		auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(m_outputFullName, true);
-		spdlog::sinks_init_list sink_list = {console_sink, file_sink};
-		mp_logger = std::make_shared<spdlog::logger>(loggerName, sink_list);
+		mp_logger = logger;
 	}
 	
 	mp_logger->flush_on(spdlog::level::info);

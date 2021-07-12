@@ -17,6 +17,8 @@ public:
 	std::vector < std::shared_ptr<Nuclide> > getNuclides(std::vector<std::string> &nucVec);
 	void setXSLibraryPath(const std::string& libraryPath);
 	std::string getXSLibraryPath() {return m_libraryPath;}
+	size_t getNumberOfNuclidesRead() {return m_nuclides.size();} 
+
 
 	void printLogsOnConsole(const std::string& logLevel);
 	void printLogsOnFile(const std::string& logFile, const std::string& logLevel);
