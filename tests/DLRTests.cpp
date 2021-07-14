@@ -1,7 +1,18 @@
 #include <iostream>
 
 #include "gtest/gtest.h"
+#include "network_tools.h"
 #include "Library.h"
+
+TEST(DLRTests, DownloadLibrary)
+{	
+    curl_global_init(CURL_GLOBAL_ALL);
+    std::string url = "https://www.polymtl.ca/merlin/downloads/libraries/ascii/draglibendfb7r0.gz";
+    std::string target = "draglibendfb7r0.gz";
+    bool result = Network::downloadFile(url, target);
+    curl_global_cleanup();
+    EXPECT_TRUE(result);
+}
 
 TEST(DLRTests, OpenLibrary)
 {	

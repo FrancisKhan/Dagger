@@ -53,8 +53,13 @@ external/eigen-lib
 external/spdlog-lib
 external/googletest-download/
 external/googletest-src/
+external/libcurl-lib/
+external/lib/
+external/include/
+external/bin/
 tests/gtest_DLR
 git-version.h
+draglibendfb7r0.gz
 **build
 **__pycache__
 output.txt
