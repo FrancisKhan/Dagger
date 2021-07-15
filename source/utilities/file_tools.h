@@ -96,34 +96,35 @@ namespace File
         return true;
     }
 
-    inline std::string compressFile(const std::string& data)
+    inline void compressFile(const std::string& data)
 	{
-		namespace bio = boost::iostreams;
-
-		std::stringstream compressed;
-		std::stringstream origin(data);
-
-		bio::filtering_streambuf<bio::input> out;
-		out.push(bio::gzip_compressor(bio::gzip_params(bio::gzip::best_compression)));
-		out.push(origin);
-		bio::copy(out, compressed);
-
-		return compressed.str();
+		// read filename from the function argument
+        std::ofstream file(data, std::ios_base::out | std::ios_base::binary);
+        boost::iostreams::filtering_streambuf<boost::iostreams::output> outbuf;
+        outbuf.push(boost::iostreams::gzip_compressor());
+        outbuf.push(file);
+        // convert streambuf to ostream
+        std::ostream out(&outbuf);
+        // write some test data
+        out << "This is a test text!\n";
+        // cleanup
+        boost::iostreams::close(outbuf);
+        file.close();
 	}
 
-	inline std::string decompressFile(const std::string& data)
+	inline void decompressFile(const std::string& data)
 	{
-		namespace bio = boost::iostreams;
-
-		std::stringstream compressed(data);
-		std::stringstream decompressed;
-
-		bio::filtering_streambuf<bio::input> out;
-		out.push(bio::gzip_decompressor());
-		out.push(compressed);
-		bio::copy(out, decompressed);
-
-		return decompressed.str();
+		// read from the function argument, assume it's gzipped
+        std::ifstream file(data, std::ios_base::in | std::ios_base::binary);
+        boost::iostreams::filtering_streambuf<boost::iostreams::input> inbuf;
+        inbuf.push(boost::iostreams::gzip_decompressor());
+        inbuf.push(file);
+        // convert streambuf to istream
+        std::istream instream(&inbuf);
+        // copy everything from instream to 
+        std::cout << instream.rdbuf();
+        // cleanup
+        file.close();
 	}
 }
 

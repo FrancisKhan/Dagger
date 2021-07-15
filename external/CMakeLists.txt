@@ -40,6 +40,17 @@ ExternalProject_Add(
     INSTALL_COMMAND ""
 )
 
+ExternalProject_Add(
+    zlib 
+    PREFIX "zlib-lib"
+    URL https://zlib.net/zlib-1.2.11.tar.gz
+    SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/zlib-lib/src/zlib
+    CMAKE_ARGS
+        ${GLOBAL_DEFAULT_ARGS}
+        -DCMAKE_INSTALL_PREFIX=${CMAKE_SOURCE_DIR}/external
+    BUILD_COMMAND make
+)
+
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .

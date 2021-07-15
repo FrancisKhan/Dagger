@@ -122,6 +122,7 @@
         "*.evaluator": "cpp",
         "*.traits": "cpp",
         "*.expression": "cpp",
-        "bit": "cpp"
+        "bit": "cpp",
+        "source_location": "cpp"
     }
 }

@@ -32,3 +32,25 @@ TEST(FileToolsTests, getFileExtension)
     std::string extension = File::getFileExtension(newFile);
     EXPECT_EQ(extension, "txt");
 }
+
+TEST(FileToolsTests, CompressFile)
+{	
+    std::string newFile = "/home/why/DragLibReader/newfile.txt";
+    // std::string newFile = File::getCurrentPath() + "/newFile.txt";
+    //File::createFile(newFile);
+    File::compressFile(newFile);
+    // bool comparison = File::getFileExtension(newFile)
+    // std::string fileToRemove = File::getCurrentPath() +"/neutron_libraries/newFile.txt";
+    // EXPECT_TRUE(File::removeFile(fileToRemove));
+}
+
+TEST(FileToolsTests, DecompressFile)
+{	
+    std::string newFile = "/home/why/DragLibReader/newfile.gz";
+    // std::string newFile = File::getCurrentPath() + "/newFile.txt";
+    //File::createFile(newFile);
+    File::decompressFile(newFile);
+    // bool comparison = File::getFileExtension(newFile)
+    // std::string fileToRemove = File::getCurrentPath() +"/neutron_libraries/newFile.txt";
+    // EXPECT_TRUE(File::removeFile(fileToRemove));
+}
