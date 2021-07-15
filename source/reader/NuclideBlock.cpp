@@ -37,9 +37,9 @@ unsigned NuclideBlock::getNumberOfLinesToRead(unsigned lineNumber)
     }
     else
     {
-        out.print(TraceLevel::CRITICAL, "Error NuclideBlock::getNumberOfLinesToRead, {} value kind not recognized!", 
+        out.print(TraceLevel::CRITICAL, "ERROR: NuclideBlock::getNumberOfLinesToRead, {} value kind not recognized!", 
                   int(valuePair.first));
-        exit(-1);
+        throw std::runtime_error("ERROR: NuclideBlock::getNumberOfLinesToRead, {} value kind not recognized!");
     }
 
     return numberOfLines;
@@ -111,8 +111,8 @@ std::vector< std::pair<unsigned, unsigned> > NuclideBlock::readTemperatureBlocks
         }
         else
         {
-            out.print(TraceLevel::CRITICAL, "Error {} seems to repeat in the XS library!", key);
-            exit(-1);
+            out.print(TraceLevel::CRITICAL, "ERROR: {} seems to repeat in the XS library!", key);
+            throw std::runtime_error("ERROR: key seems to repeat in the XS library!");
         }
     }
 
@@ -134,10 +134,9 @@ std::vector<double> NuclideBlock::readDilutions(unsigned firstLine, unsigned las
     std::vector<double> dilutions = m_nuclide->getDilutions();
     if((dilutions.size() != 0) && (v != dilutions))
     {
-        out.print(TraceLevel::CRITICAL, "Error {} seems to have temperature-dependent dilution values!", 
+        out.print(TraceLevel::CRITICAL, "ERROR: {} seems to have temperature-dependent dilution values!", 
         m_nuclide->getName());
-        
-        exit(-1);
+        throw std::runtime_error("ERROR: nuclide seems to have temperature-dependent dilution values!");
     }
 
     m_nuclide->setDilutions(v);
@@ -161,8 +160,8 @@ NuclideBlock::readDilutionBlocks(std::pair<unsigned, unsigned> &block)
         }
         else
         {
-            out.print(TraceLevel::CRITICAL, "Error {} seems to repeat in the XS library!", key);
-            exit(-1);
+            out.print(TraceLevel::CRITICAL, "ERROR: {} seems to repeat in the XS library!", key);
+            throw std::runtime_error("ERROR: key seems to repeat in the XS library!");
         }
     }
 
@@ -210,8 +209,8 @@ std::vector<double> NuclideBlock::populateXS(std::vector<double> &xsVec)
         }
         else
         {
-            out.print(TraceLevel::CRITICAL, "Error {} read in the XS library!", int(inputSize));
-            exit(-1);
+            out.print(TraceLevel::CRITICAL, "ERROR: {} read in the XS library!", int(inputSize));
+            throw std::runtime_error("ERROR: wrong number of values read in the XS library!");
         }
 
     return result;

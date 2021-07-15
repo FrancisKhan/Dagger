@@ -78,8 +78,8 @@ namespace InputParser
 
         if(keywordFound == false) 
 	    {
-		    out.print(TraceLevel::CRITICAL, "{} is missing from the input!", toSearch);
-	        exit(-1);
+		    out.print(TraceLevel::CRITICAL, "ERROR: {} is missing from the input!", toSearch);
+	        throw std::runtime_error("ERROR: key missing from the input!");
 	    }
 
 	    return line;

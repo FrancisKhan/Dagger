@@ -3,6 +3,8 @@
 #include "inputParser.h"
 #include "NuclideBlock.h"
 #include "numeric_tools.h"
+#include "network_tools.h"
+#include "file_tools.h"
 
 #include <iostream>
 #include <fstream>
@@ -24,7 +26,7 @@ std::vector<std::string> Library::readXSFile(std::string &input)
 	if (!xsDataFile) 
 	{
 		out.print(TraceLevel::CRITICAL, "Unable to open file: {}", input); 
-		exit(-1);
+        throw std::runtime_error("ERROR: Unable to open file");
 	}
 	
     std::string line;
@@ -60,8 +62,8 @@ std::pair<unsigned, unsigned> Library::getXSNuclideBLock(const std::string &nucl
     }
     else
     {
-        out.print(TraceLevel::CRITICAL, "{} nuclide not found!", nuclide);
-	    exit(-1);
+        out.print(TraceLevel::CRITICAL, "ERROR: {} nuclide not found!", nuclide);
+        throw std::runtime_error("ERROR: nuclide not found!");
     } 
 
     if (lines.size() == 1)
@@ -75,8 +77,8 @@ std::pair<unsigned, unsigned> Library::getXSNuclideBLock(const std::string &nucl
     }
 	else
     {
-        out.print(TraceLevel::CRITICAL, "Error in reading the {} nuclide data block!", nuclide);
-	    exit(-1);
+        out.print(TraceLevel::CRITICAL, "ERROR: reading the {} nuclide data block not successful!", nuclide);
+         throw std::runtime_error("ERROR: nuclide not found!");
     } 
 
 	return blockLines;
@@ -113,12 +115,21 @@ void Library::setNumberOfEnergyGroups()
 void Library::setXSLibraryPath(const std::string& libraryPath)
 {
     if (fs::exists(libraryPath))
-	{
-		m_libraryPath = libraryPath;
-	}
+    {
+        if(File::getFileExtension(libraryPath) == "txt")
+        {
+            m_libraryPath = libraryPath;
+        }
+        else
+        {
+            out.print(TraceLevel::CRITICAL, "ERROR: library file has not a txt extension");
+            throw std::runtime_error("ERROR: library file has not a txt extension");
+        }
+    }
     else
     {
-        std::cout << "ERROR: library file not found!" << std::endl;
+        out.print(TraceLevel::CRITICAL, "ERROR: library file not found");
+        throw std::runtime_error("ERROR: library file not found");
     }
 }
 
@@ -154,6 +165,14 @@ void setLogLevel(const std::string& logLevel)
 std::string Library::getLogLevel()
 {
     return get_name(out.getLevel());
+}
+
+bool Library::downloadLibrary(const std::string& url, const std::string& targetFolder)
+{
+    curl_global_init(CURL_GLOBAL_ALL);
+    bool result = Network::downloadFile(url, targetFolder);
+    curl_global_cleanup();
+    return result;
 }
 
 // void Input::printData()

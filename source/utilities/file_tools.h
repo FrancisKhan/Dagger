@@ -6,6 +6,10 @@
 #include <experimental/filesystem>
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include <boost/iostreams/filtering_streambuf.hpp>
+#include <boost/iostreams/copy.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
 
 namespace fs = std::experimental::filesystem;
 
@@ -24,6 +28,19 @@ namespace File
 	    if (found != std::string::npos)
 	    {
 		    result = path.substr(0, found);
+	    }
+
+        return result;
+    }
+
+    inline std::string getFileExtension(const std::string& path)
+    {
+        std::string result("");
+	    std::size_t found = path.find_last_of(".\\");
+	
+	    if (found != std::string::npos)
+	    {
+		    result = path.substr(found + 1);
 	    }
 
         return result;
@@ -78,6 +95,36 @@ namespace File
 
         return true;
     }
+
+    inline std::string compressFile(const std::string& data)
+	{
+		namespace bio = boost::iostreams;
+
+		std::stringstream compressed;
+		std::stringstream origin(data);
+
+		bio::filtering_streambuf<bio::input> out;
+		out.push(bio::gzip_compressor(bio::gzip_params(bio::gzip::best_compression)));
+		out.push(origin);
+		bio::copy(out, compressed);
+
+		return compressed.str();
+	}
+
+	inline std::string decompressFile(const std::string& data)
+	{
+		namespace bio = boost::iostreams;
+
+		std::stringstream compressed(data);
+		std::stringstream decompressed;
+
+		bio::filtering_streambuf<bio::input> out;
+		out.push(bio::gzip_decompressor());
+		out.push(compressed);
+		bio::copy(out, decompressed);
+
+		return decompressed.str();
+	}
 }
 
 #endif

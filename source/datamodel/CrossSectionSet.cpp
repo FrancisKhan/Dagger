@@ -60,6 +60,6 @@ void CrossSectionSet::debugCalcXS(std::vector<double> &newValues, std::vector<do
         out.print(TraceLevel::CRITICAL, "New XS:");
         PrintFuncs::printVector(newValues, out, TraceLevel::CRITICAL);
 
-        exit(-1);
+        throw std::runtime_error("ERROR: error in CalcXS");
     }
 }

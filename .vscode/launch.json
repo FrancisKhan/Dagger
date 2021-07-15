@@ -29,7 +29,7 @@
             "name": "gdb DLR",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/app/test_DLR",
+            "program": "${workspaceFolder}/app/testDLR",
             "args": ["./output.txt"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

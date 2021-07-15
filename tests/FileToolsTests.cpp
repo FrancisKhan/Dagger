@@ -25,3 +25,10 @@ TEST(FileToolsTests, MoveFile)
     std::string fileToRemove = File::getCurrentPath() +"/neutron_libraries/newFile.txt";
     EXPECT_TRUE(File::removeFile(fileToRemove));
 }
+
+TEST(FileToolsTests, getFileExtension)
+{	
+    std::string newFile = File::getCurrentPath() + "/newFile.txt";
+    std::string extension = File::getFileExtension(newFile);
+    EXPECT_EQ(extension, "txt");
+}

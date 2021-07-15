@@ -54,6 +54,7 @@ external/spdlog-lib
 external/googletest-download/
 external/googletest-src/
 external/libcurl-lib/
+external/boost-lib/
 external/lib/
 external/include/
 external/bin/

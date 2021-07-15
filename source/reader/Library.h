@@ -19,7 +19,7 @@ public:
 	std::string getXSLibraryPath() {return m_libraryPath;}
 	size_t getNumberOfNuclidesRead() {return m_nuclides.size();} 
 
-
+	bool downloadLibrary(const std::string& url, const std::string& targetFolder);
 	void printLogsOnConsole(const std::string& logLevel);
 	void printLogsOnFile(const std::string& logFile, const std::string& logLevel);
 	void printLogsOnBoth(const std::string& logFile, const std::string& logLevel);

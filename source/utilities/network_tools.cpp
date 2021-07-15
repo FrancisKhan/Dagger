@@ -39,8 +39,8 @@ namespace Network
                     retval = true;
                 else
                 {
-                    out.print(TraceLevel::CRITICAL, "Libcurl error number: {}", res);
-                    exit(-1);
+                    out.print(TraceLevel::CRITICAL, "ERROR: Libcurl error number: {}", res);
+                    throw std::runtime_error("ERROR: Libcurl error!");
                 }
             
                 fclose(fp);
