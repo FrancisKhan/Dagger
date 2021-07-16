@@ -1,6 +1,5 @@
 #include "Library.h"
 #include "Output.h"
-#include "inputParser.h"
 #include "NuclideBlock.h"
 #include "numeric_tools.h"
 #include "network_tools.h"
@@ -17,27 +16,24 @@ Library::Library()
     out.createLogger(Sink::EMPTY);
 }
 
-std::vector<std::string> Library::readXSFile(std::string &input)
+std::vector<std::string> Library::readXSLibrary(std::string &input)
 {
-	std::vector<std::string> data;
+    std::vector<std::string> result {};
 
-    std::ifstream xsDataFile;
-	xsDataFile.open(input);
-	if (!xsDataFile) 
-	{
-		out.print(TraceLevel::CRITICAL, "Unable to open file: {}", input); 
-        throw std::runtime_error("ERROR: Unable to open file");
-	}
-	
-    std::string line;
-	std::string noExtraSpacesline;
-    while (std::getline(xsDataFile, line))
+	if(File::getFileExtension(input) == "gz") // reading a zlib archive
     {
-        data.push_back(InputParser::removeSpaces(line));
+        result = File::decompressFile(input);
+    }
+    else if(File::getFileExtension(input) == "txt") // reading a text file
+    {
+        result = File::readTextFile(input);
+    }
+    else
+    {
+
     }
 
-	xsDataFile.close();
-	return data;
+    return result;
 }
 
 
@@ -86,7 +82,7 @@ std::pair<unsigned, unsigned> Library::getXSNuclideBLock(const std::string &nucl
 
 std::vector < std::shared_ptr<Nuclide> > Library::getNuclides(std::vector<std::string> &nucVec)
 {
-    m_xsDataFileLines = readXSFile(m_libraryPath);
+    m_xsDataFileLines = readXSLibrary(m_libraryPath);
     findNuclideBLocks();
 
     setNumberOfEnergyGroups();
@@ -116,14 +112,14 @@ void Library::setXSLibraryPath(const std::string& libraryPath)
 {
     if (fs::exists(libraryPath))
     {
-        if(File::getFileExtension(libraryPath) == "txt")
+        if((File::getFileExtension(libraryPath) == "txt") || (File::getFileExtension(libraryPath) == "gz"))
         {
             m_libraryPath = libraryPath;
         }
         else
         {
-            out.print(TraceLevel::CRITICAL, "ERROR: library file has not a txt extension");
-            throw std::runtime_error("ERROR: library file has not a txt extension");
+            out.print(TraceLevel::CRITICAL, "ERROR: library file has not a txt or gz extension");
+            throw std::runtime_error("ERROR: library file has not a txt or gz extension");
         }
     }
     else

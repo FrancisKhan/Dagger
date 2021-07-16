@@ -10,7 +10,7 @@ class Library
 {
 public:
 	Library();
-	std::vector<std::string> readXSFile(std::string &input);
+	std::vector<std::string> readXSLibrary(std::string &input);
 	void findNuclideBLocks();
 	std::pair<unsigned, unsigned> getXSNuclideBLock(const std::string &nuclide);
 	unsigned getNumberOfEnergyGroups() {return m_numberOfEnergyGroups;}

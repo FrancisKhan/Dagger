@@ -33,24 +33,16 @@ TEST(FileToolsTests, getFileExtension)
     EXPECT_EQ(extension, "txt");
 }
 
-TEST(FileToolsTests, CompressFile)
+TEST(FileToolsTests, CompressDecompressFile)
 {	
-    std::string newFile = "/home/why/DragLibReader/newfile.txt";
-    // std::string newFile = File::getCurrentPath() + "/newFile.txt";
-    //File::createFile(newFile);
-    File::compressFile(newFile);
-    // bool comparison = File::getFileExtension(newFile)
-    // std::string fileToRemove = File::getCurrentPath() +"/neutron_libraries/newFile.txt";
-    // EXPECT_TRUE(File::removeFile(fileToRemove));
-}
+    std::vector<std::string> refVec{"Text1!", "Text2!", "Text3!"}; 
 
-TEST(FileToolsTests, DecompressFile)
-{	
-    std::string newFile = "/home/why/DragLibReader/newfile.gz";
-    // std::string newFile = File::getCurrentPath() + "/newFile.txt";
-    //File::createFile(newFile);
-    File::decompressFile(newFile);
-    // bool comparison = File::getFileExtension(newFile)
-    // std::string fileToRemove = File::getCurrentPath() +"/neutron_libraries/newFile.txt";
-    // EXPECT_TRUE(File::removeFile(fileToRemove));
+    std::string newFile = File::getCurrentPath() + "/newFile.gz";
+    File::compressFile(newFile, refVec);
+
+    std::vector<std::string> result = File::decompressFile(newFile);
+    bool areEqual = std::equal(refVec.begin(), refVec.end(), result.begin());
+
+    File::removeFile(newFile);
+    EXPECT_TRUE(areEqual);
 }

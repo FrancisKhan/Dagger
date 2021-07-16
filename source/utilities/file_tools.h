@@ -11,6 +11,8 @@
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
 
+#include "inputParser.h"
+
 namespace fs = std::experimental::filesystem;
 
 namespace File
@@ -96,35 +98,69 @@ namespace File
         return true;
     }
 
-    inline void compressFile(const std::string& data)
+    inline std::vector<std::string> readTextFile(const std::string& inputFile)
+	{
+        std::vector<std::string> data;
+
+        std::ifstream fileData;
+        fileData.open(inputFile);
+        if (!fileData) 
+        {
+            throw std::runtime_error("ERROR: Unable to open file");
+        }
+        
+        std::string line;
+        while (std::getline(fileData, line))
+        {
+            data.push_back(InputParser::removeSpaces(line));
+        }
+
+        fileData.close();
+        return data;
+	}
+
+    inline void compressFile(const std::string& data, std::vector<std::string>& content)
 	{
 		// read filename from the function argument
         std::ofstream file(data, std::ios_base::out | std::ios_base::binary);
         boost::iostreams::filtering_streambuf<boost::iostreams::output> outbuf;
         outbuf.push(boost::iostreams::gzip_compressor());
         outbuf.push(file);
-        // convert streambuf to ostream
-        std::ostream out(&outbuf);
-        // write some test data
-        out << "This is a test text!\n";
+        std::ostream out(&outbuf); // convert streambuf to ostream
+        
+        for(const auto& i : content) // write data content
+            out << i << "\n";
+        
         // cleanup
         boost::iostreams::close(outbuf);
         file.close();
 	}
 
-	inline void decompressFile(const std::string& data)
+    inline std::vector<std::string> decompressFile(const std::string& inputFile)
 	{
-		// read from the function argument, assume it's gzipped
-        std::ifstream file(data, std::ios_base::in | std::ios_base::binary);
-        boost::iostreams::filtering_streambuf<boost::iostreams::input> inbuf;
-        inbuf.push(boost::iostreams::gzip_decompressor());
-        inbuf.push(file);
-        // convert streambuf to istream
-        std::istream instream(&inbuf);
-        // copy everything from instream to 
-        std::cout << instream.rdbuf();
-        // cleanup
-        file.close();
+        std::vector<std::string> result;
+
+        if(fs::exists(inputFile) && (getFileExtension(inputFile) == "gz"))
+	    {
+            // read from the function argument, assume it's gzipped
+            std::ifstream file(inputFile, std::ios_base::in | std::ios_base::binary);
+            boost::iostreams::filtering_streambuf<boost::iostreams::input> inbuf;
+            inbuf.push(boost::iostreams::gzip_decompressor());
+            inbuf.push(file);
+            std::istream instream(&inbuf); // convert streambuf to istream
+
+            std::string line;
+            while (std::getline(instream, line))
+                result.push_back(InputParser::removeSpaces(line));
+
+            file.close(); // cleanup
+        }
+        else
+        {
+            throw std::runtime_error("ERROR: Unable to open file");
+        }
+
+        return result;
 	}
 }
 
