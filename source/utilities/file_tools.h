@@ -65,12 +65,10 @@ namespace File
     inline bool removeFile(const std::string& file)
     {
         bool result = false;
-        
-        fs::path filePath{fs::u8path(file)};
 
-        if (fs::exists(filePath))
+        if (fs::exists(file))
 	    {
-            fs::remove(filePath);
+            fs::remove(file);
             result = true;
         }
 
@@ -162,6 +160,23 @@ namespace File
 
         return result;
 	}
+
+    // This method is needed because Visual Studio Code runs the tests from 
+    // the base folder, while make or ctest runs from the tests folder.
+    // Absolute path seem not to work with WLS as well
+    inline std::string getPrePath() 
+    {
+        std::string path = getCurrentPath();
+
+        if(path.substr(path.size() -5, path.size()) == "tests")
+        {
+            return std::string("./../");
+        }
+        else
+        {
+            return std::string("./");
+        }
+    }
 }
 
 #endif

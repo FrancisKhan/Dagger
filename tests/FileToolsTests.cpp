@@ -3,12 +3,6 @@
 #include "gtest/gtest.h"
 #include "file_tools.h"
 
-TEST(FileToolsTests, GetCurrentPath)
-{	
-    std::string refString = "/home/why/DragLibReader";
-    EXPECT_EQ(File::getCurrentPath(), refString);
-}
-
 TEST(FileToolsTests, CreateRemoveFile)
 {	
     std::string newFile = File::getCurrentPath() + "/newFile.txt";
