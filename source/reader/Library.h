@@ -18,6 +18,8 @@ public:
 	void setXSLibraryPath(const std::string& libraryPath);
 	std::string getXSLibraryPath() {return m_libraryPath;}
 	size_t getNumberOfNuclidesRead() {return m_nuclides.size();} 
+	std::vector<std::string> getLibraryNuclides() {return m_xsNuclides;}
+	size_t getNumberOfLibraryNuclides() {return m_xsNuclides.size();}
 
 	bool downloadLibrary(const std::string& url, const std::string& targetFolder);
 	void printLogsOnConsole(const std::string& logLevel);
