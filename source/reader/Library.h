@@ -14,7 +14,8 @@ public:
 	void findNuclideBLocks();
 	std::pair<unsigned, unsigned> getXSNuclideBLock(const std::string &nuclide);
 	unsigned getNumberOfEnergyGroups() {return m_numberOfEnergyGroups;}
-	std::vector < std::shared_ptr<Nuclide> > getNuclides(std::vector<std::string> &nucVec);
+	std::vector < std::shared_ptr<Nuclide> > readNuclides(std::vector<std::string> &nucVec);
+	std::shared_ptr<Nuclide> getNuclide(const std::string &nucName);
 	void setXSLibraryPath(const std::string& libraryPath);
 	std::string getXSLibraryPath() {return m_libraryPath;}
 	size_t getNumberOfNuclidesRead() {return m_nuclides.size();} 

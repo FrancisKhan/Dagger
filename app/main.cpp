@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 	library.setXSLibraryPath(target);
 
 	std::vector<std::string> nucVec = {"Pu239", "La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library.getNuclides(nucVec);
+	std::vector < std::shared_ptr<Nuclide> > nuclides = library.readNuclides(nucVec);
 
 	for(const auto& nuc : nuclides)
 		nuc->printDebugData();

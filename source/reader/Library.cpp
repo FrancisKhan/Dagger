@@ -74,13 +74,13 @@ std::pair<unsigned, unsigned> Library::getXSNuclideBLock(const std::string &nucl
 	else
     {
         out.print(TraceLevel::CRITICAL, "ERROR: reading the {} nuclide data block not successful!", nuclide);
-         throw std::runtime_error("ERROR: nuclide not found!");
+        throw std::runtime_error("ERROR: nuclide not found!");
     } 
 
 	return blockLines;
 }
 
-std::vector < std::shared_ptr<Nuclide> > Library::getNuclides(std::vector<std::string> &nucVec)
+std::vector < std::shared_ptr<Nuclide> > Library::readNuclides(std::vector<std::string> &nucVec)
 {
     m_xsDataFileLines = readXSLibrary(m_libraryPath);
     findNuclideBLocks();
@@ -98,6 +98,22 @@ std::vector < std::shared_ptr<Nuclide> > Library::getNuclides(std::vector<std::s
 	}
 
     return m_nuclides;
+}
+
+std::shared_ptr<Nuclide> Library::getNuclide(const std::string &nucName)
+{
+    auto it = std::find_if(m_nuclides.begin(), m_nuclides.end(), 
+    [&nucName](const auto& i){return i->getName() == nucName;});
+
+    if(it != m_nuclides.end())
+    {
+        return *it;
+    }
+    else
+    {
+        out.print(TraceLevel::CRITICAL, "ERROR: {} has not being read yet", nucName);
+        throw std::runtime_error("ERROR: nuclide not being read yet");
+    }
 }
 
 void Library::setNumberOfEnergyGroups()
