@@ -19,27 +19,28 @@
 namespace Numerics
 {
     const double DINF = std::numeric_limits<double>::max();
+    const double DEPS = 10.0 * std::numeric_limits<double>::epsilon();
 
     typedef Eigen::Tensor<double, 2> Tensor2d;
     typedef Eigen::Tensor<double, 3> Tensor3d;
     typedef Eigen::Tensor<double, 4> Tensor4d;
 
     template <typename T>
-    inline bool is_equal(const T &x, const T &y)
+    inline bool is_equal(const T &x, const T &y, double eps = DEPS)
     {
-    	return fabs(x - y) < 10.0 * std::numeric_limits<double>::epsilon();
+        return fabs(x - y) < eps;
     }
 
     template <typename T>
-    inline bool not_equal(const T &x, const T &y)
+    inline bool not_equal(const T &x, const T &y, double eps = DEPS)
     {
-    	return !is_equal(x, y);
+    	return !is_equal(x, y, eps);
     }
 
     template <typename T>
-    inline bool is_lower(const T &x, const T &y)
+    inline bool is_lower(const T &x, const T &y, double eps = DEPS)
     {
-    	return x < y - 10.0 * std::numeric_limits<double>::epsilon();
+    	return x < y - eps;
     }
 
     template <typename T>
@@ -146,6 +147,26 @@ namespace Numerics
        auto last = v.begin() + n + 1;
        std::vector<T> vector(first, last);
        return vector;
+    }
+
+    template<typename T>
+    inline bool areVectorsEqual(std::vector<T> const &v, std::vector<T> const &ref, 
+                                double eps = DEPS)
+    {   
+        bool result = true;
+
+        if(v.size() == ref.size())
+        {
+            for(size_t i = 0; i < v.size(); i++)
+                if(not_equal(v[i], ref[i], eps))
+                    result = false;
+        }
+        else
+        {
+            result = false; 
+        }
+
+        return result;
     }
 }
 
