@@ -168,6 +168,12 @@ namespace Numerics
 
         return result;
     }
+
+    inline std::vector<double> eigenVecTOStdVec(Eigen::VectorXd const& v)
+    {   
+        std::vector<double> result(v.data(), v.data() + v.rows() * v.cols());
+        return result;
+    }
 }
 
 #endif
