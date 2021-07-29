@@ -42,6 +42,7 @@ private:
 
 	std::tuple< std::vector<double>, std::vector<int32_t>, std::vector<int32_t> > 
 	readMatrixComponents(XSMatrixKind xsKind, unsigned lowBound, unsigned upperBound);
+	std::pair<std::string, std::string> getMatrixKeys(XSMatrixKind xsKind);
 
 	Eigen::MatrixXd assembleMatrixXS(XSMatrixKind xsKind, unsigned lowBound, unsigned upperBound);
 

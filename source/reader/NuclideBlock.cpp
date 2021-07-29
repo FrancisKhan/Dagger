@@ -365,26 +365,23 @@ MatrixXd NuclideBlock::assembleMatrixXS(XSMatrixKind xsKind, unsigned lowBound, 
 std::tuple< std::vector<double>, std::vector<int32_t>, std::vector<int32_t> > 
 	NuclideBlock::readMatrixComponents(XSMatrixKind xsKind, unsigned lowBound, unsigned upperBound)
 {
-    std::string key1, key2;
-    if(xsKind == XSMatrixKind::SCAT00)
-    {
-        key1 = "NJJS00";
-        key2 = "IJJS00";
-    }
-    else
-    {
-        key1 = "NJJS01";
-        key2 = "IJJS01";
-    }
+    std::pair<std::string, std::string> keys = getMatrixKeys(xsKind);
 
     std::vector<double> xsVec     = readParameters(get_name(xsKind), lowBound, upperBound);
-    std::vector<double> njjDouble = readParameters(key1, lowBound, upperBound);
-    std::vector<double> ijjDouble = readParameters(key2, lowBound, upperBound);
+    std::vector<double> njjDouble = readParameters(keys.first, lowBound, upperBound);
+    std::vector<double> ijjDouble = readParameters(keys.second, lowBound, upperBound);
 
     std::vector<int32_t> njj(begin(njjDouble), end(njjDouble));
     std::vector<int32_t> ijj(begin(ijjDouble), end(ijjDouble)); 
 
     return std::make_tuple(xsVec, njj, ijj);
+}
+
+std::pair<std::string, std::string> NuclideBlock::getMatrixKeys(XSMatrixKind xsKind)
+{
+    std::string key1 = "NJJS0" + std::to_string(static_cast<uint32_t>(xsKind));
+    std::string key2 = "IJJS0" + std::to_string(static_cast<uint32_t>(xsKind));
+    return std::make_pair(key1, key2);
 }
 
 void NuclideBlock::readGroupConstants()
