@@ -30,6 +30,7 @@ private:
 	void readName();
 	void readAWR();
 	std::vector<double> readTemperatures();
+	std::vector<double> readLambdas();
 	std::vector<double> readDilutions(unsigned firstLine, unsigned lastLine);
 	void readGroupConstants();
 	std::vector<Nuclide::XSSetType> readXSs();

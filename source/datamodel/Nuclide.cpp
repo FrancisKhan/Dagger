@@ -115,8 +115,10 @@ void Nuclide::printDebugData()
     out.print(TraceLevel::CRITICAL, "Nuclide AWR: {}", getAWR());
     out.print(TraceLevel::CRITICAL, "Is nuclide resonant: {}", isResonant());
     out.print(TraceLevel::CRITICAL, "Temperatures:");
-    out.print(TraceLevel::CRITICAL, "getXSsNumber(): {}", int(getXSsNumber()));
     PrintFuncs::printVector(getTemperatures(), out, TraceLevel::CRITICAL);
+    out.print(TraceLevel::CRITICAL, "Lambdas:");
+    PrintFuncs::printVector(getLambdas(), out, TraceLevel::CRITICAL);
+    out.print(TraceLevel::CRITICAL, "getXSsNumber(): {}", int(getXSsNumber()));
 
     for (const auto& xsKind : XSKind())
         printXSs(xsKind);

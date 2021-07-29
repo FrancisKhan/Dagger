@@ -1337,8 +1337,6 @@ TEST(DLRTests, GetCHICrossSectionResonant)
 	std::vector < std::shared_ptr<Nuclide> > nuclides = library.readNuclides(nucVec);
     std::vector<double> xs = library.getNuclide("Pu239")->getXSSet(XSKind::CHI).getXS(5.50000000e+02, 2.51750000e+02).getValues();
 
-	//PrintFuncs::createCppVector(xs, "%13.12e");
-
 	std::vector<double> ref {8.082575730000e-06, 4.209186950000e-05, 6.258555370000e-05, 
 	4.768497310000e-04, 1.337711470000e-03, 4.988725760000e-03, 1.275756860000e-02, 1.097499950000e-02, 
 	1.487907120000e-02, 4.317126050000e-02, 6.205504760000e-02, 7.931021600000e-02, 9.172122930000e-02, 
@@ -1376,6 +1374,24 @@ TEST(DLRTests, GetCHICrossSectionResonant)
 	3.925120210000e-12, 2.404882720000e-12, 2.530769000000e-12, 3.794833370000e-12};
 
     EXPECT_TRUE(Numerics::areVectorsEqual(xs, ref, 1.0E-9));
+}
+
+TEST(DLRTests, GetLambdas)
+{	
+    Library library;
+    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+	library.setXSLibraryPath(refLibPath);
+
+    std::vector<std::string> nucVec = {"Pu239"};
+	std::vector < std::shared_ptr<Nuclide> > nuclides = library.readNuclides(nucVec);
+    std::vector<double> lambdas = library.getNuclide("Pu239")->getLambdas();
+
+	//PrintFuncs::createCppVector(lambdas, "%13.12e");
+
+	std::vector<double> ref {1.248109990000e-02, 2.994666990000e-02, 1.071553010000e-01, 
+	3.176192940000e-01, 1.352380040000e+00, 1.069116020000e+01};
+
+    EXPECT_TRUE(Numerics::areVectorsEqual(lambdas, ref, 1.0E-9));
 }
 
 TEST(DLRTests, RemoveLibrary)

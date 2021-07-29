@@ -406,6 +406,14 @@ void NuclideBlock::isNuclideResonant()
     m_nuclide->setIsResonant(value);
 }
 
+std::vector<double> NuclideBlock::readLambdas()
+{
+    const std::string key = "LAMBDA-D"; 
+    std::vector<double> v = readParameters(key);
+    m_nuclide->setLambdas(v);
+    return v;
+}
+
 std::shared_ptr<Nuclide> NuclideBlock::getNuclide()
 {
     readName();
@@ -414,5 +422,6 @@ std::shared_ptr<Nuclide> NuclideBlock::getNuclide()
     setNumberOfEnergyGroups();
 	readTemperatureBlocks();
 	readGroupConstants();
+    readLambdas();
     return m_nuclide;
 }
