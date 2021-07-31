@@ -33,14 +33,14 @@ const std::string VERSION_PATCH =\"${VERSION_PATCH}\";
 
 #endif")
 
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/source/IO/git-version.h)
-    file(READ ${CMAKE_CURRENT_SOURCE_DIR}/source/IO/git-version.h VERSION_)
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/source/git-version.h)
+    file(READ ${CMAKE_CURRENT_SOURCE_DIR}/source/git-version.h VERSION_)
 else()
     set(VERSION_ "")
 endif()
 
 if (NOT "${VERSION}" STREQUAL "${VERSION_}")
-    file(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/source/IO/git-version.h "${VERSION}")
+    file(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/source/git-version.h "${VERSION}")
 endif()
 
 include(CTest)
