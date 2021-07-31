@@ -49,6 +49,7 @@ _deps
 
 DartConfiguration.tcl
 app/testDLR
+dragLibReader-lib/
 external/eigen-lib
 external/spdlog-lib
 external/googletest-download/
