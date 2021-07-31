@@ -51,9 +51,6 @@ add_subdirectory(external)
 # Backbone directory
 add_subdirectory(source)
 
-# The executable code is here
-add_subdirectory(app)
-
 # Tests are here
 if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING) AND BUILD_TESTING)
     add_subdirectory(tests)

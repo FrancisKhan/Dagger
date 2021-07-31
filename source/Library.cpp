@@ -140,7 +140,7 @@ void Library::setXSLibraryPath(const std::string& libraryPath)
     }
     else
     {
-        out.print(TraceLevel::CRITICAL, "ERROR: library file not found");
+        out.print(TraceLevel::CRITICAL, "ERROR: library file not found in: {}", libraryPath);
         throw std::runtime_error("ERROR: library file not found");
     }
 }
