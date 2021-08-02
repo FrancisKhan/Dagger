@@ -10,14 +10,14 @@ add_library(DLR_library Output.cpp Library.cpp NuclideBlock.cpp
 			../external/utilities/gzip.cpp 
 			../external/utilities/zlib.cpp)
 
-target_include_directories(DLR_library PUBLIC .)
-target_include_directories(DLR_library PUBLIC ../external/utilities)
-target_include_directories(DLR_library PUBLIC ../external/eigen-lib/src/eigen)
-target_include_directories(DLR_library PUBLIC ../external/spdlog-lib/src/spdlog/include/)
-target_include_directories(DLR_library PUBLIC ../external/boost-lib/src/boost)
-target_include_directories(DLR_library PUBLIC ../external/include)
+target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/.)
+target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/../external/utilities)
+target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/../external/eigen-lib/src/eigen)
+target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/../external/spdlog-lib/src/spdlog/include/)
+target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/../external/boost-lib/src/boost)
+target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/../external/include)
 
-link_directories(../external/lib)
+link_directories(${CMAKE_CURRENT_BINARY_DIR}/../external/lib)
 
 # Experimental/filesystem C++ library
 target_link_libraries(DLR_library -lstdc++fs -lcurl -lz)

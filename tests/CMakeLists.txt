@@ -10,7 +10,7 @@ IF (WIN32)
   SET(CMAKE_EXE_LINKER_FLAGS "-static")
 ENDIF()
 
-link_directories(../external/lib)
+link_directories(${CMAKE_CURRENT_BINARY_DIR}/../external/lib)
 target_link_libraries(gtest_DLR PRIVATE DLR_library gtest gtest_main pthread -lstdc++fs -lcurl -lz)
 
 # If you register a test, then ctest and make test will run it.
