@@ -50,16 +50,15 @@ namespace File
 
     inline bool createFile(const std::string& inputFile)
     {
-        bool result = false;
         std::string parentFolder = getParentFolder(inputFile);
 
-        if (fs::exists(parentFolder))
+        if (!fs::exists(parentFolder))
 	    {
-            std::ofstream file {inputFile};
-            result = true;
+            fs::create_directories(parentFolder);
         }
 
-        return result;
+        std::ofstream file {inputFile};
+        return true;
     }
 
     inline bool removeFile(const std::string& file)
