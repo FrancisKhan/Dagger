@@ -68,7 +68,7 @@ namespace File
 
         if (fs::exists(file))
 	    {
-            fs::remove(file);
+            fs::remove_all(file);
             result = true;
         }
 
@@ -82,7 +82,7 @@ namespace File
 
         auto target = targetParent / sourceFile.filename(); // sourceFile.filename() returns "sourceFile.ext".
 
-        try // If you want to avoid exception handling, then use the error code overload of the following functions.
+        try
         {
             fs::create_directories(targetParent); // Recursively create target directory if not existing.
             fs::copy_file(sourceFile, target, fs::copy_options::overwrite_existing);

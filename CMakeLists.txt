@@ -9,8 +9,6 @@ version_from_git(
   TIMESTAMP "%Y%m%d%H%M%S"
 )
 
-# Use the full semantic version for things like packag
-
 project(DragLibReader
     VERSION ${VERSION}
     DESCRIPTION "DragLibReader"

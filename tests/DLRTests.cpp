@@ -11,7 +11,7 @@ TEST(DLRTests, DownloadLibrary)
 {	
     Library library;
     std::string url = "https://www.polymtl.ca/merlin/downloads/libraries/ascii/draglibendfb7r0.gz";
-    std::string target = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string target = File::getPrePath() + "draglibendfb7r0.gz";
 	File::removeFile(target);
 
     EXPECT_TRUE(library.downloadLibrary(url, target));
@@ -20,7 +20,7 @@ TEST(DLRTests, DownloadLibrary)
 TEST(DLRTests, OpenLibrary)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::string inputPath = library.getXSLibraryPath();
@@ -30,7 +30,7 @@ TEST(DLRTests, OpenLibrary)
 TEST(DLRTests, GetNuclides)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239", "La139"};
@@ -42,7 +42,7 @@ TEST(DLRTests, GetNuclides)
 TEST(DLRTests, GetLibraryNuclides)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -75,7 +75,7 @@ TEST(DLRTests, GetLibraryNuclides)
 TEST(DLRTests, GetNuclide)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -87,7 +87,7 @@ TEST(DLRTests, GetNuclide)
 TEST(DLRTests, GetTotalCrossSectionSetNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -100,7 +100,7 @@ TEST(DLRTests, GetTotalCrossSectionSetNonResonant)
 TEST(DLRTests, GetInelCrossSectionSetNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -113,7 +113,7 @@ TEST(DLRTests, GetInelCrossSectionSetNonResonant)
 TEST(DLRTests, GetN2NCrossSectionSetNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -126,7 +126,7 @@ TEST(DLRTests, GetN2NCrossSectionSetNonResonant)
 TEST(DLRTests, GetN3NCrossSectionSetNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -139,7 +139,7 @@ TEST(DLRTests, GetN3NCrossSectionSetNonResonant)
 TEST(DLRTests, GetN4NCrossSectionSetNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -152,7 +152,7 @@ TEST(DLRTests, GetN4NCrossSectionSetNonResonant)
 TEST(DLRTests, GetNNPCrossSectionSetNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -165,7 +165,7 @@ TEST(DLRTests, GetNNPCrossSectionSetNonResonant)
 TEST(DLRTests, GetNGCrossSectionSetNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -178,7 +178,7 @@ TEST(DLRTests, GetNGCrossSectionSetNonResonant)
 TEST(DLRTests, GetNPCrossSectionSetNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -191,7 +191,7 @@ TEST(DLRTests, GetNPCrossSectionSetNonResonant)
 TEST(DLRTests, GetNDCrossSectionSetNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -204,7 +204,7 @@ TEST(DLRTests, GetNDCrossSectionSetNonResonant)
 TEST(DLRTests, GetNTCrossSectionSetNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -217,7 +217,7 @@ TEST(DLRTests, GetNTCrossSectionSetNonResonant)
 TEST(DLRTests, GetNACrossSectionSetNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -230,7 +230,7 @@ TEST(DLRTests, GetNACrossSectionSetNonResonant)
 TEST(DLRTests, GetTotalCrossSectionSetResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -243,7 +243,7 @@ TEST(DLRTests, GetTotalCrossSectionSetResonant)
 TEST(DLRTests, GetInelCrossSectionSetResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -256,7 +256,7 @@ TEST(DLRTests, GetInelCrossSectionSetResonant)
 TEST(DLRTests, GetN2NCrossSectionSetResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -269,7 +269,7 @@ TEST(DLRTests, GetN2NCrossSectionSetResonant)
 TEST(DLRTests, GetN3NCrossSectionSetResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -282,7 +282,7 @@ TEST(DLRTests, GetN3NCrossSectionSetResonant)
 TEST(DLRTests, GetN4NCrossSectionSetResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -295,7 +295,7 @@ TEST(DLRTests, GetN4NCrossSectionSetResonant)
 TEST(DLRTests, GetNNPCrossSectionSetResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -308,7 +308,7 @@ TEST(DLRTests, GetNNPCrossSectionSetResonant)
 TEST(DLRTests, GetNGCrossSectionSetResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -321,7 +321,7 @@ TEST(DLRTests, GetNGCrossSectionSetResonant)
 TEST(DLRTests, GetNPCrossSectionSetResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -334,7 +334,7 @@ TEST(DLRTests, GetNPCrossSectionSetResonant)
 TEST(DLRTests, GetNDCrossSectionSetResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -347,7 +347,7 @@ TEST(DLRTests, GetNDCrossSectionSetResonant)
 TEST(DLRTests, GetNTCrossSectionSetResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -360,7 +360,7 @@ TEST(DLRTests, GetNTCrossSectionSetResonant)
 TEST(DLRTests, GetNACrossSectionSetResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -373,7 +373,7 @@ TEST(DLRTests, GetNACrossSectionSetResonant)
 TEST(DLRTests, GetNFTOTCrossSectionSetResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -386,7 +386,7 @@ TEST(DLRTests, GetNFTOTCrossSectionSetResonant)
 TEST(DLRTests, GetNUSIGFCrossSectionSetResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -399,7 +399,7 @@ TEST(DLRTests, GetNUSIGFCrossSectionSetResonant)
 TEST(DLRTests, GetCHICrossSectionSetResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -412,7 +412,7 @@ TEST(DLRTests, GetCHICrossSectionSetResonant)
 TEST(DLRTests, GetTotalCrossSectionNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -462,7 +462,7 @@ TEST(DLRTests, GetTotalCrossSectionNonResonant)
 TEST(DLRTests, GetInelCrossSectionNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -512,7 +512,7 @@ TEST(DLRTests, GetInelCrossSectionNonResonant)
 TEST(DLRTests, GetN2NCrossSectionNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -562,7 +562,7 @@ TEST(DLRTests, GetN2NCrossSectionNonResonant)
 TEST(DLRTests, GetN3NCrossSectionNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -612,7 +612,7 @@ TEST(DLRTests, GetN3NCrossSectionNonResonant)
 TEST(DLRTests, GetN4NCrossSectionNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -628,7 +628,7 @@ TEST(DLRTests, GetN4NCrossSectionNonResonant)
 TEST(DLRTests, GetNNPCrossSectionNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -678,7 +678,7 @@ TEST(DLRTests, GetNNPCrossSectionNonResonant)
 TEST(DLRTests, GetNGCrossSectionNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -728,7 +728,7 @@ TEST(DLRTests, GetNGCrossSectionNonResonant)
 TEST(DLRTests, GetNPCrossSectionNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -778,7 +778,7 @@ TEST(DLRTests, GetNPCrossSectionNonResonant)
 TEST(DLRTests, GetNDCrossSectionNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -828,7 +828,7 @@ TEST(DLRTests, GetNDCrossSectionNonResonant)
 TEST(DLRTests, GetNTCrossSectionNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -878,7 +878,7 @@ TEST(DLRTests, GetNTCrossSectionNonResonant)
 TEST(DLRTests, GetNACrossSectionNonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"La139"};
@@ -928,7 +928,7 @@ TEST(DLRTests, GetNACrossSectionNonResonant)
 TEST(DLRTests, GetTotalCrossSectionResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -977,7 +977,7 @@ TEST(DLRTests, GetTotalCrossSectionResonant)
 TEST(DLRTests, GetInelCrossSectionResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -1026,7 +1026,7 @@ TEST(DLRTests, GetInelCrossSectionResonant)
 TEST(DLRTests, GetN2NCrossSectionResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -1075,7 +1075,7 @@ TEST(DLRTests, GetN2NCrossSectionResonant)
 TEST(DLRTests, GetN3NCrossSectionResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -1124,7 +1124,7 @@ TEST(DLRTests, GetN3NCrossSectionResonant)
 TEST(DLRTests, GetN4NCrossSectionResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -1140,7 +1140,7 @@ TEST(DLRTests, GetN4NCrossSectionResonant)
 TEST(DLRTests, GetNNPCrossSectionResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -1155,7 +1155,7 @@ TEST(DLRTests, GetNNPCrossSectionResonant)
 TEST(DLRTests, GetNGCrossSectionResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -1204,7 +1204,7 @@ TEST(DLRTests, GetNGCrossSectionResonant)
 TEST(DLRTests, GetNPCrossSectionResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -1219,7 +1219,7 @@ TEST(DLRTests, GetNPCrossSectionResonant)
 TEST(DLRTests, GetNDCrossSectionResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -1234,7 +1234,7 @@ TEST(DLRTests, GetNDCrossSectionResonant)
 TEST(DLRTests, GetNTCrossSectionResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -1249,7 +1249,7 @@ TEST(DLRTests, GetNTCrossSectionResonant)
 TEST(DLRTests, GetNACrossSectionResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -1264,7 +1264,7 @@ TEST(DLRTests, GetNACrossSectionResonant)
 TEST(DLRTests, GetNFTOTCrossSectionResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -1313,7 +1313,7 @@ TEST(DLRTests, GetNFTOTCrossSectionResonant)
 TEST(DLRTests, GetNUSIGFCrossSectionResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -1362,7 +1362,7 @@ TEST(DLRTests, GetNUSIGFCrossSectionResonant)
 TEST(DLRTests, GetCHICrossSectionResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -1411,7 +1411,7 @@ TEST(DLRTests, GetCHICrossSectionResonant)
 TEST(DLRTests, GetLambdas)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -1427,7 +1427,7 @@ TEST(DLRTests, GetLambdas)
 TEST(DLRTests, GetCrossSectionMatrixSetL0NonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"H1_H2O"};
@@ -1440,7 +1440,7 @@ TEST(DLRTests, GetCrossSectionMatrixSetL0NonResonant)
 TEST(DLRTests, GetCrossSectionMatrixSetL1NonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"H1_H2O"};
@@ -1453,7 +1453,7 @@ TEST(DLRTests, GetCrossSectionMatrixSetL1NonResonant)
 TEST(DLRTests, GetCrossSectionMatrixSetL2NonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"H1_H2O"};
@@ -1466,7 +1466,7 @@ TEST(DLRTests, GetCrossSectionMatrixSetL2NonResonant)
 TEST(DLRTests, GetCrossSectionMatrixSetL3NonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"H1_H2O"};
@@ -1479,7 +1479,7 @@ TEST(DLRTests, GetCrossSectionMatrixSetL3NonResonant)
 TEST(DLRTests, GetCrossSectionMatrixSetL0Resonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -1492,7 +1492,7 @@ TEST(DLRTests, GetCrossSectionMatrixSetL0Resonant)
 TEST(DLRTests, GetCrossSectionMatrixSetL1Resonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -1505,7 +1505,7 @@ TEST(DLRTests, GetCrossSectionMatrixSetL1Resonant)
 TEST(DLRTests, GetCrossSectionMatrixL0NonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"H1_H2O"};
@@ -1555,7 +1555,7 @@ TEST(DLRTests, GetCrossSectionMatrixL0NonResonant)
 TEST(DLRTests, GetCrossSectionMatrixL1NonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"H1_H2O"};
@@ -1605,7 +1605,7 @@ TEST(DLRTests, GetCrossSectionMatrixL1NonResonant)
 TEST(DLRTests, GetCrossSectionMatrixL2NonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"H1_H2O"};
@@ -1655,7 +1655,7 @@ TEST(DLRTests, GetCrossSectionMatrixL2NonResonant)
 TEST(DLRTests, GetCrossSectionMatrixL3NonResonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"H1_H2O"};
@@ -1705,7 +1705,7 @@ TEST(DLRTests, GetCrossSectionMatrixL3NonResonant)
 TEST(DLRTests, GetCrossSectionMatrixL0Resonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -1755,7 +1755,7 @@ TEST(DLRTests, GetCrossSectionMatrixL0Resonant)
 TEST(DLRTests, GetCrossSectionMatrixL1Resonant)
 {	
     Library library;
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
 	library.setXSLibraryPath(refLibPath);
 
     std::vector<std::string> nucVec = {"Pu239"};
@@ -1806,6 +1806,6 @@ TEST(DLRTests, GetCrossSectionMatrixL1Resonant)
 
 TEST(DLRTests, RemoveLibrary)
 {	
-    std::string refLibPath = File::getPrePath() + "neutron_libraries/draglibendfb7r0.gz";
+    std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
     EXPECT_TRUE(File::removeFile(refLibPath));
 }
