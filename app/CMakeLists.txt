@@ -29,4 +29,20 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-target_link_libraries(testDLR ${LIB_SRC_DIR}/source/libDLR_library.a -lstdc++fs -lcurl -lz)
+# to link it to the local shared library
+add_library(libcurlLocal SHARED IMPORTED)
+set_target_properties(
+  libcurlLocal
+    PROPERTIES 
+        IMPORTED_LOCATION ${LIB_SRC_DIR}/external/lib/libcurl.so
+)    
+
+# to link it to the local shared library
+add_library(zlibLocal SHARED IMPORTED)
+set_target_properties(
+  zlibLocal
+    PROPERTIES 
+        IMPORTED_LOCATION ${LIB_SRC_DIR}/external/lib/libz.so
+)   
+
+target_link_libraries(testDLR ${LIB_SRC_DIR}/source/libDLR_library.a libcurlLocal zlibLocal -lstdc++fs)

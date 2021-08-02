@@ -17,8 +17,6 @@ target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../ext
 target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../external/boost-lib/src/boost)
 target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../external/include)
 
-#link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../external/lib)
-
 SET(LIB_EXT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/lib)
 
 # to link it to the local shared library
