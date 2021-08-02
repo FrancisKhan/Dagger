@@ -10,17 +10,35 @@ add_library(DLR_library Output.cpp Library.cpp NuclideBlock.cpp
 			../external/utilities/gzip.cpp 
 			../external/utilities/zlib.cpp)
 
-target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/.)
-target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/../external/utilities)
-target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/../external/eigen-lib/src/eigen)
-target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/../external/spdlog-lib/src/spdlog/include/)
-target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/../external/boost-lib/src/boost)
-target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/../external/include)
+target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/.)
+target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../external/utilities)
+target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../external/eigen-lib/src/eigen)
+target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../external/spdlog-lib/src/spdlog/include/)
+target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../external/boost-lib/src/boost)
+target_include_directories(DLR_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../external/include)
 
-link_directories(${CMAKE_CURRENT_BINARY_DIR}/../external/lib)
+#link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../external/lib)
+
+SET(LIB_EXT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/lib)
+
+# to link it to the local shared library
+add_library(libcurlLocal SHARED IMPORTED)
+set_target_properties(
+  libcurlLocal
+    PROPERTIES 
+        IMPORTED_LOCATION ${LIB_EXT_DIR}/libcurl.so
+)    
+
+# to link it to the local shared library
+add_library(zlibLocal SHARED IMPORTED)
+set_target_properties(
+  zlibLocal
+    PROPERTIES 
+        IMPORTED_LOCATION ${LIB_EXT_DIR}/libz.so
+)   
 
 # Experimental/filesystem C++ library
-target_link_libraries(DLR_library -lstdc++fs -lcurl -lz)
+target_link_libraries(DLR_library libcurlLocal zlibLocal -lstdc++fs)
 
 # All users of this library will need at least C++17
 set(CMAKE_CXX_STANDARD 17)
