@@ -21,40 +21,40 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Compile DragLibReader Library
-      run: |
-        cmake -DCMAKE_BUILD_TYPE=Release .
-        make |& tee build-output.txt ; ( exit ${PIPESTATUS[0]} )
+    # - name: Compile DragLibReader Library
+    #   run: |
+    #     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON .
+    #     make |& tee build-output.txt ; ( exit ${PIPESTATUS[0]} )
 
-    - uses: actions/upload-artifact@v2
-      if: failure()
-      with:
-        name: build-output-failure
-        path: build-output.txt
+    # - uses: actions/upload-artifact@v2
+    #   if: failure()
+    #   with:
+    #     name: build-output-failure
+    #     path: build-output.txt
     
-    - uses: actions/upload-artifact@v2
-      with:
-        name: build-output
-        path: build-output.txt
+    # - uses: actions/upload-artifact@v2
+    #   with:
+    #     name: build-output
+    #     path: build-output.txt
   
-  test:
-    needs: build_lib
-    runs-on: ubuntu-20.04
-    steps:
+  # test:
+  #   needs: build_lib
+  #   runs-on: ubuntu-20.04
+  #   steps:
         
-    - name: Test the library
-      run: ctest -VV -O test-output.txt
+  #   - name: Test the library
+  #     run: ctest -VV -O test-output.txt
       
-    - uses: actions/upload-artifact@v2
-      if: failure()
-      with:
-        name: test-output-failure
-        path: test-output.txt
+  #   - uses: actions/upload-artifact@v2
+  #     if: failure()
+  #     with:
+  #       name: test-output-failure
+  #       path: test-output.txt
     
-    - uses: actions/upload-artifact@v2
-      with:
-        name: test-output
-        path: test-output.txt
+  #   - uses: actions/upload-artifact@v2
+  #     with:
+  #       name: test-output
+  #       path: test-output.txt
 
   build_exec:
     needs: test
@@ -64,7 +64,7 @@ jobs:
     - name: Compile DragLibReader Example Executable
       working-directory: ./app
       run: |
-        cmake -DCMAKE_BUILD_TYPE=Release .
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON .
         make |& tee build-output2.txt ; ( exit ${PIPESTATUS[0]} )
 
     - uses: actions/upload-artifact@v2
