@@ -26,11 +26,7 @@ jobs:
       with:
         name: build-output-failure
         path: build-output.txt
-    
-    - uses: actions/upload-artifact@v2
-      with:
-        name: build-output
-        path: build-output.txt
+        retention-days: 5
   
   test:
     needs: build_lib
@@ -45,11 +41,7 @@ jobs:
       with:
         name: test-output-failure
         path: test-output.txt
-    
-    - uses: actions/upload-artifact@v2
-      with:
-        name: test-output
-        path: test-output.txt
+        retention-days: 5
 
   build_exec:
     runs-on: ubuntu-20.04
@@ -70,9 +62,5 @@ jobs:
       if: failure()
       with:
         name: build-output2-failure
-        path: build-output2.txt
-    
-    - uses: actions/upload-artifact@v2
-      with:
-        name: build-output2
-        path: build-output2.txt
+        path: ./app/build-output2.txt
+        retention-days: 5
