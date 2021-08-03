@@ -7,15 +7,10 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build_lib:
     runs-on: ubuntu-20.04
-
     steps:
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y valgrind
-           
+
     - name: Checkout DragLibReader Repository
       uses: actions/checkout@v2
       with:
@@ -30,6 +25,11 @@ jobs:
       with:
         name: build-output
         path: build-output.txt
+  
+  test:
+    needs: build_lib
+    runs-on: ubuntu-20.04
+    steps:
         
     - name: Test the library
       run: ctest -VV -O test-output.txt
@@ -44,6 +44,11 @@ jobs:
       with:
         name: test-output
         path: test-output.txt
+
+  build_exec:
+    needs: test
+    runs-on: ubuntu-20.04
+    steps:
 
     - name: Compile DragLibReader Example Executable
       working-directory: ./app
