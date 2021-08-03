@@ -31,6 +31,14 @@ ExternalProject_Add(
     BUILD_COMMAND make
 )
 
+# to link to the local shared library
+add_library(libcurlLocal SHARED IMPORTED GLOBAL)
+set_target_properties(
+  libcurlLocal
+    PROPERTIES 
+        IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/libcurl.so
+)    
+
 ExternalProject_Add(
     boost 
     PREFIX "boost-lib"
@@ -50,6 +58,14 @@ ExternalProject_Add(
         -DCMAKE_INSTALL_PREFIX=${CMAKE_SOURCE_DIR}/external
     BUILD_COMMAND make
 )
+
+# to link to the local shared library
+add_library(zlibLocal SHARED IMPORTED GLOBAL)
+set_target_properties(
+  zlibLocal
+    PROPERTIES 
+        IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/libz.so
+)   
 
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)

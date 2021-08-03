@@ -1,45 +1,13 @@
 cmake_minimum_required (VERSION 3.10)
 
-include( Munkei.cmake )
-include( MunkeiVersionFromGit )
-
-# Use it
-version_from_git(
-  LOG       ON
-  TIMESTAMP "%Y%m%d%H%M%S"
-)
-
 project(DragLibReader
-    VERSION ${VERSION}
+    VERSION 1.0
     DESCRIPTION "DragLibReader"
     LANGUAGES CXX)
 	
 # Let's ensure -std=c++xx instead of -std=g++xx
-
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_FLAGS "-Wall")
-
-set(VERSION "#ifndef GIT_VERSION_H
-#define GIT_VERSION_H
-
-#include <string>
-
-const std::string VERSION_ALL   =\"${VERSION}\";
-const std::string VERSION_MAJOR =\"${VERSION_MAJOR}\";
-const std::string VERSION_MINOR =\"${VERSION_MINOR}\";
-const std::string VERSION_PATCH =\"${VERSION_PATCH}\";
-
-#endif")
-
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/source/git-version.h)
-    file(READ ${CMAKE_CURRENT_SOURCE_DIR}/source/git-version.h VERSION_)
-else()
-    set(VERSION_ "")
-endif()
-
-if (NOT "${VERSION}" STREQUAL "${VERSION_}")
-    file(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/source/git-version.h "${VERSION}")
-endif()
 
 include(CTest)
 

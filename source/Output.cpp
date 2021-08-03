@@ -1,5 +1,4 @@
 #include "Output.h"
-#include "version.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -15,7 +14,7 @@ void Output::printStart()
 {
 	out.getLogger()->set_pattern("[%D %T] [%n] %v");
 	out.getLogger()->critical("Start reading");
-    out.getLogger()->critical("DRAGON Library Reader, Version: {} \n", get_version_all());
+    out.getLogger()->critical("DRAGON Library Reader\n");
 	out.getLogger()->set_pattern("%v");
 }
 
