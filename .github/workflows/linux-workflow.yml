@@ -11,6 +11,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
 
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y valgrind
+
     - name: Checkout DragLibReader Repository
       uses: actions/checkout@v2
       with:
@@ -20,6 +25,12 @@ jobs:
       run: |
         cmake -DCMAKE_BUILD_TYPE=Release .
         make |& tee build-output.txt ; ( exit ${PIPESTATUS[0]} )
+
+  - uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: build-output-failure
+        path: build-output.txt
     
     - uses: actions/upload-artifact@v2
       with:
@@ -55,6 +66,12 @@ jobs:
       run: |
         cmake -DCMAKE_BUILD_TYPE=Release .
         make |& tee build-output2.txt ; ( exit ${PIPESTATUS[0]} )
+
+  - uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: build-output2-failure
+        path: build-output2.txt
     
     - uses: actions/upload-artifact@v2
       with:
