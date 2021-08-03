@@ -57,7 +57,7 @@ jobs:
   #       path: test-output.txt
 
   build_exec:
-    needs: test
+    needs: build_lib
     runs-on: ubuntu-20.04
     steps:
 
