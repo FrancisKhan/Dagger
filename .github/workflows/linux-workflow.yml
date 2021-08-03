@@ -26,7 +26,7 @@ jobs:
         cmake -DCMAKE_BUILD_TYPE=Release .
         make |& tee build-output.txt ; ( exit ${PIPESTATUS[0]} )
 
-  - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v2
       if: failure()
       with:
         name: build-output-failure
@@ -67,7 +67,7 @@ jobs:
         cmake -DCMAKE_BUILD_TYPE=Release .
         make |& tee build-output2.txt ; ( exit ${PIPESTATUS[0]} )
 
-  - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v2
       if: failure()
       with:
         name: build-output2-failure
