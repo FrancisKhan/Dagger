@@ -68,12 +68,14 @@ jobs:
         make |& tee build-output2.txt ; ( exit ${PIPESTATUS[0]} )
 
     - uses: actions/upload-artifact@v2
+      working-directory: ./app
       if: failure()
       with:
         name: build-output2-failure
         path: build-output2.txt
     
     - uses: actions/upload-artifact@v2
+      working-directory: ./app
       with:
         name: build-output2
         path: build-output2.txt
