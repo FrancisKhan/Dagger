@@ -118,8 +118,8 @@ std::shared_ptr<Nuclide> Library::getNuclide(const std::string &nucName)
 
 void Library::setNumberOfEnergyGroups()
 {
-    std::vector<unsigned> lines = InputParser::findLine(m_xsDataFileLines, "SUBTMP0001", 0, 100);
-    std::string line = InputParser::getLine(m_xsDataFileLines, lines[0] + 1);   
+    std::vector<unsigned> lines = InputParser::findLine(m_xsDataFileLines, "NTOT0", 0, 100);
+    std::string line = InputParser::getLine(m_xsDataFileLines, lines[0] - 1);   
     std::vector<std::string> lineVec = InputParser::splitLine(line);
     m_numberOfEnergyGroups = std::stoi(lineVec.end()[-1]);
 }

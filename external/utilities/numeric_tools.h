@@ -38,9 +38,27 @@ namespace Numerics
     }
 
     template <typename T>
+    inline bool is_greater(const T &x, const T &y, double eps = DEPS)
+    {
+    	return x > y + eps;
+    }
+
+    template <typename T>
+    inline bool is_greater_equal(const T &x, const T &y, double eps = DEPS)
+    {
+    	return x > y - eps;
+    }
+
+    template <typename T>
     inline bool is_lower(const T &x, const T &y, double eps = DEPS)
     {
     	return x < y - eps;
+    }
+
+    template <typename T>
+    inline bool is_lower_equal(const T &x, const T &y, double eps = DEPS)
+    {
+    	return x < y + eps;
     }
 
     template <typename T>
@@ -169,10 +187,43 @@ namespace Numerics
         return result;
     }
 
+    template<typename T>
+    inline std::pair<T, T> getExtremals(T x, std::vector<T>& vec)
+    {
+        T lower = 0.0;
+        for(const auto& val : vec)
+            if(is_greater_equal(x, val, 1.0E-10)) 
+            {
+                lower = val;
+                break;
+            }
+
+        T higher = 0.0;
+        for(const auto& val : vec)
+            if(is_lower_equal(x, val, 1.0E-10)) 
+            {
+                higher = val;
+                break;
+            }
+        return std::make_pair(lower, higher);
+    }
+
     inline std::vector<double> eigenVecTOStdVec(Eigen::VectorXd const& v)
     {   
         std::vector<double> result(v.data(), v.data() + v.rows() * v.cols());
         return result;
+    }
+
+    inline double sqrtInterpolation(double x, double x0, double x1, double y0, double y1)
+    {
+        double a = (sqrt(x1) - sqrt(x)) / (sqrt(x1) - sqrt(x0));
+        double b = (sqrt(x) - sqrt(x0)) / (sqrt(x1) - sqrt(x0));
+        return (a * y0 + b * y1);
+    }
+
+    inline double logLinInterpolation(double x, double x0, double x1, double y0, double y1)
+    {
+        return (y0 + (log(x) - log(x0)) * (y1 - y0) / (log(x1) - log(x0)));
     }
 }
 

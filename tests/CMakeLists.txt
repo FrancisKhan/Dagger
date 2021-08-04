@@ -1,5 +1,6 @@
 # Tests need to be added as executables first
-add_executable(gtest_DLR mathsTests.cpp DLRTests.cpp FileToolsTests.cpp)
+add_executable(gtest_DLR mathsTests.cpp DLRTests.cpp FileToolsTests.cpp
+               InterpolationTests.cpp)
 
 
 set(CMAKE_CXX_STANDARD 17)

@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "gtest/gtest.h"
 #include "file_tools.h"
 #include "network_tools.h"
@@ -1809,3 +1807,4 @@ TEST(DLRTests, RemoveLibrary)
     std::string refLibPath = File::getPrePath() + "draglibendfb7r0.gz";
     EXPECT_TRUE(File::removeFile(refLibPath));
 }
+

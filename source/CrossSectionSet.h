@@ -16,9 +16,14 @@ public:
     void setXS(unsigned i, CrossSection &xs) {m_XSSet[i] = xs;}
     CrossSection getXS(unsigned i) {return m_XSSet.at(i);}
     CrossSection getXS(double t, double b);
+    void getXS2(double t);
     unsigned getSize() {return m_XSSet.size();}
     XSKind getKind() {return m_kind;}
     void setKind(XSKind xsKind) {m_kind = xsKind;}
+    void setTemperatures(std::vector<double>& temperatures) {m_temperatures = temperatures;}
+    std::vector<double> getTemperatures() {return m_temperatures;}
+    void setBackgroundXSs(std::vector<double>& backgroundXSs) {m_backgroundXSs = backgroundXSs;}
+    std::vector<double> getBackgroundXSs() {return m_backgroundXSs;}
     void calcXSs();
 
     void debugCalcXS(std::vector<double> &newValues, std::vector<double> &infValues,
@@ -27,6 +32,8 @@ public:
 private:
     XSKind m_kind;
     std::vector<CrossSection> m_XSSet;
+    std::vector<double> m_temperatures;
+    std::vector<double> m_backgroundXSs;
 };
 
 #endif

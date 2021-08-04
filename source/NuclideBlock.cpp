@@ -226,6 +226,7 @@ std::vector<Nuclide::XSSetType> NuclideBlock::readXSs()
     for (const auto& xsKind : XSKind())
     {
         CrossSectionSet& crossSectionSet = Nuclide::getXSSet(xsKind, crossSectionSets);
+        crossSectionSet.setTemperatures(temperatures);
 
         for(size_t i = 0; i < temperatures.size(); i++)
         {
@@ -253,6 +254,8 @@ std::vector<Nuclide::XSSetType> NuclideBlock::readXSs()
 
                 std::vector< std::pair<unsigned, unsigned> > dilutionBlocks = readDilutionBlocks(tempBlocks[i]);
                 std::vector<double> dilutions = readDilutions(tempBlocks[i].first, tempBlocks[i].second);
+
+                crossSectionSet.setBackgroundXSs(dilutions);
 
                 for(size_t j = 0; j < dilutions.size(); j++)
                 {

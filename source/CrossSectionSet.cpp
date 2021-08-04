@@ -6,6 +6,12 @@ using namespace Numerics;
 
 #include <algorithm>
 
+void CrossSectionSet::getXS2(double t)
+{
+    std::pair<double, double> temps = Numerics::getExtremals(t, m_temperatures);
+    std::cout << "lower: " << temps.first << " higher: " << temps.second << std::endl;
+}
+
 CrossSection CrossSectionSet::getXS(double t, double b)
 {
     std::vector<CrossSection>::iterator it = std::find_if(m_XSSet.begin(), m_XSSet.end(), 
@@ -31,7 +37,7 @@ void CrossSectionSet::calcXSs()
             std::vector<double> dilValues = getXS(i).getValues();
             std::vector<double> newValues = infValues + dilValues;
 
-            debugCalcXS(newValues, infValues, dilValues, temp, sigma0);
+            //debugCalcXS(newValues, infValues, dilValues, temp, sigma0);
 
             CrossSection xs(temp, sigma0, newValues);
             setXS(i, xs);
