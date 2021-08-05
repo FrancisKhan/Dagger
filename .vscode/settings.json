@@ -123,6 +123,7 @@
         "*.traits": "cpp",
         "*.expression": "cpp",
         "bit": "cpp",
-        "source_location": "cpp"
+        "source_location": "cpp",
+        "charconv": "cpp"
     }
 }
