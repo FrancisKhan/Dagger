@@ -5,6 +5,7 @@
 #include "Library.h"
 #include "Interpolation.h"
 
+
 TEST(InterpolationTests, test1)
 {	
     Library library;
@@ -15,17 +16,8 @@ TEST(InterpolationTests, test1)
 
     CrossSectionSet xsSet = library.getNuclide("Pu239")->getXSSet(XSKind::NTOT0);
 
-    // std::vector<double> temps = xsSet.getTemperatures();
-    // std::cout << "temps: " << std::endl;
-    // for(auto i : temps)
-    //     std::cout << i << std::endl;
-
-    // std::vector<double> bs = xsSet.getBackgroundXSs();
-    // std::cout << "bXSs: " << std::endl;
-    // for(auto i : bs)
-    //     std::cout << i << std::endl;
-
-    xsSet.getXS2(300.0, 1222.5);
+    std::cout << std::setprecision(10) << std::endl;
+    std::cout << "xsSet.getXS3(): " << xsSet.getXS3(300.0, LinLin(), 1222.5, LinLin()) << std::endl;
 }
 
 TEST(InterpolationTests, test2)
@@ -38,6 +30,12 @@ TEST(InterpolationTests, test2)
 
     CrossSectionSet xsSet = library.getNuclide("Pu239")->getXSSet(XSKind::NTOT0);
 
-    std::cout << "xsSet.getXS3(4.0, LinLin()): " << xsSet.getXS3(4.0, LinLin()) << std::endl;
+    std::cout << std::setprecision(10) << std::endl;
+    std::vector<double> vec = xsSet.getXS4(300.0, LinLin(), 1222.5, LinLin()).getValues();
+
+    std::cout << std::scientific << std::endl;
+
+    for(auto i : vec)
+        std::cout << i << std::endl;
 }
 

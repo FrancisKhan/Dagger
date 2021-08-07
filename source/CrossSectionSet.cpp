@@ -1,48 +1,8 @@
 #include "CrossSectionSet.h"
-#include "numeric_tools.h"
 #include "additionalPrintFuncs.h"
 
 #include <algorithm>
 #include <iomanip>
-
-void CrossSectionSet::getXS2(double t, double b)
-{
-    //std::cout << std::scientific << std::endl;
-    std::cout << std::setprecision(10) << std::endl;
-
-    //std::cout << "t: " << t << " b: " << b << std::endl;
-
-    std::pair<double, double> temps = Numerics::getInterval(t, m_temperatures);
-    //std::cout << "T lower: " << temps.first << " T higher: " << temps.second << std::endl;
-
-    std::pair<double, double> bs = Numerics::getInterval(b, m_backgroundXSs);
-    //std::cout << "B lower: " << bs.first << " B higher: " << bs.second << std::endl;
-
-    // CrossSection Q11 = getXS(temps.first, bs.first);
-    // CrossSection Q12 = getXS(temps.first, bs.second);
-    // CrossSection Q21 = getXS(temps.second, bs.first);
-    // CrossSection Q22 = getXS(temps.second, bs.second);
-
-    double Q11 = getXS(temps.first, bs.first).getValues().back();
-    double Q12 = getXS(temps.first, bs.second).getValues().back();
-    double Q21 = getXS(temps.second, bs.first).getValues().back();
-    double Q22 = getXS(temps.second, bs.second).getValues().back();
-
-    // std::cout << "Q11: " << Q11 << std::endl;
-    // std::cout << "Q12: " << Q12 << std::endl;
-    // std::cout << "Q21: " << Q21 << std::endl;
-    // std::cout << "Q22: " << Q22 << std::endl;
-
-    double funcxy1 = Numerics::linLinInterpolation(t, temps.first, temps.second, Q11, Q12);
-    double funcxy2 = Numerics::linLinInterpolation(t, temps.first, temps.second, Q21, Q22);
-
-    // std::cout << "funcxy1: " << funcxy1 << std::endl;
-    // std::cout << "funcxy2: " << funcxy2 << std::endl;
-
-    double funcxy = Numerics::linLinInterpolation(b, bs.first, bs.second, funcxy1, funcxy2);
-
-    //std::cout << "funcxy: " << funcxy << std::endl;
-}
 
 CrossSection CrossSectionSet::getXS(double t, double b)
 {
