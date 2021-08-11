@@ -89,11 +89,11 @@ void Nuclide::printXSs(XSKind xsKind)
 {
     for(size_t i = 0; i < getXSsNumber(); i++)
     {
-        out.print(TraceLevel::CRITICAL, "{} XS: {}",  get_name(xsKind), getXSSet(xsKind).getXS(0).getSize());
+        out.print(TraceLevel::CRITICAL, "{} XS: {}",  get_name(xsKind), getXSSet(xsKind).getXSNoInterp(0).getSize());
         out.print(TraceLevel::CRITICAL, "Temperature: {}, Background XS: {}", 
-        getXSSet(xsKind).getXS(i).getTemperature(), getXSSet(xsKind).getXS(i).getBackgroundXS());
+        getXSSet(xsKind).getXSNoInterp(i).getTemperature(), getXSSet(xsKind).getXSNoInterp(i).getBackgroundXS());
 
-        PrintFuncs::printVector(getXSSet(xsKind).getXS(i).getValues(), out, TraceLevel::CRITICAL);
+        PrintFuncs::printVector(getXSSet(xsKind).getXSNoInterp(i).getValues(), out, TraceLevel::CRITICAL);
     }
 }
 

@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <iomanip>
 
-CrossSection CrossSectionSet::getXS(double t, double b)
+CrossSection CrossSectionSet::getXSNoInterp(double t, double b)
 {
     std::vector<CrossSection>::iterator it = std::find_if(m_XSSet.begin(), m_XSSet.end(), 
     [t, b] (CrossSection &c) 
@@ -22,13 +22,13 @@ void CrossSectionSet::calcXSs()
 
     for(unsigned i = 0; i < getSize(); i++)
     {
-        double sigma0 = getXS(i).getBackgroundXS();
-        double temp   = getXS(i).getTemperature();
+        double sigma0 = getXSNoInterp(i).getBackgroundXS();
+        double temp   = getXSNoInterp(i).getTemperature();
 
         if(Numerics::not_equal(sigma0, Numerics::DINF))
         {
-            std::vector<double> infValues = getXS(temp, Numerics::DINF).getValues();
-            std::vector<double> dilValues = getXS(i).getValues();
+            std::vector<double> infValues = getXSNoInterp(temp, Numerics::DINF).getValues();
+            std::vector<double> dilValues = getXSNoInterp(i).getValues();
             std::vector<double> newValues = infValues + dilValues;
 
             //debugCalcXS(newValues, infValues, dilValues, temp, sigma0);

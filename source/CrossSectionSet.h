@@ -16,8 +16,8 @@ public:
 
     void addXS(CrossSection &xs) {m_XSSet.push_back(xs);}
     void setXS(unsigned i, CrossSection &xs) {m_XSSet[i] = xs;}
-    CrossSection getXS(unsigned i) {return m_XSSet.at(i);}
-    CrossSection getXS(double t, double b);
+    CrossSection getXSNoInterp(unsigned i) {return m_XSSet.at(i);}
+    CrossSection getXSNoInterp(double t, double b);
     unsigned getSize() {return m_XSSet.size();}
     XSKind getKind() {return m_kind;}
     void setKind(XSKind xsKind) {m_kind = xsKind;}
@@ -31,38 +31,17 @@ public:
     std::vector<double> &dilValues, double temp, double sigma0);
 
     template <typename InterpolFuncT, typename InterpolFuncB>
-    double getXS3(double t, InterpolFuncT funcT, double b, InterpolFuncB funcB)
-    {   
-        std::pair<double, double> temps   = Numerics::getInterval(t, m_temperatures);
-        std::pair<double, double> backXSs = Numerics::getInterval(b, m_backgroundXSs);
-
-        double Q11 = getXS(temps.first,  backXSs.first).getValues().back();
-        double Q12 = getXS(temps.first,  backXSs.second).getValues().back();
-        double Q21 = getXS(temps.second, backXSs.first).getValues().back();
-        double Q22 = getXS(temps.second, backXSs.second).getValues().back();
-
-        funcT.setIntervals(temps.first, temps.second, Q11, Q12);
-        double funcxy1 = funcT(t);
-
-        funcT.setIntervals(temps.first, temps.second, Q21, Q22);
-        double funcxy2 = funcT(t); 
-
-        funcB.setIntervals(backXSs.first, backXSs.second, funcxy1, funcxy2);
-        return funcB(b);
-    }
-
-    template <typename InterpolFuncT, typename InterpolFuncB>
-    CrossSection getXS4(double t, InterpolFuncT funcT, double b, InterpolFuncB funcB)
+    CrossSection getXS(double t, InterpolFuncT funcT, double b, InterpolFuncB funcB)
     {   
         std::vector<double> result;
 
         std::pair<double, double> temps   = Numerics::getInterval(t, m_temperatures);
         std::pair<double, double> backXSs = Numerics::getInterval(b, m_backgroundXSs);
 
-        std::vector<double> Q11s = getXS(temps.first,  backXSs.first).getValues();
-        std::vector<double> Q12s = getXS(temps.first,  backXSs.second).getValues();
-        std::vector<double> Q21s = getXS(temps.second, backXSs.first).getValues();
-        std::vector<double> Q22s = getXS(temps.second, backXSs.second).getValues();
+        std::vector<double> Q11s = getXSNoInterp(temps.first,  backXSs.first).getValues();
+        std::vector<double> Q12s = getXSNoInterp(temps.first,  backXSs.second).getValues();
+        std::vector<double> Q21s = getXSNoInterp(temps.second, backXSs.first).getValues();
+        std::vector<double> Q22s = getXSNoInterp(temps.second, backXSs.second).getValues();
 
         for(size_t i = 0; i < Q11s.size(); i++)
         {
