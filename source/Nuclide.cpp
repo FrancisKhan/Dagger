@@ -101,11 +101,11 @@ void Nuclide::printMatrixXSs(XSMatrixKind xsKind)
 {
     for(size_t i = 0; i < getXSsNumber(); i++)
     {
-        out.print(TraceLevel::CRITICAL, "{} XS Matrix: {}",  get_name(xsKind), getXSMatrixSet(xsKind).getXSMatrix(0).getSize());
+        out.print(TraceLevel::CRITICAL, "{} XS Matrix: {}",  get_name(xsKind), getXSMatrixSet(xsKind).getXSMatrixNoInterp(0).getSize());
         out.print(TraceLevel::CRITICAL, "Temperature: {}, Background XS: {}", 
-        getXSMatrixSet(xsKind).getXSMatrix(i).getTemperature(), getXSMatrixSet(xsKind).getXSMatrix(i).getBackgroundXS());
+        getXSMatrixSet(xsKind).getXSMatrixNoInterp(i).getTemperature(), getXSMatrixSet(xsKind).getXSMatrixNoInterp(i).getBackgroundXS());
 
-        PrintFuncs::printMatrix(getXSMatrixSet(xsKind).getXSMatrix(i).getValues(), out, TraceLevel::CRITICAL);
+        PrintFuncs::printMatrix(getXSMatrixSet(xsKind).getXSMatrixNoInterp(i).getValues(), out, TraceLevel::CRITICAL);
     }
 }
 

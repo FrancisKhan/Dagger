@@ -1508,7 +1508,7 @@ TEST(DLRTests, GetCrossSectionMatrixL0NonResonant)
 
     std::vector<std::string> nucVec = {"H1_H2O"};
 	std::vector < std::shared_ptr<Nuclide> > nuclides = library.readNuclides(nucVec);
-    Eigen::MatrixXd mat = library.getNuclide("H1_H2O")->getXSMatrixSet(XSMatrixKind::SCAT00).getXSMatrix(5.00000000E+02, Numerics::DINF).getValues();
+    Eigen::MatrixXd mat = library.getNuclide("H1_H2O")->getXSMatrixSet(XSMatrixKind::SCAT00).getXSMatrixNoInterp(5.00000000E+02, Numerics::DINF).getValues();
 	std::vector<double> vec = Numerics::eigenVecTOStdVec(mat.diagonal(1)); 
 
 	std::vector<double> ref {6.883744900000e-02, 4.055498910000e-02, 1.013163030000e-01, 
@@ -1558,7 +1558,7 @@ TEST(DLRTests, GetCrossSectionMatrixL1NonResonant)
 
     std::vector<std::string> nucVec = {"H1_H2O"};
 	std::vector < std::shared_ptr<Nuclide> > nuclides = library.readNuclides(nucVec);
-    Eigen::MatrixXd mat = library.getNuclide("H1_H2O")->getXSMatrixSet(XSMatrixKind::SCAT01).getXSMatrix(5.00000000E+02, Numerics::DINF).getValues();
+    Eigen::MatrixXd mat = library.getNuclide("H1_H2O")->getXSMatrixSet(XSMatrixKind::SCAT01).getXSMatrixNoInterp(5.00000000E+02, Numerics::DINF).getValues();
 	std::vector<double> vec = Numerics::eigenVecTOStdVec(mat.diagonal(1)); 
 
 	std::vector<double> ref {6.489767130000e-02, 3.876321020000e-02, 9.556920080000e-02, 
@@ -1608,7 +1608,7 @@ TEST(DLRTests, GetCrossSectionMatrixL2NonResonant)
 
     std::vector<std::string> nucVec = {"H1_H2O"};
 	std::vector < std::shared_ptr<Nuclide> > nuclides = library.readNuclides(nucVec);
-    Eigen::MatrixXd mat = library.getNuclide("H1_H2O")->getXSMatrixSet(XSMatrixKind::SCAT02).getXSMatrix(5.00000000E+02, Numerics::DINF).getValues();
+    Eigen::MatrixXd mat = library.getNuclide("H1_H2O")->getXSMatrixSet(XSMatrixKind::SCAT02).getXSMatrixNoInterp(5.00000000E+02, Numerics::DINF).getValues();
 	std::vector<double> vec = Numerics::eigenVecTOStdVec(mat.diagonal(1)); 
 
 	std::vector<double> ref {5.742473160000e-02, 3.532680120000e-02, 8.466509730000e-02, 
@@ -1658,7 +1658,7 @@ TEST(DLRTests, GetCrossSectionMatrixL3NonResonant)
 
     std::vector<std::string> nucVec = {"H1_H2O"};
 	std::vector < std::shared_ptr<Nuclide> > nuclides = library.readNuclides(nucVec);
-    Eigen::MatrixXd mat = library.getNuclide("H1_H2O")->getXSMatrixSet(XSMatrixKind::SCAT03).getXSMatrix(5.00000000E+02, Numerics::DINF).getValues();
+    Eigen::MatrixXd mat = library.getNuclide("H1_H2O")->getXSMatrixSet(XSMatrixKind::SCAT03).getXSMatrixNoInterp(5.00000000E+02, Numerics::DINF).getValues();
 	std::vector<double> vec = Numerics::eigenVecTOStdVec(mat.diagonal(1)); 
 
 	std::vector<double> ref {4.717973990000e-02, 3.052468040000e-02, 6.970927120000e-02, 
@@ -1708,7 +1708,7 @@ TEST(DLRTests, GetCrossSectionMatrixL0Resonant)
 
     std::vector<std::string> nucVec = {"Pu239"};
 	std::vector < std::shared_ptr<Nuclide> > nuclides = library.readNuclides(nucVec);
-    Eigen::MatrixXd mat = library.getNuclide("Pu239")->getXSMatrixSet(XSMatrixKind::SCAT00).getXSMatrix(9.00000000E+02, 1.00279404E+02).getValues();
+    Eigen::MatrixXd mat = library.getNuclide("Pu239")->getXSMatrixSet(XSMatrixKind::SCAT00).getXSMatrixNoInterp(9.00000000E+02, 1.00279404E+02).getValues();
 	std::vector<double> vec = Numerics::eigenVecTOStdVec(mat.diagonal(1)); 
 
 	std::vector<double> ref {1.451736240000e-01, 1.019773860000e-01, 2.006407530000e-01, 
@@ -1758,7 +1758,7 @@ TEST(DLRTests, GetCrossSectionMatrixL1Resonant)
 
     std::vector<std::string> nucVec = {"Pu239"};
 	std::vector < std::shared_ptr<Nuclide> > nuclides = library.readNuclides(nucVec);
-    Eigen::MatrixXd mat = library.getNuclide("Pu239")->getXSMatrixSet(XSMatrixKind::SCAT01).getXSMatrix(9.00000000E+02, 1.00279404E+02).getValues();
+    Eigen::MatrixXd mat = library.getNuclide("Pu239")->getXSMatrixSet(XSMatrixKind::SCAT01).getXSMatrixNoInterp(9.00000000E+02, 1.00279404E+02).getValues();
 	std::vector<double> vec = Numerics::eigenVecTOStdVec(mat.diagonal(1)); 
 
 	//PrintFuncs::createCppVector(vec, "%13.12e");

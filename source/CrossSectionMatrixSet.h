@@ -2,7 +2,11 @@
 #define CROSSSECTIONMATRIXSET_H
 
 #include "CrossSectionMatrix.h"
+#include "Interpolation.h"
 #include "XSMatrixKind.h"
+#include "numeric_tools.h"
+
+using namespace Eigen;
 
 class CrossSectionMatrixSet
 {
@@ -12,8 +16,45 @@ public:
 
     void addXS(CrossSectionMatrix &xs) {m_XSSet.push_back(xs);}
     void setXS(unsigned i, CrossSectionMatrix &xs) {m_XSSet[i] = xs;}
-    CrossSectionMatrix getXSMatrix(unsigned i);
-    CrossSectionMatrix getXSMatrix(double t, double b);
+    CrossSectionMatrix getXSMatrixNoInterp(unsigned i);
+    CrossSectionMatrix getXSMatrixNoInterp(double t, double b);
+
+    template <typename InterpolFuncT, typename InterpolFuncB>
+    CrossSectionMatrix getXSMatrix(double t, InterpolFuncT funcT, double b, InterpolFuncB funcB)
+    {   
+        std::pair<double, double> temps   = Numerics::getInterval(t, m_temperatures);
+        std::pair<double, double> backXSs = Numerics::getInterval(b, m_backgroundXSs);
+
+        Eigen::MatrixXd Q11s = getXSMatrixNoInterp(temps.first,  backXSs.first).getValues();
+        Eigen::MatrixXd Q12s = getXSMatrixNoInterp(temps.first,  backXSs.second).getValues();
+        Eigen::MatrixXd Q21s = getXSMatrixNoInterp(temps.second, backXSs.first).getValues();
+        Eigen::MatrixXd Q22s = getXSMatrixNoInterp(temps.second, backXSs.second).getValues();
+
+        Eigen::MatrixXd result = MatrixXd::Zero(Q11s.rows(), Q11s.cols());
+
+        for(size_t i = 0; i < Q11s.size(); i++)
+        {
+            for(size_t j = 0; j < Q11s.size(); j++)
+            {
+                funcT.setIntervals(temps.first, temps.second, Q11s(i, j), Q12s(i, j));
+                double funcxy1 = funcT(t);
+
+                funcT.setIntervals(temps.first, temps.second, Q21s(i, j), Q22s(i, j));
+                double funcxy2 = funcT(t); 
+
+                funcB.setIntervals(backXSs.first, backXSs.second, funcxy1, funcxy2);
+                result(i, j) = funcB(b);
+            }
+        }
+
+        CrossSectionMatrix matrix(t, b, result);
+        return matrix;
+    }
+
+    void setTemperatures(std::vector<double>& temperatures) {m_temperatures = temperatures;}
+    std::vector<double> getTemperatures() {return m_temperatures;}
+    void setBackgroundXSs(std::vector<double>& backgroundXSs) {m_backgroundXSs = backgroundXSs;}
+    std::vector<double> getBackgroundXSs() {return m_backgroundXSs;}
     unsigned getSize() {return m_XSSet.size();}
     XSMatrixKind getKind() {return m_kind;}
     void calcXSs();
@@ -21,6 +62,8 @@ public:
 private:
     XSMatrixKind m_kind;
     std::vector<CrossSectionMatrix> m_XSSet;
+    std::vector<double> m_temperatures;
+    std::vector<double> m_backgroundXSs;
 };
 
 #endif

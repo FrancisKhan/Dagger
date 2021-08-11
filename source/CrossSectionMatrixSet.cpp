@@ -7,13 +7,13 @@ void CrossSectionMatrixSet::calcXSs()
 {
     for(unsigned i = 0; i < getSize(); i++)
     {
-        double sigma0 = getXSMatrix(i).getBackgroundXS();
-        double temp   = getXSMatrix(i).getTemperature();
+        double sigma0 = getXSMatrixNoInterp(i).getBackgroundXS();
+        double temp   = getXSMatrixNoInterp(i).getTemperature();
 
         if(not_equal(sigma0, DINF))
         {
-            Eigen::MatrixXd infValues = getXSMatrix(temp, DINF).getValues();
-            Eigen::MatrixXd dilValues = getXSMatrix(i).getValues();
+            Eigen::MatrixXd infValues = getXSMatrixNoInterp(temp, DINF).getValues();
+            Eigen::MatrixXd dilValues = getXSMatrixNoInterp(i).getValues();
             Eigen::MatrixXd newValues = infValues + dilValues;
 
             CrossSectionMatrix matrix(temp, sigma0, newValues);
@@ -22,7 +22,7 @@ void CrossSectionMatrixSet::calcXSs()
     }
 }
 
-CrossSectionMatrix CrossSectionMatrixSet::getXSMatrix(double t, double b)
+CrossSectionMatrix CrossSectionMatrixSet::getXSMatrixNoInterp(double t, double b)
 {
     std::vector<CrossSectionMatrix>::iterator it = std::find_if(m_XSSet.begin(), m_XSSet.end(), 
     [t, b] (CrossSectionMatrix &c) 
@@ -34,7 +34,7 @@ CrossSectionMatrix CrossSectionMatrixSet::getXSMatrix(double t, double b)
         return CrossSectionMatrix {};
 }
 
-CrossSectionMatrix CrossSectionMatrixSet::getXSMatrix(unsigned i)
+CrossSectionMatrix CrossSectionMatrixSet::getXSMatrixNoInterp(unsigned i)
 {
     if(!m_XSSet.empty())
         return m_XSSet.at(i);

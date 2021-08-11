@@ -288,6 +288,7 @@ std::vector<Nuclide::XSMatrixSetType> NuclideBlock::readXSMatrices()
     for (const auto& xsKind : XSMatrixKind())
     {
         CrossSectionMatrixSet& crossSectionMatrixSet = Nuclide::getXSMatrixSet(xsKind, crossSectionMatrixSets);
+        crossSectionMatrixSet.setTemperatures(temperatures);
 
         for(size_t i = 0; i < temperatures.size(); i++)
         {
@@ -304,6 +305,8 @@ std::vector<Nuclide::XSMatrixSetType> NuclideBlock::readXSMatrices()
 
                 std::vector< std::pair<unsigned, unsigned> > dilutionBlocks = readDilutionBlocks(tempBlocks[i]);
                 std::vector<double> dilutions = readDilutions(tempBlocks[i].first, tempBlocks[i].second);
+
+                crossSectionMatrixSet.setBackgroundXSs(dilutions);
 
                 for(size_t j = 0; j < dilutions.size(); j++)
                 {
