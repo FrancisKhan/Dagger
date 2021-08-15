@@ -9,7 +9,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/tests/gtest_DLR",
+            "program": "${workspaceFolder}/tests/gtest_Dagger",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -26,10 +26,10 @@
         },
 
         {
-            "name": "gdb DLR",
+            "name": "gdb Dagger",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/app/testDLR",
+            "program": "${workspaceFolder}/app/DaggerCode",
             "args": ["./output.txt"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
