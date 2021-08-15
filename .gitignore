@@ -48,7 +48,7 @@ _deps
 ~$*
 
 DartConfiguration.tcl
-app/testDLR
+app/DaggerCode
 dragLibReader-lib/
 external/eigen-lib
 external/spdlog-lib
@@ -61,7 +61,7 @@ external/lib/
 external/include/
 external/bin/
 external/share/
-tests/gtest_DLR
+tests/gtest_Dagger
 git-version.h
 draglibendfb7r0.gz
 Pu239.txt

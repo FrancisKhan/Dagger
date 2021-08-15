@@ -6,8 +6,6 @@
 enum class XSKind {NTOT0, NINEL, N2N, N3N, N4N, NNP, 
                    NG, NP, ND, NT, NA, NFTOT, NUSIGF, CHI};
 
-                   //LAMBDA-D
-
 inline std::ostream& operator << (std::ostream& stm, XSKind xsKind)
 {
     switch(xsKind)

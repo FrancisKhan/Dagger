@@ -7,7 +7,7 @@ project(DLRCode
     DESCRIPTION "DLRCode"
     LANGUAGES CXX)
 
-add_executable(testDLR main.cpp)
+add_executable(DaggerCode main.cpp)
 
 ExternalProject_Add(
     dragLibReader 
@@ -18,12 +18,12 @@ ExternalProject_Add(
 
 SET(LIB_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/dragLibReader-lib/src/dragLibReader)
 
-target_include_directories(testDLR PUBLIC ${LIB_SRC_DIR}/source)
-target_include_directories(testDLR PUBLIC ${LIB_SRC_DIR}/external/utilities)
-target_include_directories(testDLR PUBLIC ${LIB_SRC_DIR}/external/eigen-lib/src/eigen)
-target_include_directories(testDLR PUBLIC ${LIB_SRC_DIR}/external/spdlog-lib/src/spdlog/include/)
-target_include_directories(testDLR PUBLIC ${LIB_SRC_DIR}/external/boost-lib/src/boost)
-target_include_directories(testDLR PUBLIC ${LIB_SRC_DIR}/external/include)
+target_include_directories(DaggerCode PUBLIC ${LIB_SRC_DIR}/source)
+target_include_directories(DaggerCode PUBLIC ${LIB_SRC_DIR}/external/utilities)
+target_include_directories(DaggerCode PUBLIC ${LIB_SRC_DIR}/external/eigen-lib/src/eigen)
+target_include_directories(DaggerCode PUBLIC ${LIB_SRC_DIR}/external/spdlog-lib/src/spdlog/include/)
+target_include_directories(DaggerCode PUBLIC ${LIB_SRC_DIR}/external/boost-lib/src/boost)
+target_include_directories(DaggerCode PUBLIC ${LIB_SRC_DIR}/external/include)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -45,4 +45,4 @@ set_target_properties(
         IMPORTED_LOCATION ${LIB_SRC_DIR}/external/lib/libz.so
 )   
 
-target_link_libraries(testDLR ${LIB_SRC_DIR}/source/libDLR_library.a libcurlLocal zlibLocal -lstdc++fs)
+target_link_libraries(DaggerCode ${LIB_SRC_DIR}/source/libDagger_library.a libcurlLocal zlibLocal -lstdc++fs)

@@ -1,8 +1,8 @@
 cmake_minimum_required (VERSION 3.10)
 
-project(DragLibReader
+project(Dagger
     VERSION 1.0
-    DESCRIPTION "DragLibReader"
+    DESCRIPTION "Dragon Advanced Generic multi-Group library Reader"
     LANGUAGES CXX)
 	
 # Let's ensure -std=c++xx instead of -std=g++xx
