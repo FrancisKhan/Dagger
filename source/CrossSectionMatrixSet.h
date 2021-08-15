@@ -32,9 +32,9 @@ public:
 
         Eigen::MatrixXd result = MatrixXd::Zero(Q11s.rows(), Q11s.cols());
 
-        for(size_t i = 0; i < Q11s.size(); i++)
+        for(size_t i = 0; i < static_cast<size_t>(Q11s.rows()); i++)
         {
-            for(size_t j = 0; j < Q11s.size(); j++)
+            for(size_t j = 0; j < static_cast<size_t>(Q11s.cols()); j++)
             {
                 funcT.setIntervals(temps.first, temps.second, Q11s(i, j), Q12s(i, j));
                 double funcxy1 = funcT(t);
