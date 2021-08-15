@@ -22,6 +22,11 @@ namespace File
         return fs::current_path();
     }
 
+    inline bool isFileThere(const std::string& path)
+    {
+        return fs::exists(path);
+    }
+
     inline std::string getParentFolder(const std::string& path)
     {
         std::string result("");

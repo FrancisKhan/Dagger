@@ -1,4 +1,5 @@
 #include "network_tools.h"
+#include "file_tools.h"
 #include "Output.h"
 
 namespace Network
@@ -12,6 +13,9 @@ namespace Network
     bool downloadFile(const std::string & url, const std::string & targetFile) 
     {
         bool retval = false;
+
+        if(File::isFileThere(targetFile))
+            return retval;
     
         // download the file using curl library into DownloadCURL folder
         if(CURL* curl = curl_easy_init()) 

@@ -64,6 +64,7 @@ external/share/
 tests/gtest_DLR
 git-version.h
 draglibendfb7r0.gz
+Pu239.txt
 **build
 **__pycache__
 output.txt

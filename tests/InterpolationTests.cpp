@@ -6,15 +6,34 @@
 #include "Interpolation.h"
 #include "additionalPrintFuncs.h"
 
-TEST(InterpolationTests, LinLin)
-{	
-    Library library;
-    std::string refLibPath = File::getPrePath() + "Pu239.txt";
-	library.setXSLibraryPath(refLibPath);
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library.readNuclides(nucVec);
+class InterpolationTests : public ::testing::Test 
+{
+ protected:
+	std::string url_;
+	std::string target_;
+	Library* library_;
 
-    CrossSectionSet xsSet = library.getNuclide("Pu239")->getXSSet(XSKind::NTOT0);
+  	virtual void SetUp() 
+	{
+		library_ = new Library;
+		url_ = "https://www.polymtl.ca/merlin/downloads/libraries/ascii/draglibendfb7r0.gz";
+    	target_ = File::getPrePath() + "draglibendfb7r0.gz";
+		library_->downloadLibrary(url_, target_);
+		library_->setXSLibraryPath(target_);
+	}
+
+  	virtual void TearDown() 
+	{
+		delete library_;
+	}
+};
+
+TEST_F(InterpolationTests, LinLin)
+{	
+    std::vector<std::string> nucVec = {"Pu239"};
+	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
+
+    CrossSectionSet xsSet = library_->getNuclide("Pu239")->getXSSet(XSKind::NTOT0);
     std::vector<double> vec = xsSet.getXS(300.0, LinLin(), 1222.5, LinLin()).getValues();
 
     std::vector<double> ref {6.151040080000e+00, 6.006264210000e+00, 5.894751070000e+00, 
@@ -56,15 +75,12 @@ TEST(InterpolationTests, LinLin)
     EXPECT_TRUE(Numerics::areVectorsEqual(vec, ref, 1.0E-9));
 }
 
-TEST(InterpolationTests, SqrtLogLin)
+TEST_F(InterpolationTests, SqrtLogLin)
 {	
-    Library library;
-    std::string refLibPath = File::getPrePath() + "Pu239.txt";
-	library.setXSLibraryPath(refLibPath);
     std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library.readNuclides(nucVec);
+	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
 
-    CrossSectionSet xsSet = library.getNuclide("Pu239")->getXSSet(XSKind::NTOT0);
+    CrossSectionSet xsSet = library_->getNuclide("Pu239")->getXSSet(XSKind::NTOT0);
     std::vector<double> vec = xsSet.getXS(300.0, Sqrt(), 1222.5, LogLin()).getValues();
 
     std::vector<double> ref {6.151040080000e+00, 6.006264210000e+00, 5.894751070000e+00, 

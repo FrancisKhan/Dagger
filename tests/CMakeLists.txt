@@ -1,5 +1,5 @@
 # Tests need to be added as executables first
-add_executable(gtest_DLR mathsTests.cpp DLRTests.cpp FileToolsTests.cpp
+add_executable(gtest_DLR mathsTests.cpp XSTests.cpp XSMatrixTests.cpp FileToolsTests.cpp
                InterpolationTests.cpp)
 
 
