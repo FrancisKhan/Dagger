@@ -130,6 +130,7 @@ std::vector<double> NuclideBlock::readDilutions(unsigned firstLine, unsigned las
 {
     const std::string key = "DILUTION"; 
     std::vector<double> v = readParameters(key, firstLine, lastLine);
+    v.push_back(Numerics::DINF); // the infinite dilution value does not explicitly appears on the DILUTION list
     
     std::vector<double> dilutions = m_nuclide->getDilutions();
     if((dilutions.size() != 0) && (v != dilutions))
@@ -149,7 +150,8 @@ NuclideBlock::readDilutionBlocks(std::pair<unsigned, unsigned> &block)
     const std::string key = "SUBMAT"; 
     std::vector<unsigned> dilBlocklines;
 
-    for(unsigned i = 0; i < readDilutions(block.first, block.second).size(); i++)
+    // don't look for infinite dilution
+    for(unsigned i = 0; i < readDilutions(block.first, block.second).size() - 1; i++)
     {
         std::string compositeKey = key + PrintFuncs::stringFormat(i + 1, "%04d"); 
         std::vector<unsigned> lines = InputParser::findLine(m_xsDataLines, compositeKey, block.first, block.second);
@@ -226,7 +228,6 @@ std::vector<Nuclide::XSSetType> NuclideBlock::readXSs()
     for (const auto& xsKind : XSKind())
     {
         CrossSectionSet& crossSectionSet = Nuclide::getXSSet(xsKind, crossSectionSets);
-        crossSectionSet.setTemperatures(temperatures);
 
         for(size_t i = 0; i < temperatures.size(); i++)
         {
@@ -250,14 +251,12 @@ std::vector<Nuclide::XSSetType> NuclideBlock::readXSs()
                     crossSectionSet.addXS(crossSection);
                 }
 
-                // other dilutions XSs
+                // other dilution XSs
 
                 std::vector< std::pair<unsigned, unsigned> > dilutionBlocks = readDilutionBlocks(tempBlocks[i]);
                 std::vector<double> dilutions = readDilutions(tempBlocks[i].first, tempBlocks[i].second);
 
-                crossSectionSet.setBackgroundXSs(dilutions);
-
-                for(size_t j = 0; j < dilutions.size(); j++)
+                for(size_t j = 0; j < dilutions.size() - 1; j++) // don't look for infinite dilution
                 {
                     std::vector<double> xsVecPartial = readParameters(get_name(xsKind), dilutionBlocks[j].first, dilutionBlocks[j].second);
                     std::vector<double> xsVec = populateXS(xsVecPartial);
@@ -265,12 +264,15 @@ std::vector<Nuclide::XSSetType> NuclideBlock::readXSs()
                     crossSectionSet.addXS(crossSection);
                 }
             }
-            else // resonant isotope
+            else // non-resonant isotope
             {
                 std::vector<double> xsVecPartial = readParameters(get_name(xsKind), tempBlocks[i].first, tempBlocks[i].second);
                 std::vector<double> xsVec = populateXS(xsVecPartial);
                 CrossSection crossSection(temperatures[i], Numerics::DINF, xsVec);
                 crossSectionSet.addXS(crossSection);
+                
+                std::vector<double> dilutions {Numerics::DINF};
+                m_nuclide->setDilutions(dilutions);
             }
         }
     }
@@ -288,7 +290,6 @@ std::vector<Nuclide::XSMatrixSetType> NuclideBlock::readXSMatrices()
     for (const auto& xsKind : XSMatrixKind())
     {
         CrossSectionMatrixSet& crossSectionMatrixSet = Nuclide::getXSMatrixSet(xsKind, crossSectionMatrixSets);
-        crossSectionMatrixSet.setTemperatures(temperatures);
 
         for(size_t i = 0; i < temperatures.size(); i++)
         {
@@ -301,21 +302,19 @@ std::vector<Nuclide::XSMatrixSetType> NuclideBlock::readXSMatrices()
                 CrossSectionMatrix crossSectionMatrix(temperatures[i], Numerics::DINF, matrix);
                 crossSectionMatrixSet.addXS(crossSectionMatrix);
 
-                // other dilutions XSs
+                // other dilution XSs
 
                 std::vector< std::pair<unsigned, unsigned> > dilutionBlocks = readDilutionBlocks(tempBlocks[i]);
                 std::vector<double> dilutions = readDilutions(tempBlocks[i].first, tempBlocks[i].second);
 
-                crossSectionMatrixSet.setBackgroundXSs(dilutions);
-
-                for(size_t j = 0; j < dilutions.size(); j++)
+                for(size_t j = 0; j < dilutions.size() - 1; j++) // don't look for infinite dilution
                 {
                     MatrixXd matrix = assembleMatrixXS(xsKind, dilutionBlocks[j].first, dilutionBlocks[j].second);
                     CrossSectionMatrix crossSectionMatrix(temperatures[i], dilutions[j], matrix);
                     crossSectionMatrixSet.addXS(crossSectionMatrix);
                 }
             }
-            else
+            else // non-resonant isotope
             {
                 MatrixXd matrix = assembleMatrixXS(xsKind, tempBlocks[i].first, tempBlocks[i].second);
                 CrossSectionMatrix crossSectionMatrix(temperatures[i], Numerics::DINF, matrix);
@@ -417,6 +416,42 @@ std::vector<double> NuclideBlock::readLambdas()
     return v;
 }
 
+std::vector<Nuclide::XSSetType> NuclideBlock::addNu()
+{
+    std::vector<Nuclide::XSSetType> crossSectionSets = m_nuclide->getCopyOfXSSets();
+    CrossSectionSet nusigfSet = Nuclide::getXSSet(XSKind::NUSIGF, crossSectionSets);
+    CrossSectionSet sigfSet   = Nuclide::getXSSet(XSKind::NFTOT, crossSectionSets);
+
+    CrossSectionSet& nuSet = Nuclide::getXSSet(XSKind::NU, crossSectionSets);
+    nuSet.deleteXSs();
+
+    std::vector<double> temperatures = m_nuclide->getTemperatures();
+    std::vector<double> dilutions = m_nuclide->getDilutions();
+
+    for(size_t i = 0; i < temperatures.size(); i++)
+    {
+        for(size_t j = 0; j < dilutions.size(); j++)
+        {
+            std::vector<double> nusigf = nusigfSet.getXSNoInterp(temperatures[i], dilutions[i]).getValues();
+            std::vector<double> sigf   = sigfSet.getXSNoInterp(temperatures[i], dilutions[i]).getValues();
+            
+            std::vector<double> nu(m_numberOfEnergyGroups, 0.0);
+            std::transform(nusigf.begin(), nusigf.end(), sigf.begin(), nu.begin(), std::divides<double>());
+
+            CrossSection crossSection(temperatures[i], dilutions[j], nu);
+            nuSet.addXS(crossSection);
+        }
+    }
+
+    return crossSectionSets;
+}
+
+void NuclideBlock::additionalXSs()
+{
+    std::vector<Nuclide::XSSetType> crossSectionSets = addNu();
+    m_nuclide->setXSSets(crossSectionSets);
+}
+
 std::shared_ptr<Nuclide> NuclideBlock::getNuclide()
 {
     readName();
@@ -426,5 +461,6 @@ std::shared_ptr<Nuclide> NuclideBlock::getNuclide()
 	readTemperatureBlocks();
 	readGroupConstants();
     readLambdas();
+    additionalXSs();
     return m_nuclide;
 }

@@ -39,7 +39,7 @@ public:
 
     // Cross section sets
 
-    CrossSectionSet& getXSSet(XSKind xsKind);
+    CrossSectionSet getXSSet(XSKind xsKind);
     static CrossSectionSet& getXSSet(XSKind xsKind, std::vector<XSSetType>& crossSectionSets);
     std::vector<XSSetType>& getXSSets() {return m_crossSectionSets;}
     std::vector<XSSetType> getCopyOfXSSets() {return m_crossSectionSets;}

@@ -39,6 +39,26 @@ void CrossSectionSet::calcXSs()
     }
 }
 
+std::vector<double> CrossSectionSet::getTemperatures()
+{
+    std::vector<double> result;
+
+    for(auto& i : m_XSSet)
+        result.push_back(i.getTemperature());
+
+    return result;   
+}
+
+std::vector<double> CrossSectionSet::getBackgroundXSs()
+{
+    std::vector<double> result;
+
+    for(auto& i : m_XSSet)
+        result.push_back(i.getBackgroundXS());
+
+    return result;   
+}
+
 void CrossSectionSet::debugCalcXS(std::vector<double> &newValues, std::vector<double> &infValues,
         std::vector<double> &dilValues, double temp, double sigma0) 
 {

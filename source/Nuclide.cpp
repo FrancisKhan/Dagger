@@ -21,7 +21,7 @@ Nuclide::Nuclide()
     }
 }
 
-CrossSectionSet& Nuclide::getXSSet(XSKind kind) 
+CrossSectionSet Nuclide::getXSSet(XSKind kind) 
 {
     static CrossSectionSet crossSectionSet;
 
@@ -82,7 +82,7 @@ void Nuclide::calcXSSets()
 void Nuclide::calcXSMatrixSets()
 {
     for(auto& xsMatrixSet : m_crossSectionMatrixSets)
-       xsMatrixSet.second.calcXSs();
+       xsMatrixSet.second.calcXSMatrices();
 }
 
 void Nuclide::printXSs(XSKind xsKind)

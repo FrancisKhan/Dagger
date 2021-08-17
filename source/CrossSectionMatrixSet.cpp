@@ -3,7 +3,7 @@
 
 using namespace Numerics;
 
-void CrossSectionMatrixSet::calcXSs() 
+void CrossSectionMatrixSet::calcXSMatrices() 
 {
     for(unsigned i = 0; i < getSize(); i++)
     {
@@ -40,4 +40,24 @@ CrossSectionMatrix CrossSectionMatrixSet::getXSMatrixNoInterp(unsigned i)
         return m_XSSet.at(i);
     else
         return CrossSectionMatrix {};
+}
+
+std::vector<double> CrossSectionMatrixSet::getTemperatures()
+{
+    std::vector<double> result;
+
+    for(auto& i : m_XSSet)
+        result.push_back(i.getTemperature());
+
+    return result;   
+}
+
+std::vector<double> CrossSectionMatrixSet::getBackgroundXSs()
+{
+    std::vector<double> result;
+
+    for(auto& i : m_XSSet)
+        result.push_back(i.getBackgroundXS());
+
+    return result;   
 }

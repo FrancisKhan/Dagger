@@ -39,6 +39,8 @@ private:
 	void setNumberOfEnergyGroups();
 	unsigned getNumberOfEnergyGroups() {return m_numberOfEnergyGroups;}
 	std::vector<double> populateXS(std::vector<double> &xsVec);
+	std::vector<Nuclide::XSSetType> addNu();
+	void additionalXSs();
 
 	std::tuple< std::vector<double>, std::vector<int32_t>, std::vector<int32_t> > 
 	readMatrixComponents(XSMatrixKind xsKind, unsigned lowBound, unsigned upperBound);

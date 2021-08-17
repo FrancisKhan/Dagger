@@ -4,7 +4,7 @@
 #include <iostream>
 
 enum class XSKind {NTOT0, NINEL, N2N, N3N, N4N, NNP, 
-                   NG, NP, ND, NT, NA, NFTOT, NUSIGF, CHI};
+                   NG, NP, ND, NT, NA, NFTOT, NUSIGF, CHI, NU};
 
 inline std::ostream& operator << (std::ostream& stm, XSKind xsKind)
 {
@@ -24,6 +24,7 @@ inline std::ostream& operator << (std::ostream& stm, XSKind xsKind)
         case XSKind::NFTOT  : return stm << "NFTOT";
         case XSKind::NUSIGF : return stm << "NUSIGF";
         case XSKind::CHI    : return stm << "CHI";
+        case XSKind::NU     : return stm << "NU";
         default : return stm << "XSKind{" << int(xsKind) << "}"; 
     }
 }
@@ -46,6 +47,7 @@ inline std::string get_name(XSKind xsKind)
     case XSKind::NFTOT  : return std::string("NFTOT");
     case XSKind::NUSIGF : return std::string("NUSIGF");
     case XSKind::CHI    : return std::string("CHI");
+    case XSKind::NU     : return std::string("NU");
     default : return std::string("");
   }
 }
@@ -67,7 +69,7 @@ inline XSKind begin(XSKind r)
 
 inline XSKind end(XSKind r)   
 {
-    return XSKind(int(XSKind::CHI) + 1);
+    return XSKind(int(XSKind::NU) + 1);
 }
 
 #endif

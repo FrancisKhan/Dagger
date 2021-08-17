@@ -21,11 +21,10 @@ public:
     unsigned getSize() {return m_XSSet.size();}
     XSKind getKind() {return m_kind;}
     void setKind(XSKind xsKind) {m_kind = xsKind;}
-    void setTemperatures(std::vector<double>& temperatures) {m_temperatures = temperatures;}
-    std::vector<double> getTemperatures() {return m_temperatures;}
-    void setBackgroundXSs(std::vector<double>& backgroundXSs) {m_backgroundXSs = backgroundXSs;}
-    std::vector<double> getBackgroundXSs() {return m_backgroundXSs;}
+    std::vector<double> getTemperatures();
+    std::vector<double> getBackgroundXSs();
     void calcXSs();
+    void deleteXSs() {m_XSSet.clear();}
 
     void debugCalcXS(std::vector<double> &newValues, std::vector<double> &infValues,
     std::vector<double> &dilValues, double temp, double sigma0);
@@ -35,8 +34,8 @@ public:
     {   
         std::vector<double> result;
 
-        std::pair<double, double> temps   = Numerics::getInterval(t, m_temperatures);
-        std::pair<double, double> backXSs = Numerics::getInterval(b, m_backgroundXSs);
+        std::pair<double, double> temps   = Numerics::getInterval(t, getTemperatures());
+        std::pair<double, double> backXSs = Numerics::getInterval(b, getBackgroundXSs());
 
         std::vector<double> Q11s = getXSNoInterp(temps.first,  backXSs.first).getValues();
         std::vector<double> Q12s = getXSNoInterp(temps.first,  backXSs.second).getValues();
@@ -59,12 +58,9 @@ public:
         return xs;
     }
 
-
 private:
     XSKind m_kind;
     std::vector<CrossSection> m_XSSet;
-    std::vector<double> m_temperatures;
-    std::vector<double> m_backgroundXSs;
 };
 
 #endif

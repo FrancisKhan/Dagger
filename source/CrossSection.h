@@ -1,6 +1,9 @@
 #ifndef CROSSSECTION_H
 #define CROSSSECTION_H
 
+#include "numeric_tools.h"
+
+#include <algorithm>
 #include <vector>
 
 class CrossSection
@@ -15,7 +18,7 @@ public:
     double getTemperature() {return m_temperature;}
     void setBackgroundXS(double b) {m_backgroundXS = b;}
     double getBackgroundXS() {return m_backgroundXS;}
-    void setValues(std::vector<double> &v) {m_values = v;}
+    void setValues(const std::vector<double> &v) {m_values = v;}
     std::vector<double> getValues() {return m_values;}
     unsigned getSize() {return m_values.size();}
 

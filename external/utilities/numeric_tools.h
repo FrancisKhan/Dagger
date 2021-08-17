@@ -188,7 +188,7 @@ namespace Numerics
     }
 
     template<typename T>
-    inline std::pair<T, T> getInterval(T x, std::vector<T>& vec, double eps = DEPS)
+    inline std::pair<T, T> getInterval(T x, const std::vector<T>& vec, double eps = DEPS)
     {
         T lower = 0.0;
         for(const auto& val : vec)
