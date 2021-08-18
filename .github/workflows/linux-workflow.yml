@@ -11,12 +11,12 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
 
-    - name: Checkout DragLibReader Repository
+    - name: Checkout Dagger Repository
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
 
-    - name: Compile DragLibReader Library
+    - name: Compile Dagger Library
       run: |
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON .
         make |& tee build-output.txt ; ( exit ${PIPESTATUS[0]} )
@@ -27,11 +27,6 @@ jobs:
         name: build-output-failure
         path: build-output.txt
         retention-days: 5
-  
-  test:
-    needs: build_lib
-    runs-on: ubuntu-20.04
-    steps:
         
     - name: Test the library
       run: ctest -VV -O test-output.txt
@@ -47,12 +42,12 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
 
-    - name: Checkout DragLibReader Repository
+    - name: Checkout Dagger Repository
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
 
-    - name: Compile DragLibReader Example Executable
+    - name: Compile Dagger Example Executable
       working-directory: ./app
       run: |
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON .

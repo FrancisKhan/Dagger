@@ -10,6 +10,7 @@ compile_commands.json
 CTestTestfile.cmake
 CPackConfig.cmake
 CPackSourceConfig.cmake
+*.txt.tmp
 _CPack_Packages
 _deps
 
@@ -62,7 +63,6 @@ external/include/
 external/bin/
 external/share/
 tests/gtest_Dagger
-git-version.h
 draglibendfb7r0.gz
 Pu239.txt
 **build
