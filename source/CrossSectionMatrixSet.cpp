@@ -49,6 +49,8 @@ std::vector<double> CrossSectionMatrixSet::getTemperatures()
     for(auto& i : m_XSSet)
         result.push_back(i.getTemperature());
 
+    std::sort(result.begin(), result.end());
+    result.erase(std::unique(result.begin(), result.end()), result.end());
     return result;   
 }
 
@@ -59,5 +61,7 @@ std::vector<double> CrossSectionMatrixSet::getBackgroundXSs()
     for(auto& i : m_XSSet)
         result.push_back(i.getBackgroundXS());
 
+    std::sort(result.begin(), result.end());
+    result.erase(std::unique(result.begin(), result.end()), result.end());
     return result;   
 }
