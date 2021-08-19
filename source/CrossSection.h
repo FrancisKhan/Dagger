@@ -15,12 +15,13 @@ public:
     m_temperature(temperature), m_backgroundXS(backgroundXS), m_values(values) {}
 
     void setTemperature(double t) {m_temperature = t;}
-    double getTemperature() {return m_temperature;}
+    double getTemperature() const {return m_temperature;} 
     void setBackgroundXS(double b) {m_backgroundXS = b;}
-    double getBackgroundXS() {return m_backgroundXS;}
+    double getBackgroundXS() const {return m_backgroundXS;}
     void setValues(const std::vector<double> &v) {m_values = v;}
     std::vector<double> getValues() {return m_values;}
-    unsigned getSize() {return m_values.size();}
+    unsigned getSize() const {return m_values.size();}
+    unsigned hasOnlyZeroes() const;
 
 private:
     double m_temperature;

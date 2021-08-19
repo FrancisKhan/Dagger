@@ -4,10 +4,35 @@
 #include <algorithm>
 #include <iomanip>
 
-CrossSection CrossSectionSet::getXSNoInterp(double t, double b)
+CrossSectionSet CrossSectionSet::operator/(const CrossSectionSet& rhs)
 {
-    std::vector<CrossSection>::iterator it = std::find_if(m_XSSet.begin(), m_XSSet.end(), 
-    [t, b] (CrossSection &c) 
+    std::vector<double> temperatures = getTemperatures();
+    std::vector<double> dilutions = getBackgroundXSs();
+
+    CrossSectionSet result;
+
+    for(size_t i = 0; i < temperatures.size(); i++)
+    {
+        for(size_t j = 0; j < dilutions.size(); j++)
+        {
+            std::vector<double> rhsVec = rhs.getXSNoInterp(temperatures[i], dilutions[i]).getValues();
+            std::vector<double> lhsVec = getXSNoInterp(temperatures[i], dilutions[i]).getValues();
+                
+            std::vector<double> resultVec(rhsVec.size(), 0.0);
+            std::transform(lhsVec.begin(), lhsVec.end(), rhsVec.begin(), resultVec.begin(), std::divides<double>());
+
+            CrossSection crossSection(temperatures[i], dilutions[j], resultVec);
+            result.addXS(crossSection);
+        }
+    }
+
+    return result;
+}
+
+CrossSection CrossSectionSet::getXSNoInterp(double t, double b) const
+{
+    std::vector<CrossSection>::const_iterator it = std::find_if(m_XSSet.begin(), m_XSSet.end(), 
+    [t, b] (const CrossSection &c) 
     {return Numerics::is_equal(c.getTemperature(), t) && Numerics::is_equal(c.getBackgroundXS(), b);});
 
     if (it != m_XSSet.end())
@@ -43,7 +68,7 @@ std::vector<double> CrossSectionSet::getTemperatures()
 {
     std::vector<double> result;
 
-    for(auto& i : m_XSSet)
+    for(const auto& i : m_XSSet)
         result.push_back(i.getTemperature());
 
     std::sort(result.begin(), result.end());
@@ -55,12 +80,21 @@ std::vector<double> CrossSectionSet::getBackgroundXSs()
 {
     std::vector<double> result;
 
-    for(auto& i : m_XSSet)
+    for(const auto& i : m_XSSet)
         result.push_back(i.getBackgroundXS());
 
     std::sort(result.begin(), result.end());
     result.erase(std::unique(result.begin(), result.end()), result.end());
     return result;   
+}
+
+// It is unlikely that a XSSet has a XS(t_i, b_i) only with zeros and others with values
+bool CrossSectionSet::isEmpty() const
+{
+    if(m_XSSet[0].hasOnlyZeroes())
+        return true;
+    else
+        return false;
 }
 
 void CrossSectionSet::debugCalcXS(std::vector<double> &newValues, std::vector<double> &infValues,

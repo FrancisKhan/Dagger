@@ -17,14 +17,17 @@ public:
     typedef std::pair<XSMatrixKind, CrossSectionMatrixSet> XSMatrixSetType;
 
 	Nuclide();
-    Nuclide(std::string name) : m_name(name), m_isResonant(false) {}
+    Nuclide(std::string name) : m_name(name),m_isResonant(false), 
+                                m_isFissionable(false) {}
 
     void setName(std::string name) {m_name = name;}
     std::string getName() {return m_name;}
     void setAWR(double awr) {m_awr = awr;}
     double getAWR() {return m_awr;}
     void setIsResonant(bool value) {m_isResonant = value;}
-    bool isResonant() {return m_isResonant;}
+    bool isResonant() const {return m_isResonant;}
+    void setIsFissionable(bool value) {m_isFissionable = value;}
+    bool isFissionable() const {return m_isFissionable;}
     void setTemperatures(std::vector<double> &temps) {m_temperatures = temps;}
     std::vector<double> getTemperatures() {return m_temperatures;}
     void setLambdas(std::vector<double> &lambdas) {m_lambdas = lambdas;}
@@ -70,6 +73,7 @@ private:
     std::vector<double> m_dilutions;
     unsigned m_energyGroupsNumber;
     bool m_isResonant;
+    bool m_isFissionable;
 
     std::vector<XSSetType> m_crossSectionSets;
     std::vector<XSMatrixSetType> m_crossSectionMatrixSets;

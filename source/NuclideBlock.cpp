@@ -408,6 +408,13 @@ void NuclideBlock::isNuclideResonant()
     m_nuclide->setIsResonant(value);
 }
 
+bool NuclideBlock::isNuclideFissionable() const
+{
+    bool isFissionable = m_nuclide->getXSSet(XSKind::NFTOT).isEmpty();
+    m_nuclide->setIsFissionable(!isFissionable);
+    return !isFissionable;
+}
+
 std::vector<double> NuclideBlock::readLambdas()
 {
     const std::string key = "LAMBDA-D"; 
@@ -419,30 +426,16 @@ std::vector<double> NuclideBlock::readLambdas()
 std::vector<Nuclide::XSSetType> NuclideBlock::addNu()
 {
     std::vector<Nuclide::XSSetType> crossSectionSets = m_nuclide->getCopyOfXSSets();
-    CrossSectionSet nusigfSet = Nuclide::getXSSet(XSKind::NUSIGF, crossSectionSets);
-    CrossSectionSet sigfSet   = Nuclide::getXSSet(XSKind::NFTOT, crossSectionSets);
-
-    CrossSectionSet& nuSet = Nuclide::getXSSet(XSKind::NU, crossSectionSets);
-    nuSet.deleteXSs();
-
-    std::vector<double> temperatures = m_nuclide->getTemperatures();
-    std::vector<double> dilutions = m_nuclide->getDilutions();
-
-    for(size_t i = 0; i < temperatures.size(); i++)
+    
+    if(isNuclideFissionable())
     {
-        for(size_t j = 0; j < dilutions.size(); j++)
-        {
-            std::vector<double> nusigf = nusigfSet.getXSNoInterp(temperatures[i], dilutions[i]).getValues();
-            std::vector<double> sigf   = sigfSet.getXSNoInterp(temperatures[i], dilutions[i]).getValues();
-            
-            std::vector<double> nu(m_numberOfEnergyGroups, 0.0);
-            std::transform(nusigf.begin(), nusigf.end(), sigf.begin(), nu.begin(), std::divides<double>());
-
-            CrossSection crossSection(temperatures[i], dilutions[j], nu);
-            nuSet.addXS(crossSection);
-        }
+        CrossSectionSet nusigfSet = Nuclide::getXSSet(XSKind::NUSIGF, crossSectionSets);
+        CrossSectionSet sigfSet   = Nuclide::getXSSet(XSKind::NFTOT, crossSectionSets);
+        CrossSectionSet& nuSet = Nuclide::getXSSet(XSKind::NU, crossSectionSets);
+        nuSet.deleteXSs();
+        nuSet = nusigfSet / sigfSet;
     }
-
+    
     return crossSectionSets;
 }
 
@@ -460,6 +453,7 @@ std::shared_ptr<Nuclide> NuclideBlock::getNuclide()
     setNumberOfEnergyGroups();
 	readTemperatureBlocks();
 	readGroupConstants();
+    isNuclideFissionable();
     readLambdas();
     additionalXSs();
     return m_nuclide;

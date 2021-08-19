@@ -46,7 +46,7 @@ std::vector<double> CrossSectionMatrixSet::getTemperatures()
 {
     std::vector<double> result;
 
-    for(auto& i : m_XSSet)
+    for(const auto& i : m_XSSet)
         result.push_back(i.getTemperature());
 
     std::sort(result.begin(), result.end());
@@ -58,7 +58,7 @@ std::vector<double> CrossSectionMatrixSet::getBackgroundXSs()
 {
     std::vector<double> result;
 
-    for(auto& i : m_XSSet)
+    for(const auto& i : m_XSSet)
         result.push_back(i.getBackgroundXS());
 
     std::sort(result.begin(), result.end());

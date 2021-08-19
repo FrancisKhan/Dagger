@@ -88,6 +88,31 @@ TEST_F(XSTests, GetNuclide)
     EXPECT_EQ(size, 15);
 }
 
+TEST_F(XSTests, NonFissionableNuclide)
+{	
+	bool notFissionable = library_->getNuclide("La139")->isFissionable();
+    EXPECT_FALSE(notFissionable);
+}
+
+TEST_F(XSTests, FissionableNuclide)
+{	
+	bool fissionable = library_->getNuclide("Pu239")->isFissionable();
+    EXPECT_TRUE(fissionable);
+}
+
+TEST_F(XSTests, NonResonantNuclide)
+{	
+	bool notFissionable = library_->getNuclide("La139")->isResonant();
+    EXPECT_FALSE(notFissionable);
+}
+
+TEST_F(XSTests, ResonantNuclide)
+{	
+	bool fissionable = library_->getNuclide("Pu239")->isResonant();
+    EXPECT_TRUE(fissionable);
+}
+
+
 TEST_F(XSTests, GetTotalCrossSectionSetNonResonant)
 {	
     size_t size = library_->getNuclide("La139")->getXSSet(XSKind::NTOT0).getSize();
@@ -1124,6 +1149,16 @@ TEST_F(XSTests, GetNUCrossSectionResonant)
 
     EXPECT_TRUE(Numerics::areVectorsEqual(xs, ref, 1.0E-9));
 }
+
+// TEST_F(XSTests, GetNUCrossSectionNonFissionable)
+// {	
+//     std::vector<double> xs = library_->getNuclide("La139")->getXSSet(XSKind::NNP).getXSNoInterp(5.50000000e+02, 2.51750000e+02).getValues();
+	
+// 	PrintFuncs::createCppVector(xs, "%13.12e");
+	
+// 	std::vector<double> ref(172, 0.000000000000e+00);
+//     EXPECT_TRUE(Numerics::areVectorsEqual(xs, ref, 1.0E-9));
+// }
 
 TEST_F(XSTests, GetLambdas)
 {	

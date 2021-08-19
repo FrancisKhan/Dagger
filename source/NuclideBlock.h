@@ -36,6 +36,7 @@ private:
 	std::vector<Nuclide::XSSetType> readXSs();
 	std::vector<Nuclide::XSMatrixSetType> readXSMatrices();
 	void isNuclideResonant();
+	bool isNuclideFissionable() const;
 	void setNumberOfEnergyGroups();
 	unsigned getNumberOfEnergyGroups() {return m_numberOfEnergyGroups;}
 	std::vector<double> populateXS(std::vector<double> &xsVec);
