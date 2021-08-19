@@ -8,43 +8,55 @@
 class XSTests : public ::testing::Test 
 {
  protected:
-	std::string url_;
-	std::string target_;
-	Library* library_;
+	static std::string* url_;
+	static std::string* target_;
+	static Library* library_;
+	static std::vector<std::string>* nucVec_;
+	static std::vector < std::shared_ptr<Nuclide> >* nuclides_;
 
-  	virtual void SetUp() 
+  	static void SetUpTestSuite() 
 	{
-		library_ = new Library;
-		url_ = "https://www.polymtl.ca/merlin/downloads/libraries/ascii/draglibendfb7r0.gz";
-    	target_ = File::getPrePath() + "draglibendfb7r0.gz";
-		library_->downloadLibrary(url_, target_);
-		library_->setXSLibraryPath(target_);
-	}
+    	library_ = new Library;
+		url_ = new std::string("https://www.polymtl.ca/merlin/downloads/libraries/ascii/draglibendfb7r0.gz");
+    	target_ =  new std::string(File::getPrePath() + "draglibendfb7r0.gz");
+		library_->downloadLibrary(*url_, *target_);
+		library_->setXSLibraryPath(*target_);
+		nucVec_ = new std::vector<std::string> {"Pu239", "La139"};
+		nuclides_ = new std::vector < std::shared_ptr<Nuclide> > {library_->readNuclides(*nucVec_)};
+  	}
 
-  	virtual void TearDown() 
+	static void TearDownTestSuite() 
 	{
-		delete library_;
-	}
+    	delete library_;
+		delete url_;
+		delete target_;
+		delete nucVec_;
+		delete nuclides_;
+    	library_ = nullptr;
+		url_ = nullptr;
+		target_ = nullptr;
+		nucVec_ = nullptr;
+		nuclides_ = nullptr;
+  	}
+
+	virtual void SetUp() {}
+  	virtual void TearDown() {}
 };
 
-TEST_F(XSTests, OpenLibrary)
-{	
-    std::string inputPath = library_->getXSLibraryPath();
-    EXPECT_EQ(inputPath, target_);
-}
+Library* XSTests::library_ = nullptr;
+std::string* XSTests::url_ = nullptr;
+std::string* XSTests::target_ = nullptr;
+std::vector<std::string>* XSTests::nucVec_ = nullptr;
+std::vector < std::shared_ptr<Nuclide> >* XSTests::nuclides_ = nullptr;
 
 TEST_F(XSTests, GetNuclides)
 {	
-    std::vector<std::string> nucVec = {"Pu239", "La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t numberOfNuclides = library_->getNumberOfNuclidesRead();
     EXPECT_EQ(numberOfNuclides, 2);
 }
 
 TEST_F(XSTests, GetLibraryNuclides)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<std::string> nuclideVec = library_->getLibraryNuclides();
 
     std::vector<std::string> refVec {"La139", "B11", "Sm154", "Kr83", "Sn114", "Te126", "Sr86", "Pu239", "C0", "Cm243", "Cd108", "Xe128", "Ti49", "Pa233", "N14", "N15", "Si30", "Nd143",
@@ -72,225 +84,168 @@ TEST_F(XSTests, GetLibraryNuclides)
 
 TEST_F(XSTests, GetNuclide)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
-    size_t size = library_->getNuclide("La139")->getCopyOfXSSets().size();
+	size_t size = library_->getNuclide("La139")->getCopyOfXSSets().size();
     EXPECT_EQ(size, 15);
 }
 
 TEST_F(XSTests, GetTotalCrossSectionSetNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("La139")->getXSSet(XSKind::NTOT0).getSize();
     EXPECT_EQ(size, 5);
 }
 
 TEST_F(XSTests, GetInelCrossSectionSetNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("La139")->getXSSet(XSKind::NINEL).getSize();
     EXPECT_EQ(size, 5);
 }
 
 TEST_F(XSTests, GetN2NCrossSectionSetNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("La139")->getXSSet(XSKind::N2N).getSize();
     EXPECT_EQ(size, 5);
 }
 
 TEST_F(XSTests, GetN3NCrossSectionSetNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("La139")->getXSSet(XSKind::N3N).getSize();
     EXPECT_EQ(size, 5);
 }
 
 TEST_F(XSTests, GetN4NCrossSectionSetNonResonant)
 {	
-
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("La139")->getXSSet(XSKind::N4N).getSize();
     EXPECT_EQ(size, 5);
 }
 
 TEST_F(XSTests, GetNNPCrossSectionSetNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("La139")->getXSSet(XSKind::NNP).getSize();
     EXPECT_EQ(size, 5);
 }
 
 TEST_F(XSTests, GetNGCrossSectionSetNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("La139")->getXSSet(XSKind::NG).getSize();
     EXPECT_EQ(size, 5);
 }
 
 TEST_F(XSTests, GetNPCrossSectionSetNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("La139")->getXSSet(XSKind::NP).getSize();
     EXPECT_EQ(size, 5);
 }
 
 TEST_F(XSTests, GetNDCrossSectionSetNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("La139")->getXSSet(XSKind::ND).getSize();
     EXPECT_EQ(size, 5);
 }
 
 TEST_F(XSTests, GetNTCrossSectionSetNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("La139")->getXSSet(XSKind::NT).getSize();
     EXPECT_EQ(size, 5);
 }
 
 TEST_F(XSTests, GetNACrossSectionSetNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("La139")->getXSSet(XSKind::NA).getSize();
     EXPECT_EQ(size, 5);
 }
 
 TEST_F(XSTests, GetTotalCrossSectionSetResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("Pu239")->getXSSet(XSKind::NTOT0).getSize();
     EXPECT_EQ(size, 95);
 }
 
 TEST_F(XSTests, GetInelCrossSectionSetResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("Pu239")->getXSSet(XSKind::NINEL).getSize();
     EXPECT_EQ(size, 95);
 }
 
 TEST_F(XSTests, GetN2NCrossSectionSetResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("Pu239")->getXSSet(XSKind::N2N).getSize();
     EXPECT_EQ(size, 95);
 }
 
 TEST_F(XSTests, GetN3NCrossSectionSetResonant)
-{	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);    
+{	  
     size_t size = library_->getNuclide("Pu239")->getXSSet(XSKind::N3N).getSize();
     EXPECT_EQ(size, 95);
 }
 
 TEST_F(XSTests, GetN4NCrossSectionSetResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("Pu239")->getXSSet(XSKind::N4N).getSize();
     EXPECT_EQ(size, 95);
 }
 
 TEST_F(XSTests, GetNNPCrossSectionSetResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("Pu239")->getXSSet(XSKind::NNP).getSize();
     EXPECT_EQ(size, 95);
 }
 
 TEST_F(XSTests, GetNGCrossSectionSetResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("Pu239")->getXSSet(XSKind::NG).getSize();
     EXPECT_EQ(size, 95);
 }
 
 TEST_F(XSTests, GetNPCrossSectionSetResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("Pu239")->getXSSet(XSKind::NP).getSize();
     EXPECT_EQ(size, 95);
 }
 
 TEST_F(XSTests, GetNDCrossSectionSetResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("Pu239")->getXSSet(XSKind::ND).getSize();
     EXPECT_EQ(size, 95);
 }
 
 TEST_F(XSTests, GetNTCrossSectionSetResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec); 
     size_t size = library_->getNuclide("Pu239")->getXSSet(XSKind::NT).getSize();
     EXPECT_EQ(size, 95);
 }
 
 TEST_F(XSTests, GetNACrossSectionSetResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec); 
     size_t size = library_->getNuclide("Pu239")->getXSSet(XSKind::NA).getSize();
     EXPECT_EQ(size, 95);
 }
 
 TEST_F(XSTests, GetNFTOTCrossSectionSetResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("Pu239")->getXSSet(XSKind::NFTOT).getSize();
     EXPECT_EQ(size, 95);
 }
 
 TEST_F(XSTests, GetNUSIGFCrossSectionSetResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("Pu239")->getXSSet(XSKind::NUSIGF).getSize();
     EXPECT_EQ(size, 95);
 }
 
 TEST_F(XSTests, GetCHICrossSectionSetResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("Pu239")->getXSSet(XSKind::CHI).getSize();
     EXPECT_EQ(size, 95);
 }
 
 TEST_F(XSTests, GetNUCrossSectionSetResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     size_t size = library_->getNuclide("Pu239")->getXSSet(XSKind::NU).getSize();
     EXPECT_EQ(size, 95);
 }
 
 TEST_F(XSTests, GetTotalCrossSectionNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("La139")->getXSSet(XSKind::NTOT0).getXSNoInterp(293.0, Numerics::DINF).getValues();
 
 	std::vector<double> ref {4.54110384e+00, 4.80455208e+00, 4.91122198e+00, 
@@ -335,8 +290,6 @@ TEST_F(XSTests, GetTotalCrossSectionNonResonant)
 
 TEST_F(XSTests, GetInelCrossSectionNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("La139")->getXSSet(XSKind::NINEL).getXSNoInterp(293.0, Numerics::DINF).getValues();
 
 	std::vector<double> ref {0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 
@@ -381,8 +334,6 @@ TEST_F(XSTests, GetInelCrossSectionNonResonant)
 
 TEST_F(XSTests, GetN2NCrossSectionNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("La139")->getXSSet(XSKind::N2N).getXSNoInterp(293.0, Numerics::DINF).getValues();
 
 	std::vector<double> ref {0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 
@@ -427,8 +378,6 @@ TEST_F(XSTests, GetN2NCrossSectionNonResonant)
 
 TEST_F(XSTests, GetN3NCrossSectionNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("La139")->getXSSet(XSKind::N3N).getXSNoInterp(293.0, Numerics::DINF).getValues();
 
     std::vector<double> ref {0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 
@@ -473,10 +422,7 @@ TEST_F(XSTests, GetN3NCrossSectionNonResonant)
 
 TEST_F(XSTests, GetN4NCrossSectionNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("La139")->getXSSet(XSKind::N4N).getXSNoInterp(293.0, Numerics::DINF).getValues();
-
     std::vector<double> ref(172, 0.000000000000e+00);
     bool areEqual = std::equal(ref.begin(), ref.end(), xs.begin());
     EXPECT_TRUE(areEqual);
@@ -484,8 +430,6 @@ TEST_F(XSTests, GetN4NCrossSectionNonResonant)
 
 TEST_F(XSTests, GetNNPCrossSectionNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("La139")->getXSSet(XSKind::NNP).getXSNoInterp(293.0, Numerics::DINF).getValues();
 
 	std::vector<double> ref {0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 
@@ -530,8 +474,6 @@ TEST_F(XSTests, GetNNPCrossSectionNonResonant)
 
 TEST_F(XSTests, GetNGCrossSectionNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("La139")->getXSSet(XSKind::NG).getXSNoInterp(293.0, Numerics::DINF).getValues();
 
 	std::vector<double> ref {1.05950504e-03, 9.97772557e-04, 9.98312258e-04, 
@@ -576,8 +518,6 @@ TEST_F(XSTests, GetNGCrossSectionNonResonant)
 
 TEST_F(XSTests, GetNPCrossSectionNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("La139")->getXSSet(XSKind::NP).getXSNoInterp(293.0, Numerics::DINF).getValues();
 
 	std::vector<double> ref {0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 
@@ -622,8 +562,6 @@ TEST_F(XSTests, GetNPCrossSectionNonResonant)
 
 TEST_F(XSTests, GetNDCrossSectionNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("La139")->getXSSet(XSKind::ND).getXSNoInterp(293.0, Numerics::DINF).getValues();
 
     std::vector<double> ref {0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 
@@ -668,8 +606,6 @@ TEST_F(XSTests, GetNDCrossSectionNonResonant)
 
 TEST_F(XSTests, GetNTCrossSectionNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("La139")->getXSSet(XSKind::NT).getXSNoInterp(293.0, Numerics::DINF).getValues();
 
     std::vector<double> ref {0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 
@@ -714,8 +650,6 @@ TEST_F(XSTests, GetNTCrossSectionNonResonant)
 
 TEST_F(XSTests, GetNACrossSectionNonResonant)
 {	
-    std::vector<std::string> nucVec = {"La139"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("La139")->getXSSet(XSKind::NA).getXSNoInterp(293.0, Numerics::DINF).getValues();
     
     std::vector<double> ref {0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 
@@ -760,8 +694,6 @@ TEST_F(XSTests, GetNACrossSectionNonResonant)
 
 TEST_F(XSTests, GetTotalCrossSectionResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("Pu239")->getXSSet(XSKind::NTOT0).getXSNoInterp(5.50000000e+02, 2.51750000e+02).getValues();
 
 	std::vector<double> ref {6.151040080000e+00, 6.006264210000e+00, 5.894751070000e+00, 
@@ -805,8 +737,6 @@ TEST_F(XSTests, GetTotalCrossSectionResonant)
 
 TEST_F(XSTests, GetInelCrossSectionResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("Pu239")->getXSSet(XSKind::NINEL).getXSNoInterp(5.50000000e+02, 2.51750000e+02).getValues();
 
 	std::vector<double> ref {0.000000000000e+00, 0.000000000000e+00, 0.000000000000e+00, 
@@ -850,8 +780,6 @@ TEST_F(XSTests, GetInelCrossSectionResonant)
 
 TEST_F(XSTests, GetN2NCrossSectionResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("Pu239")->getXSSet(XSKind::N2N).getXSNoInterp(5.50000000e+02, 2.51750000e+02).getValues();
 
 	std::vector<double> ref {0.000000000000e+00, 0.000000000000e+00, 0.000000000000e+00, 
@@ -895,8 +823,6 @@ TEST_F(XSTests, GetN2NCrossSectionResonant)
 
 TEST_F(XSTests, GetN3NCrossSectionResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("Pu239")->getXSSet(XSKind::N3N).getXSNoInterp(5.50000000e+02, 2.51750000e+02).getValues();
 
 	std::vector<double> ref {0.000000000000e+00, 0.000000000000e+00, 0.000000000000e+00, 
@@ -940,10 +866,7 @@ TEST_F(XSTests, GetN3NCrossSectionResonant)
 
 TEST_F(XSTests, GetN4NCrossSectionResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("Pu239")->getXSSet(XSKind::N4N).getXSNoInterp(5.50000000e+02, 2.51750000e+02).getValues();
-
 	std::vector<double> ref(171, 0.000000000000e+00);
 	ref.push_back(1.824667920000e-05);
 
@@ -952,18 +875,13 @@ TEST_F(XSTests, GetN4NCrossSectionResonant)
 
 TEST_F(XSTests, GetNNPCrossSectionResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("Pu239")->getXSSet(XSKind::NNP).getXSNoInterp(5.50000000e+02, 2.51750000e+02).getValues();
-
 	std::vector<double> ref(172, 0.000000000000e+00);
     EXPECT_TRUE(Numerics::areVectorsEqual(xs, ref, 1.0E-9));
 }
 
 TEST_F(XSTests, GetNGCrossSectionResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("Pu239")->getXSSet(XSKind::NG).getXSNoInterp(5.50000000e+02, 2.51750000e+02).getValues();
 
 	std::vector<double> ref {2.210438950000e-03, 2.118142090000e-03, 2.229847010000e-03, 
@@ -1007,48 +925,34 @@ TEST_F(XSTests, GetNGCrossSectionResonant)
 
 TEST_F(XSTests, GetNPCrossSectionResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("Pu239")->getXSSet(XSKind::NP).getXSNoInterp(5.50000000e+02, 2.51750000e+02).getValues();
-
 	std::vector<double> ref(172, 0.000000000000e+00);
     EXPECT_TRUE(Numerics::areVectorsEqual(xs, ref, 1.0E-9));
 }
 
 TEST_F(XSTests, GetNDCrossSectionResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("Pu239")->getXSSet(XSKind::ND).getXSNoInterp(5.50000000e+02, 2.51750000e+02).getValues();
-
 	std::vector<double> ref(172, 0.000000000000e+00);
     EXPECT_TRUE(Numerics::areVectorsEqual(xs, ref, 1.0E-9));
 }
 
 TEST_F(XSTests, GetNTCrossSectionResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("Pu239")->getXSSet(XSKind::NT).getXSNoInterp(5.50000000e+02, 2.51750000e+02).getValues();
-
 	std::vector<double> ref(172, 0.000000000000e+00);
     EXPECT_TRUE(Numerics::areVectorsEqual(xs, ref, 1.0E-9));
 }
 
 TEST_F(XSTests, GetNACrossSectionResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("Pu239")->getXSSet(XSKind::NA).getXSNoInterp(5.50000000e+02, 2.51750000e+02).getValues();
-
 	std::vector<double> ref(172, 0.000000000000e+00);
     EXPECT_TRUE(Numerics::areVectorsEqual(xs, ref, 1.0E-9));
 }
 
 TEST_F(XSTests, GetNFTOTCrossSectionResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("Pu239")->getXSSet(XSKind::NFTOT).getXSNoInterp(5.50000000e+02, 2.51750000e+02).getValues();
 
 	std::vector<double> ref {2.350255970000e+00, 2.420903920000e+00, 2.415081980000e+00, 
@@ -1092,8 +996,6 @@ TEST_F(XSTests, GetNFTOTCrossSectionResonant)
 
 TEST_F(XSTests, GetNUSIGFCrossSectionResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("Pu239")->getXSSet(XSKind::NUSIGF).getXSNoInterp(5.50000000e+02, 2.51750000e+02).getValues();
 
 	std::vector<double> ref {1.288118360000e+01, 1.252699470000e+01, 1.202330590000e+01, 
@@ -1137,8 +1039,6 @@ TEST_F(XSTests, GetNUSIGFCrossSectionResonant)
 
 TEST_F(XSTests, GetCHICrossSectionResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("Pu239")->getXSSet(XSKind::CHI).getXSNoInterp(5.50000000e+02, 2.51750000e+02).getValues();
 
 	std::vector<double> ref {8.082575730000e-06, 4.209186950000e-05, 6.258555370000e-05, 
@@ -1182,8 +1082,6 @@ TEST_F(XSTests, GetCHICrossSectionResonant)
 
 TEST_F(XSTests, GetNUCrossSectionResonant)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> xs = library_->getNuclide("Pu239")->getXSSet(XSKind::NU).getXSNoInterp(5.50000000e+02, 2.51750000e+02).getValues();
 
 	//PrintFuncs::createCppVector(xs, "%13.12e");
@@ -1229,10 +1127,7 @@ TEST_F(XSTests, GetNUCrossSectionResonant)
 
 TEST_F(XSTests, GetLambdas)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     std::vector<double> lambdas = library_->getNuclide("Pu239")->getLambdas();
-
 	std::vector<double> ref {1.248109990000e-02, 2.994666990000e-02, 1.071553010000e-01, 
 	3.176192940000e-01, 1.352380040000e+00, 1.069116020000e+01};
 

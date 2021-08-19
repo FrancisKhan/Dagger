@@ -9,30 +9,49 @@
 class InterpolationTests : public ::testing::Test 
 {
  protected:
-	std::string url_;
-	std::string target_;
-	Library* library_;
+	static std::string* url_;
+	static std::string* target_;
+	static Library* library_;
+	static std::vector<std::string>* nucVec_;
+	static std::vector < std::shared_ptr<Nuclide> >* nuclides_;
 
-  	virtual void SetUp() 
+	static void SetUpTestSuite() 
 	{
-		library_ = new Library;
-		url_ = "https://www.polymtl.ca/merlin/downloads/libraries/ascii/draglibendfb7r0.gz";
-    	target_ = File::getPrePath() + "draglibendfb7r0.gz";
-		library_->downloadLibrary(url_, target_);
-		library_->setXSLibraryPath(target_);
-	}
+    	library_ = new Library;
+		url_ = new std::string("https://www.polymtl.ca/merlin/downloads/libraries/ascii/draglibendfb7r0.gz");
+    	target_ =  new std::string(File::getPrePath() + "draglibendfb7r0.gz");
+		library_->downloadLibrary(*url_, *target_);
+		library_->setXSLibraryPath(*target_);
+		nucVec_ = new std::vector<std::string> {"Pu239"};
+		nuclides_ = new std::vector < std::shared_ptr<Nuclide> > {library_->readNuclides(*nucVec_)};
+  	}
 
-  	virtual void TearDown() 
+	static void TearDownTestSuite() 
 	{
-		delete library_;
-	}
+    	delete library_;
+		delete url_;
+		delete target_;
+		delete nucVec_;
+		delete nuclides_;
+    	library_ = nullptr;
+		url_ = nullptr;
+		target_ = nullptr;
+		nucVec_ = nullptr;
+		nuclides_ = nullptr;
+  	}
+
+	virtual void SetUp() {}
+  	virtual void TearDown() {}
 };
+
+Library* InterpolationTests::library_ = nullptr;
+std::string* InterpolationTests::url_ = nullptr;
+std::string* InterpolationTests::target_ = nullptr;
+std::vector<std::string>* InterpolationTests::nucVec_ = nullptr;
+std::vector < std::shared_ptr<Nuclide> >* InterpolationTests::nuclides_ = nullptr;
 
 TEST_F(InterpolationTests, LinLin)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
-
     CrossSectionSet xsSet = library_->getNuclide("Pu239")->getXSSet(XSKind::NTOT0);
     std::vector<double> vec = xsSet.getXS(300.0, LinLin(), 1222.5, LinLin()).getValues();
 
@@ -77,9 +96,6 @@ TEST_F(InterpolationTests, LinLin)
 
 TEST_F(InterpolationTests, SqrtLogLin)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
-
     CrossSectionSet xsSet = library_->getNuclide("Pu239")->getXSSet(XSKind::NTOT0);
     std::vector<double> vec = xsSet.getXS(300.0, Sqrt(), 1222.5, LogLin()).getValues();
 
@@ -124,8 +140,6 @@ TEST_F(InterpolationTests, SqrtLogLin)
 
 TEST_F(InterpolationTests, MatrixLinLin)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     Eigen::MatrixXd mat = library_->getNuclide("Pu239")->getXSMatrixSet(XSMatrixKind::SCAT01).getXSMatrix(300.0, LinLin(), 1222.5, LinLin()).getValues();
 	std::vector<double> vec = Numerics::eigenVecTOStdVec(mat.diagonal(1)); 
 
@@ -170,8 +184,6 @@ TEST_F(InterpolationTests, MatrixLinLin)
 
 TEST_F(InterpolationTests, MatrixSqrtLogLin)
 {	
-    std::vector<std::string> nucVec = {"Pu239"};
-	std::vector < std::shared_ptr<Nuclide> > nuclides = library_->readNuclides(nucVec);
     Eigen::MatrixXd mat = library_->getNuclide("Pu239")->getXSMatrixSet(XSMatrixKind::SCAT01).getXSMatrix(300.0, Sqrt(), 1222.5, LogLin()).getValues();
 	std::vector<double> vec = Numerics::eigenVecTOStdVec(mat.diagonal(1)); 
 
