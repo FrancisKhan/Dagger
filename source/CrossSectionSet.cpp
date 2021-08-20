@@ -29,6 +29,56 @@ CrossSectionSet CrossSectionSet::operator/(const CrossSectionSet& rhs)
     return result;
 }
 
+CrossSectionSet CrossSectionSet::operator+(const CrossSectionSet& rhs)
+{
+    std::vector<double> temperatures = getTemperatures();
+    std::vector<double> dilutions = getBackgroundXSs();
+
+    CrossSectionSet result;
+
+    for(size_t i = 0; i < temperatures.size(); i++)
+    {
+        for(size_t j = 0; j < dilutions.size(); j++)
+        {
+            std::vector<double> rhsVec = rhs.getXSNoInterp(temperatures[i], dilutions[i]).getValues();
+            std::vector<double> lhsVec = getXSNoInterp(temperatures[i], dilutions[i]).getValues();
+                
+            std::vector<double> resultVec(rhsVec.size(), 0.0);
+            std::transform(lhsVec.begin(), lhsVec.end(), rhsVec.begin(), resultVec.begin(), std::plus<double>());
+
+            CrossSection crossSection(temperatures[i], dilutions[j], resultVec);
+            result.addXS(crossSection);
+        }
+    }
+
+    return result;
+}
+
+CrossSectionSet CrossSectionSet::operator-(const CrossSectionSet& rhs)
+{
+    std::vector<double> temperatures = getTemperatures();
+    std::vector<double> dilutions = getBackgroundXSs();
+
+    CrossSectionSet result;
+
+    for(size_t i = 0; i < temperatures.size(); i++)
+    {
+        for(size_t j = 0; j < dilutions.size(); j++)
+        {
+            std::vector<double> rhsVec = rhs.getXSNoInterp(temperatures[i], dilutions[i]).getValues();
+            std::vector<double> lhsVec = getXSNoInterp(temperatures[i], dilutions[i]).getValues();
+                
+            std::vector<double> resultVec(rhsVec.size(), 0.0);
+            std::transform(lhsVec.begin(), lhsVec.end(), rhsVec.begin(), resultVec.begin(), std::minus<double>());
+
+            CrossSection crossSection(temperatures[i], dilutions[j], resultVec);
+            result.addXS(crossSection);
+        }
+    }
+
+    return result;
+}
+
 CrossSection CrossSectionSet::getXSNoInterp(double t, double b) const
 {
     std::vector<CrossSection>::const_iterator it = std::find_if(m_XSSet.begin(), m_XSSet.end(), 
@@ -88,13 +138,18 @@ std::vector<double> CrossSectionSet::getBackgroundXSs()
     return result;   
 }
 
-// It is unlikely that a XSSet has a XS(t_i, b_i) only with zeros and others with values
+// It is unlikely that a XSSet has a XS(t_i, b_i) empty and others with values
 bool CrossSectionSet::isEmpty() const
 {
-    if(m_XSSet[0].hasOnlyZeroes())
-        return true;
+    if(m_XSSet[0].getSize() != 0)
+    {
+        if(m_XSSet[0].hasOnlyZeroes())
+            return true;
+        else
+            return false;
+    }
     else
-        return false;
+        return true;
 }
 
 void CrossSectionSet::debugCalcXS(std::vector<double> &newValues, std::vector<double> &infValues,

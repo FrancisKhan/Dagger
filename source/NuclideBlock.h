@@ -41,6 +41,7 @@ private:
 	unsigned getNumberOfEnergyGroups() {return m_numberOfEnergyGroups;}
 	std::vector<double> populateXS(std::vector<double> &xsVec);
 	std::vector<Nuclide::XSSetType> addNu();
+	std::vector<Nuclide::XSSetType> addScatteringL1XS();
 	void additionalXSs();
 
 	std::tuple< std::vector<double>, std::vector<int32_t>, std::vector<int32_t> > 

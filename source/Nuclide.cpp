@@ -47,7 +47,7 @@ CrossSectionSet& Nuclide::getXSSet(XSKind kind, std::vector<XSSetType>& crossSec
         return crossSectionSet;
 }
 
-CrossSectionMatrixSet& Nuclide::getXSMatrixSet(XSMatrixKind kind) 
+CrossSectionMatrixSet Nuclide::getXSMatrixSet(XSMatrixKind kind) 
 {
     static CrossSectionMatrixSet crossSectionMatrixSet;
 

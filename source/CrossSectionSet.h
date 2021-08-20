@@ -14,7 +14,7 @@ public:
     CrossSectionSet() {}
 	CrossSectionSet(XSKind xsKind) : m_kind(xsKind) {}
 
-    void addXS(CrossSection &xs) {m_XSSet.push_back(xs);}
+    void addXS(const CrossSection &xs) {m_XSSet.push_back(xs);}
     void setXS(unsigned i, CrossSection &xs) {m_XSSet[i] = xs;}
     CrossSection getXSNoInterp(unsigned i) {return m_XSSet.at(i);}
     CrossSection getXSNoInterp(double t, double b) const;
@@ -28,6 +28,8 @@ public:
     bool isEmpty() const;
 
     CrossSectionSet operator/(const CrossSectionSet& rhs);
+    CrossSectionSet operator+(const CrossSectionSet& rhs);
+    CrossSectionSet operator-(const CrossSectionSet& rhs);
 
     void debugCalcXS(std::vector<double> &newValues, std::vector<double> &infValues,
     std::vector<double> &dilValues, double temp, double sigma0);

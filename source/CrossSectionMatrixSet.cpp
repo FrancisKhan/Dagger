@@ -65,3 +65,13 @@ std::vector<double> CrossSectionMatrixSet::getBackgroundXSs()
     result.erase(std::unique(result.begin(), result.end()), result.end());
     return result;   
 }
+
+CrossSectionSet CrossSectionMatrixSet::condenseToXSs()
+{
+    CrossSectionSet xsSet;
+
+    for(const auto& s : m_XSSet)
+        xsSet.addXS(s.condenseToXS());
+
+    return xsSet;
+}

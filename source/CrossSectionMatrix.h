@@ -2,6 +2,7 @@
 #define CROSSSECTIONMATRIX_H
 
 #include "numeric_tools.h"
+#include "CrossSection.h"
 
 class CrossSectionMatrix
 {
@@ -18,6 +19,7 @@ public:
     void setValues(Eigen::MatrixXd &m) {m_values = m;}
     Eigen::MatrixXd getValues() {return m_values;}
     unsigned getSize() {return m_values.rows();}
+    CrossSection condenseToXS() const;
 
 private:
     double m_temperature;

@@ -439,10 +439,27 @@ std::vector<Nuclide::XSSetType> NuclideBlock::addNu()
     return crossSectionSets;
 }
 
+std::vector<Nuclide::XSSetType> NuclideBlock::addScatteringL1XS()
+{
+    std::vector<Nuclide::XSSetType> crossSectionSets = m_nuclide->getCopyOfXSSets();
+
+    CrossSectionSet& xsScatt01Set = Nuclide::getXSSet(XSKind::SCATT01, crossSectionSets);
+    xsScatt01Set.deleteXSs();
+
+    CrossSectionMatrixSet matS1 = m_nuclide->getXSMatrixSet(XSMatrixKind::SCAT01);
+    xsScatt01Set = matS1.condenseToXSs();
+
+    return crossSectionSets;
+}
+
+
 void NuclideBlock::additionalXSs()
 {
-    std::vector<Nuclide::XSSetType> crossSectionSets = addNu();
-    m_nuclide->setXSSets(crossSectionSets);
+    std::vector<Nuclide::XSSetType> crossSectionSets1 = addNu();
+    m_nuclide->setXSSets(crossSectionSets1);
+
+    std::vector<Nuclide::XSSetType> crossSectionSets2 = addScatteringL1XS();
+    m_nuclide->setXSSets(crossSectionSets2);
 }
 
 std::shared_ptr<Nuclide> NuclideBlock::getNuclide()

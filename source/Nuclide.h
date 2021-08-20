@@ -52,7 +52,7 @@ public:
 
     // Cross section matrix sets
 
-    CrossSectionMatrixSet& getXSMatrixSet(XSMatrixKind kind);
+    CrossSectionMatrixSet getXSMatrixSet(XSMatrixKind kind);
     static CrossSectionMatrixSet& getXSMatrixSet(XSMatrixKind kind, std::vector<XSMatrixSetType>& crossSectionMatrixSets);
     std::vector<XSMatrixSetType>& getXSMatrixSets() {return m_crossSectionMatrixSets;}
     std::vector<XSMatrixSetType> getCopyOfXSMatrixSets() {return m_crossSectionMatrixSets;}

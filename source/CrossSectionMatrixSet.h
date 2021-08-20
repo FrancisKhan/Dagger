@@ -2,6 +2,7 @@
 #define CROSSSECTIONMATRIXSET_H
 
 #include "CrossSectionMatrix.h"
+#include "CrossSectionSet.h"
 #include "Interpolation.h"
 #include "XSMatrixKind.h"
 #include "numeric_tools.h"
@@ -24,6 +25,7 @@ public:
     unsigned getSize() {return m_XSSet.size();}
     XSMatrixKind getKind() {return m_kind;}
     void calcXSMatrices();
+    CrossSectionSet condenseToXSs();
 
     template <typename InterpolFuncT, typename InterpolFuncB>
     CrossSectionMatrix getXSMatrix(double t, InterpolFuncT funcT, double b, InterpolFuncB funcB)
