@@ -75,3 +75,17 @@ CrossSectionSet CrossSectionMatrixSet::condenseToXSs()
 
     return xsSet;
 }
+
+// It is unlikely that a XSSet has a XS(t_i, b_i) empty and others with values
+bool CrossSectionMatrixSet::isEmpty() const
+{
+    if(m_XSSet[0].getSize() != 0)
+    {
+        if(m_XSSet[0].hasOnlyZeroes())
+            return true;
+        else
+            return false;
+    }
+    else
+        return true;
+}

@@ -1,6 +1,6 @@
 #include "CrossSection.h"
 
-unsigned CrossSection::hasOnlyZeroes() const
+bool CrossSection::hasOnlyZeroes() const
 {
     if(std::all_of(m_values.begin(), m_values.end(), [](const double i)
        {return Numerics::is_equal(i, 0.0);}))

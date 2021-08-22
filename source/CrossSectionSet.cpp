@@ -15,8 +15,8 @@ CrossSectionSet CrossSectionSet::operator/(const CrossSectionSet& rhs)
     {
         for(size_t j = 0; j < dilutions.size(); j++)
         {
-            std::vector<double> rhsVec = rhs.getXSNoInterp(temperatures[i], dilutions[i]).getValues();
-            std::vector<double> lhsVec = getXSNoInterp(temperatures[i], dilutions[i]).getValues();
+            std::vector<double> rhsVec = rhs.getXSNoInterp(temperatures[i], dilutions[j]).getValues();
+            std::vector<double> lhsVec = getXSNoInterp(temperatures[i], dilutions[j]).getValues();
                 
             std::vector<double> resultVec(rhsVec.size(), 0.0);
             std::transform(lhsVec.begin(), lhsVec.end(), rhsVec.begin(), resultVec.begin(), std::divides<double>());
@@ -40,8 +40,8 @@ CrossSectionSet CrossSectionSet::operator+(const CrossSectionSet& rhs)
     {
         for(size_t j = 0; j < dilutions.size(); j++)
         {
-            std::vector<double> rhsVec = rhs.getXSNoInterp(temperatures[i], dilutions[i]).getValues();
-            std::vector<double> lhsVec = getXSNoInterp(temperatures[i], dilutions[i]).getValues();
+            std::vector<double> rhsVec = rhs.getXSNoInterp(temperatures[i], dilutions[j]).getValues();
+            std::vector<double> lhsVec = getXSNoInterp(temperatures[i], dilutions[j]).getValues();
                 
             std::vector<double> resultVec(rhsVec.size(), 0.0);
             std::transform(lhsVec.begin(), lhsVec.end(), rhsVec.begin(), resultVec.begin(), std::plus<double>());
@@ -65,9 +65,9 @@ CrossSectionSet CrossSectionSet::operator-(const CrossSectionSet& rhs)
     {
         for(size_t j = 0; j < dilutions.size(); j++)
         {
-            std::vector<double> rhsVec = rhs.getXSNoInterp(temperatures[i], dilutions[i]).getValues();
-            std::vector<double> lhsVec = getXSNoInterp(temperatures[i], dilutions[i]).getValues();
-                
+            std::vector<double> rhsVec = rhs.getXSNoInterp(temperatures[i], dilutions[j]).getValues();
+            std::vector<double> lhsVec = getXSNoInterp(temperatures[i], dilutions[j]).getValues();
+
             std::vector<double> resultVec(rhsVec.size(), 0.0);
             std::transform(lhsVec.begin(), lhsVec.end(), rhsVec.begin(), resultVec.begin(), std::minus<double>());
 
@@ -78,6 +78,55 @@ CrossSectionSet CrossSectionSet::operator-(const CrossSectionSet& rhs)
 
     return result;
 }
+
+CrossSectionSet CrossSectionSet::operator*(const double rhs)
+{
+    std::vector<double> temperatures = getTemperatures();
+    std::vector<double> dilutions = getBackgroundXSs();
+
+    CrossSectionSet result;
+
+    for(size_t i = 0; i < temperatures.size(); i++)
+    {
+        for(size_t j = 0; j < dilutions.size(); j++)
+        {
+            std::vector<double> lhsVec = getXSNoInterp(temperatures[i], dilutions[j]).getValues();
+                
+            std::vector<double> resultVec(lhsVec.size(), 0.0);
+            std::transform(lhsVec.begin(), lhsVec.end(), resultVec.begin(), [rhs](auto k){return k * rhs;});
+
+            CrossSection crossSection(temperatures[i], dilutions[j], resultVec);
+            result.addXS(crossSection);
+        }
+    }
+
+    return result;
+}
+
+CrossSectionSet CrossSectionSet::operator/(const double rhs)
+{
+    std::vector<double> temperatures = getTemperatures();
+    std::vector<double> dilutions = getBackgroundXSs();
+
+    CrossSectionSet result;
+
+    for(size_t i = 0; i < temperatures.size(); i++)
+    {
+        for(size_t j = 0; j < dilutions.size(); j++)
+        {
+            std::vector<double> lhsVec = getXSNoInterp(temperatures[i], dilutions[j]).getValues();
+                
+            std::vector<double> resultVec(lhsVec.size(), 0.0);
+            std::transform(lhsVec.begin(), lhsVec.end(), resultVec.begin(), [rhs](auto k){return k / rhs;});
+
+            CrossSection crossSection(temperatures[i], dilutions[j], resultVec);
+            result.addXS(crossSection);
+        }
+    }
+
+    return result;
+}
+
 
 CrossSection CrossSectionSet::getXSNoInterp(double t, double b) const
 {
@@ -114,7 +163,7 @@ void CrossSectionSet::calcXSs()
     }
 }
 
-std::vector<double> CrossSectionSet::getTemperatures()
+std::vector<double> CrossSectionSet::getTemperatures() const
 {
     std::vector<double> result;
 
@@ -126,7 +175,7 @@ std::vector<double> CrossSectionSet::getTemperatures()
     return result;   
 }
 
-std::vector<double> CrossSectionSet::getBackgroundXSs()
+std::vector<double> CrossSectionSet::getBackgroundXSs() const
 {
     std::vector<double> result;
 

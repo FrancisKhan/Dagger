@@ -21,7 +21,7 @@ public:
     void setValues(const std::vector<double> &v) {m_values = v;}
     std::vector<double> getValues() {return m_values;}
     unsigned getSize() const {return m_values.size();}
-    unsigned hasOnlyZeroes() const;
+    bool hasOnlyZeroes() const;
 
 private:
     double m_temperature;

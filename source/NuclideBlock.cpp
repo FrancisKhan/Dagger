@@ -408,11 +408,10 @@ void NuclideBlock::isNuclideResonant()
     m_nuclide->setIsResonant(value);
 }
 
-bool NuclideBlock::isNuclideFissionable() const
+void NuclideBlock::isNuclideFissionable() const
 {
     bool isFissionable = m_nuclide->getXSSet(XSKind::NFTOT).isEmpty();
     m_nuclide->setIsFissionable(!isFissionable);
-    return !isFissionable;
 }
 
 std::vector<double> NuclideBlock::readLambdas()
@@ -427,7 +426,7 @@ std::vector<Nuclide::XSSetType> NuclideBlock::addNu()
 {
     std::vector<Nuclide::XSSetType> crossSectionSets = m_nuclide->getCopyOfXSSets();
     
-    if(isNuclideFissionable())
+    if(m_nuclide->isFissionable())
     {
         CrossSectionSet nusigfSet = Nuclide::getXSSet(XSKind::NUSIGF, crossSectionSets);
         CrossSectionSet sigfSet   = Nuclide::getXSSet(XSKind::NFTOT, crossSectionSets);
@@ -446,8 +445,33 @@ std::vector<Nuclide::XSSetType> NuclideBlock::addScatteringL1XS()
     CrossSectionSet& xsScatt01Set = Nuclide::getXSSet(XSKind::SCATT01, crossSectionSets);
     xsScatt01Set.deleteXSs();
 
-    CrossSectionMatrixSet matS1 = m_nuclide->getXSMatrixSet(XSMatrixKind::SCAT01);
-    xsScatt01Set = matS1.condenseToXSs();
+    CrossSectionMatrixSet matS1 = m_nuclide->getXSMatrixSet(XSMatrixKind::SCAT01); 
+    
+    if(matS1.isEmpty()) // there is no L1 scattering matrix available for this nuclide
+    {
+        CrossSectionMatrixSet matS0 = m_nuclide->getXSMatrixSet(XSMatrixKind::SCAT00); 
+        CrossSectionSet xsScatt00Set = matS0.condenseToXSs();
+        xsScatt01Set = (2.0 / (3.0 * m_nuclide->getAWR())) * xsScatt00Set;
+    }
+    else
+    {
+        xsScatt01Set = matS1.condenseToXSs();
+    } 
+
+    return crossSectionSets;
+}
+
+std::vector<Nuclide::XSSetType> NuclideBlock::addDiffCoeff()
+{
+    std::vector<Nuclide::XSSetType> crossSectionSets = m_nuclide->getCopyOfXSSets();
+
+    CrossSectionSet& diffCoeffSet = Nuclide::getXSSet(XSKind::DIFFCOEFF, crossSectionSets);
+    diffCoeffSet.deleteXSs();
+
+    CrossSectionSet totSet = Nuclide::getXSSet(XSKind::NTOT0, crossSectionSets);
+    CrossSectionSet scatt01Set = Nuclide::getXSSet(XSKind::SCATT01, crossSectionSets);
+
+    diffCoeffSet = 1.0 / (3.0 * (totSet - scatt01Set));
 
     return crossSectionSets;
 }
@@ -460,6 +484,9 @@ void NuclideBlock::additionalXSs()
 
     std::vector<Nuclide::XSSetType> crossSectionSets2 = addScatteringL1XS();
     m_nuclide->setXSSets(crossSectionSets2);
+
+    std::vector<Nuclide::XSSetType> crossSectionSets3 = addDiffCoeff();
+    m_nuclide->setXSSets(crossSectionSets3);
 }
 
 std::shared_ptr<Nuclide> NuclideBlock::getNuclide()

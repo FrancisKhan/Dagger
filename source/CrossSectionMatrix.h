@@ -18,8 +18,9 @@ public:
     double getBackgroundXS() const {return m_backgroundXS;}
     void setValues(Eigen::MatrixXd &m) {m_values = m;}
     Eigen::MatrixXd getValues() {return m_values;}
-    unsigned getSize() {return m_values.rows();}
+    unsigned getSize() const {return m_values.rows();}
     CrossSection condenseToXS() const;
+    bool hasOnlyZeroes() const;
 
 private:
     double m_temperature;

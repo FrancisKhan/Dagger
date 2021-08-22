@@ -36,12 +36,13 @@ private:
 	std::vector<Nuclide::XSSetType> readXSs();
 	std::vector<Nuclide::XSMatrixSetType> readXSMatrices();
 	void isNuclideResonant();
-	bool isNuclideFissionable() const;
+	void isNuclideFissionable() const;
 	void setNumberOfEnergyGroups();
 	unsigned getNumberOfEnergyGroups() {return m_numberOfEnergyGroups;}
 	std::vector<double> populateXS(std::vector<double> &xsVec);
 	std::vector<Nuclide::XSSetType> addNu();
 	std::vector<Nuclide::XSSetType> addScatteringL1XS();
+	std::vector<Nuclide::XSSetType> addDiffCoeff();
 	void additionalXSs();
 
 	std::tuple< std::vector<double>, std::vector<int32_t>, std::vector<int32_t> > 

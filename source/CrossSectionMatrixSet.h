@@ -22,8 +22,9 @@ public:
 
     std::vector<double> getTemperatures();
     std::vector<double> getBackgroundXSs();
-    unsigned getSize() {return m_XSSet.size();}
+    unsigned getSize() const {return m_XSSet.size();}
     XSMatrixKind getKind() {return m_kind;}
+    bool isEmpty() const;
     void calcXSMatrices();
     CrossSectionSet condenseToXSs();
 
