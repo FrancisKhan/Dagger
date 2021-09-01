@@ -48,6 +48,7 @@ _deps
 
 ~$*
 
+app/.vscode/
 DartConfiguration.tcl
 app/DaggerCode
 dragLibReader-lib/
