@@ -40,6 +40,9 @@ public:
     unsigned getEnergyGroupsNumber() {return m_energyGroupsNumber;}
     unsigned getXSsNumber() {return isResonant() ? (getDilutions().size() * getTemperatures().size()) : getTemperatures().size();}
 
+    void setPotXS(double potXS) {m_potXS = potXS;}
+    double getPotXS() const {return m_potXS;}
+
     // Cross section sets
 
     CrossSectionSet getXSSet(XSKind xsKind);
@@ -74,6 +77,7 @@ private:
     unsigned m_energyGroupsNumber;
     bool m_isResonant;
     bool m_isFissionable;
+    double m_potXS;
 
     std::vector<XSSetType> m_crossSectionSets;
     std::vector<XSMatrixSetType> m_crossSectionMatrixSets;

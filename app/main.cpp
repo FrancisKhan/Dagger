@@ -1,6 +1,7 @@
 #include "Library.h"
 #include "Output.h"
 #include "file_tools.h"
+#include "MacroCrossSection.h"
 
 #include <iostream>
 #include <chrono>
@@ -15,14 +16,16 @@ int main(int argc, char** argv)
     std::string target = File::getCurrentPath() + "/draglibendfb7r0.gz";
 
 	library.downloadLibrary(url, target);
-	library.printLogsOnFile("output.txt", "CRITICAL");
 	library.setXSLibraryPath(target);
+	library.printLogsOnFile("output.txt", "CRITICAL");
 
-	std::vector<std::string> nucVec = {"Pu239", "La139"};
+	std::vector<std::string> nucVec = {"Pu239", "C0_GR"};
 	std::vector < std::shared_ptr<Nuclide> > nuclides = library.readNuclides(nucVec);
 
-	for(const auto& nuc : nuclides)
-		nuc->printDebugData();
+	std::vector<double> dens = {0.0001, 0.001}; // barn
+	double temp = 300.0; // Kelvin
+
+	MacroCrossSection macroXS(temp, nucVec, dens);
 
 	auto end = std::chrono::steady_clock::now();
 	auto diff = end - start;

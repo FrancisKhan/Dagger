@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
 #include "Nuclide.h"
 
@@ -22,6 +23,8 @@ public:
 	std::vector<std::string> getLibraryNuclides() {return m_xsNuclides;}
 	size_t getNumberOfLibraryNuclides() {return m_xsNuclides.size();}
 
+	void hardCodedPotXSs();
+
 	bool downloadLibrary(const std::string& url, const std::string& targetFolder);
 	void printLogsOnConsole(const std::string& logLevel);
 	void printLogsOnFile(const std::string& logFile, const std::string& logLevel);
@@ -37,6 +40,8 @@ private:
 	std::vector<unsigned> m_xsNuclideBlocks;
 	unsigned m_numberOfEnergyGroups;
 	std::string m_libraryPath;
+
+	std::map<std::string, double> m_potXSs;
 
 	std::vector < std::shared_ptr<Nuclide> > m_nuclides;
 	TraceLevel m_logLevel;
