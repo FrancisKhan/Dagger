@@ -19,9 +19,15 @@ public:
     void setBackgroundXS(double b) {m_backgroundXS = b;}
     double getBackgroundXS() const {return m_backgroundXS;}
     void setValues(const std::vector<double> &v) {m_values = v;}
-    std::vector<double> getValues() {return m_values;}
+    std::vector<double> getValues() const {return m_values;}
     unsigned getSize() const {return m_values.size();}
     bool hasOnlyZeroes() const;
+    void deleteXS() {m_values.clear();}
+
+    CrossSection operator+(const CrossSection& rhs);
+    CrossSection operator-(const CrossSection& rhs);
+    CrossSection& operator+=(const CrossSection& rhs);
+    CrossSection& operator-=(const CrossSection& rhs);
 
 private:
     double m_temperature;

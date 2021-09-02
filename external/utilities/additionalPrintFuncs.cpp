@@ -425,7 +425,7 @@ namespace PrintFuncs
 		return result;
 	}
 
-	std::vector<std::string> createCppVector(std::vector<double>& vec, std::string format)
+	std::vector<std::string> createCppVector(const std::vector<double>& vec, std::string format)
 	{
 		unsigned firstRowValues = 3;
 		unsigned valuesPerRow   = 5;

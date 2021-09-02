@@ -19,7 +19,7 @@ namespace PrintFuncs
     bool isInteger(const std::string& s);
     bool isString(const std::string& s);
 
-    std::vector<std::string> createCppVector(std::vector<double>& vec, std::string format);
+    std::vector<std::string> createCppVector(const std::vector<double>& vec, std::string format);
 }
 
 #endif

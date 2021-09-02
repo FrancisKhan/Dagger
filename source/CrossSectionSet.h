@@ -45,21 +45,35 @@ public:
         std::pair<double, double> temps   = Numerics::getInterval(t, getTemperatures());
         std::pair<double, double> backXSs = Numerics::getInterval(b, getBackgroundXSs());
 
-        std::vector<double> Q11s = getXSNoInterp(temps.first,  backXSs.first).getValues();
-        std::vector<double> Q12s = getXSNoInterp(temps.first,  backXSs.second).getValues();
-        std::vector<double> Q21s = getXSNoInterp(temps.second, backXSs.first).getValues();
-        std::vector<double> Q22s = getXSNoInterp(temps.second, backXSs.second).getValues();
-
-        for(size_t i = 0; i < Q11s.size(); i++)
+        if(getBackgroundXSs().size() > 1)
         {
-            funcT.setIntervals(temps.first, temps.second, Q11s[i], Q12s[i]);
-            double funcxy1 = funcT(t);
+            std::vector<double> Q11s = getXSNoInterp(temps.first,  backXSs.first).getValues();
+            std::vector<double> Q12s = getXSNoInterp(temps.first,  backXSs.second).getValues();
+            std::vector<double> Q21s = getXSNoInterp(temps.second, backXSs.first).getValues();
+            std::vector<double> Q22s = getXSNoInterp(temps.second, backXSs.second).getValues();
 
-            funcT.setIntervals(temps.first, temps.second, Q21s[i], Q22s[i]);
-            double funcxy2 = funcT(t); 
+            for(size_t i = 0; i < Q11s.size(); i++)
+            {
+                funcT.setIntervals(temps.first, temps.second, Q11s[i], Q12s[i]);
+                double funcxy1 = funcT(t);
 
-            funcB.setIntervals(backXSs.first, backXSs.second, funcxy1, funcxy2);
-            result.push_back(funcB(b));
+                funcT.setIntervals(temps.first, temps.second, Q21s[i], Q22s[i]);
+                double funcxy2 = funcT(t); 
+
+                funcB.setIntervals(backXSs.first, backXSs.second, funcxy1, funcxy2);
+                result.push_back(funcB(b));
+            }
+        }
+        else // non-resonant isotopes have only the infinite background XS
+        {
+            std::vector<double> Q1s = getXSNoInterp(temps.first,  backXSs.second).getValues();
+            std::vector<double> Q2s = getXSNoInterp(temps.first,  backXSs.second).getValues();
+
+            for(size_t i = 0; i < Q1s.size(); i++)
+            {
+                funcT.setIntervals(temps.first, temps.second, Q1s[i], Q2s[i]);
+                result.push_back(funcT(t));
+            }
         }
 
         CrossSection xs(t, b, result);

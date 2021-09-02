@@ -25,6 +25,22 @@ std::map<std::string, double> Material::calculateBackgroundXS()
 void Material::calculateMacroXS()
 {
     std::map<std::string, double> backgroundXSMap = calculateBackgroundXS();
+    CrossSection xs;
+
+    for(const auto& xsKind : XSKind())
+    {
+        xs.deleteXS();
+
+        for(const auto& nuc : libNuclides_)        
+        {
+            double backgroundXS = backgroundXSMap.find(nuc->getName())->second;
+            xs = xs + nuc->getXSSet(xsKind).getXS(temperature_, Sqrt(), backgroundXS, LogLin());
+        }
+
+        
+    }
+
+    /// std::make_pair(xsKind, )
 
     for(auto i : backgroundXSMap)
         std::cout << i.first << " " << i.second << std::endl; 
