@@ -17,10 +17,15 @@ public:
     void setBackgroundXS(double b) {m_backgroundXS = b;}
     double getBackgroundXS() const {return m_backgroundXS;}
     void setValues(Eigen::MatrixXd &m) {m_values = m;}
-    Eigen::MatrixXd getValues() {return m_values;}
+    Eigen::MatrixXd getValues() const {return m_values;}
     unsigned getSize() const {return m_values.rows();}
     CrossSection condenseToXS() const;
     bool hasOnlyZeroes() const;
+
+    CrossSectionMatrix operator+(const CrossSectionMatrix& rhs);
+    CrossSectionMatrix operator-(const CrossSectionMatrix& rhs);
+    CrossSectionMatrix& operator+=(const CrossSectionMatrix& rhs);
+    CrossSectionMatrix& operator-=(const CrossSectionMatrix& rhs);
 
 private:
     double m_temperature;

@@ -67,7 +67,7 @@ public:
         else // non-resonant isotopes have only the infinite background XS
         {
             std::vector<double> Q1s = getXSNoInterp(temps.first,  backXSs.second).getValues();
-            std::vector<double> Q2s = getXSNoInterp(temps.first,  backXSs.second).getValues();
+            std::vector<double> Q2s = getXSNoInterp(temps.second, backXSs.second).getValues();
 
             for(size_t i = 0; i < Q1s.size(); i++)
             {

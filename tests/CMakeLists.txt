@@ -1,6 +1,6 @@
 # Tests need to be added as executables first
 add_executable(gtest_Dagger mathsTests.cpp XSTests.cpp XSMatrixTests.cpp FileToolsTests.cpp
-               InterpolationTests.cpp)
+               XSMatrixOpsTests.cpp)
 
 
 set(CMAKE_CXX_STANDARD 17)

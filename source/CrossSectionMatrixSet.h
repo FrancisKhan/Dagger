@@ -34,25 +34,46 @@ public:
         std::pair<double, double> temps   = Numerics::getInterval(t, getTemperatures());
         std::pair<double, double> backXSs = Numerics::getInterval(b, getBackgroundXSs());
 
-        Eigen::MatrixXd Q11s = getXSMatrixNoInterp(temps.first,  backXSs.first).getValues();
-        Eigen::MatrixXd Q12s = getXSMatrixNoInterp(temps.first,  backXSs.second).getValues();
-        Eigen::MatrixXd Q21s = getXSMatrixNoInterp(temps.second, backXSs.first).getValues();
-        Eigen::MatrixXd Q22s = getXSMatrixNoInterp(temps.second, backXSs.second).getValues();
+        Eigen::MatrixXd result;
 
-        Eigen::MatrixXd result = MatrixXd::Zero(Q11s.rows(), Q11s.cols());
-
-        for(size_t i = 0; i < static_cast<size_t>(Q11s.rows()); i++)
+        if(getBackgroundXSs().size() > 1)
         {
-            for(size_t j = 0; j < static_cast<size_t>(Q11s.cols()); j++)
+            Eigen::MatrixXd Q11s = getXSMatrixNoInterp(temps.first,  backXSs.first).getValues();
+            Eigen::MatrixXd Q12s = getXSMatrixNoInterp(temps.first,  backXSs.second).getValues();
+            Eigen::MatrixXd Q21s = getXSMatrixNoInterp(temps.second, backXSs.first).getValues();
+            Eigen::MatrixXd Q22s = getXSMatrixNoInterp(temps.second, backXSs.second).getValues();
+
+            result = MatrixXd::Zero(Q11s.rows(), Q11s.cols());
+
+            for(size_t i = 0; i < static_cast<size_t>(Q11s.rows()); i++)
             {
-                funcT.setIntervals(temps.first, temps.second, Q11s(i, j), Q12s(i, j));
-                double funcxy1 = funcT(t);
+                for(size_t j = 0; j < static_cast<size_t>(Q11s.cols()); j++)
+                {
+                    funcT.setIntervals(temps.first, temps.second, Q11s(i, j), Q12s(i, j));
+                    double funcxy1 = funcT(t);
 
-                funcT.setIntervals(temps.first, temps.second, Q21s(i, j), Q22s(i, j));
-                double funcxy2 = funcT(t); 
+                    funcT.setIntervals(temps.first, temps.second, Q21s(i, j), Q22s(i, j));
+                    double funcxy2 = funcT(t); 
 
-                funcB.setIntervals(backXSs.first, backXSs.second, funcxy1, funcxy2);
-                result(i, j) = funcB(b);
+                    funcB.setIntervals(backXSs.first, backXSs.second, funcxy1, funcxy2);
+                    result(i, j) = funcB(b);
+                }
+            }
+        }
+        else // non-resonant isotopes have only the infinite background XS
+        {
+            Eigen::MatrixXd Q1s = getXSMatrixNoInterp(temps.first,  backXSs.second).getValues();
+            Eigen::MatrixXd Q2s = getXSMatrixNoInterp(temps.second, backXSs.second).getValues();
+
+            result = MatrixXd::Zero(Q1s.rows(), Q1s.cols());
+
+            for(size_t i = 0; i < static_cast<size_t>(Q1s.rows()); i++)
+            {
+                for(size_t j = 0; j < static_cast<size_t>(Q1s.cols()); j++)
+                {
+                    funcT.setIntervals(temps.first, temps.second, Q1s(i, j), Q2s(i, j));
+                    result(i, j) = funcT(t);
+                }
             }
         }
 
