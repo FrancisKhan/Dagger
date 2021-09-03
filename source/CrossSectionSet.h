@@ -54,10 +54,10 @@ public:
 
             for(size_t i = 0; i < Q11s.size(); i++)
             {
-                funcT.setIntervals(temps.first, temps.second, Q11s[i], Q12s[i]);
+                funcT.setIntervals(temps.first, temps.second, Q11s[i], Q21s[i]);
                 double funcxy1 = funcT(t);
 
-                funcT.setIntervals(temps.first, temps.second, Q21s[i], Q22s[i]);
+                funcT.setIntervals(temps.first, temps.second, Q12s[i], Q22s[i]);
                 double funcxy2 = funcT(t); 
 
                 funcB.setIntervals(backXSs.first, backXSs.second, funcxy1, funcxy2);

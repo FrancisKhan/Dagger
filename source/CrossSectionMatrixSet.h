@@ -49,10 +49,10 @@ public:
             {
                 for(size_t j = 0; j < static_cast<size_t>(Q11s.cols()); j++)
                 {
-                    funcT.setIntervals(temps.first, temps.second, Q11s(i, j), Q12s(i, j));
+                    funcT.setIntervals(temps.first, temps.second, Q11s(i, j), Q21s(i, j));
                     double funcxy1 = funcT(t);
 
-                    funcT.setIntervals(temps.first, temps.second, Q21s(i, j), Q22s(i, j));
+                    funcT.setIntervals(temps.first, temps.second, Q12s(i, j), Q22s(i, j));
                     double funcxy2 = funcT(t); 
 
                     funcB.setIntervals(backXSs.first, backXSs.second, funcxy1, funcxy2);
