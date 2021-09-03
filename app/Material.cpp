@@ -60,7 +60,7 @@ void Material::calculateMacroXSMatrices()
         }
 
         MacroCrossSectionMatrix macroXSMat(xsKind, getTemperature(), xsMat.getValues());
-        m_crossSectionMatrices.push_back(std::pair<XSMatrixKind, MacroCrossSection>(xsKind, macroXSMat));
+        m_crossSectionMatrices.push_back(std::pair<XSMatrixKind, MacroCrossSectionMatrix>(xsKind, macroXSMat));
         xsMat.setToZero(nEnergyGroups, nEnergyGroups);
     }
 
