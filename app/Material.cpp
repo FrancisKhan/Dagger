@@ -22,9 +22,10 @@ std::map<std::string, double> Material::calculateBackgroundXS()
     return backgroundXSMap;
 }
 
-void Material::calculateMacroXS()
+void Material::calculateMacroXSs()
 {
     std::map<std::string, double> backgroundXSMap = calculateBackgroundXS();
+
     std::vector<double> values(libNuclides_.front()->getEnergyGroupsNumber(), 0.0);
     CrossSection xs(getTemperature(), 0.0, values);
 
@@ -39,6 +40,28 @@ void Material::calculateMacroXS()
         MacroCrossSection macroXS(xsKind, getTemperature(), xs.getValues());
         m_crossSections.push_back(std::pair<XSKind, MacroCrossSection>(xsKind, macroXS));
         xs.deleteXS();
+    }
+}
+
+void Material::calculateMacroXSMatrices()
+{
+    std::map<std::string, double> backgroundXSMap = calculateBackgroundXS();
+
+    unsigned nEnergyGroups = libNuclides_.front()->getEnergyGroupsNumber();
+    Eigen::MatrixXd values = Eigen::MatrixXd::Zero(nEnergyGroups, nEnergyGroups);
+    CrossSectionMatrix xsMat(getTemperature(), 0.0, values);
+
+    for(const auto& xsKind : XSMatrixKind())
+    {
+        for(const auto& nuc : libNuclides_)        
+        {
+            double backgroundXS = backgroundXSMap.find(nuc->getName())->second;
+            xsMat += nuc->getXSMatrixSet(xsKind).getXSMatrix(temperature_, Sqrt(), backgroundXS, LogLin());
+        }
+
+        MacroCrossSectionMatrix macroXSMat(xsKind, getTemperature(), xsMat.getValues());
+        m_crossSectionMatrices.push_back(std::pair<XSMatrixKind, MacroCrossSection>(xsKind, macroXSMat));
+        xsMat.setToZero(nEnergyGroups, nEnergyGroups);
     }
 
     for(auto i : backgroundXSMap)

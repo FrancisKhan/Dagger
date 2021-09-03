@@ -12,8 +12,10 @@ public:
     MacroCrossSection() : temperature_(0.0), values_(std::vector<double> {}) {}
     
 	MacroCrossSection(XSKind xsKind, double temperature, const std::vector<double> &values) :
-    temperature_(temperature), values_(values) {}
+    xsKind_(xsKind), temperature_(temperature), values_(values) {}
 
+    void setKind(XSKind xsKind) {xsKind_ = xsKind;}
+    XSKind getKind() const {return xsKind_;} 
     void setTemperature(double t) {temperature_ = t;}
     double getTemperature() const {return temperature_;} 
     void setValues(const std::vector<double> &v) {values_ = v;}

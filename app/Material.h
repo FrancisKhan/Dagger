@@ -35,7 +35,8 @@ public:
     std::vector < std::shared_ptr<Nuclide> > setLibNuclides() const {return libNuclides_;}
 
     std::map<std::string, double> calculateBackgroundXS();
-    void calculateMacroXS();
+    void calculateMacroXSs();
+    void calculateMacroXSMatrices();
 
 private:
     double temperature_;

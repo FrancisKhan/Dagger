@@ -4,25 +4,29 @@
 #include <vector>
 #include <string>
 
+#include "numeric_tools.h"
+#include "XSMatrixKind.h"
+
 class MacroCrossSectionMatrix
 {
 public:
-    MacroCrossSectionMatrix(double t, const std::vector<std::string> &n, const std::vector<double> &d) : 
-                      temperature_(t), nuclides_(n), densities_(d) {}
+    MacroCrossSectionMatrix() : temperature_(0.0) {}
+    
+	MacroCrossSectionMatrix(XSMatrixKind xsKind, double temperature, const Eigen::MatrixXd& values) :
+    xsKind_(xsKind), temperature_(temperature), values_(values) {}
 
-    MacroCrossSectionMatrix() : temperature_(0.0), nuclides_(std::vector<std::string> {}),
-                                densities_(std::vector<double> {}) {}
+    void setKind(XSMatrixKind xsKind) {xsKind_ = xsKind;}
+    XSMatrixKind getKind() const {return xsKind_;} 
     void setTemperature(double t) {temperature_ = t;}
     double getTemperature() const {return temperature_;} 
-    void setNuclides(const std::vector<std::string>& nuclides) {nuclides_ = nuclides;}
-    std::vector<std::string> getNuclides() const {return nuclides_;}
-    void setDensities(const std::vector<double>& densities) {densities_ = densities;}
-    std::vector<double> getDensities() const {return densities_;}
+    void setValues(const Eigen::MatrixXd &v) {values_ = v;}
+    Eigen::MatrixXd getValues() const {return values_;}
+    unsigned getSize() const {return values_.rows();}
 
 private:
+    XSMatrixKind xsKind_;
     double temperature_;
-    std::vector<std::string> nuclides_;
-    std::vector<double> densities_;
+    Eigen::MatrixXd values_;
 };
 
 #endif
