@@ -23,15 +23,13 @@ Nuclide::Nuclide()
 
 CrossSectionSet Nuclide::getXSSet(XSKind kind) 
 {
-    static CrossSectionSet crossSectionSet;
-
     std::vector<Nuclide::XSSetType>::iterator it = std::find_if(m_crossSectionSets.begin(), m_crossSectionSets.end(), 
     [kind] (Nuclide::XSSetType &p) {return p.first == kind;});
 
     if (it != m_crossSectionSets.end()) 
         return it->second;
     else
-        return crossSectionSet;
+        return CrossSectionSet {};
 }
 
 CrossSectionSet& Nuclide::getXSSet(XSKind kind, std::vector<XSSetType>& crossSectionSets) 
@@ -49,15 +47,13 @@ CrossSectionSet& Nuclide::getXSSet(XSKind kind, std::vector<XSSetType>& crossSec
 
 CrossSectionMatrixSet Nuclide::getXSMatrixSet(XSMatrixKind kind) 
 {
-    static CrossSectionMatrixSet crossSectionMatrixSet;
-
     std::vector<Nuclide::XSMatrixSetType>::iterator it = std::find_if(m_crossSectionMatrixSets.begin(), 
     m_crossSectionMatrixSets.end(), [kind] (Nuclide::XSMatrixSetType &m) {return m.first == kind;});
 
     if (it != m_crossSectionMatrixSets.end()) 
         return it->second;
     else
-        return crossSectionMatrixSet;
+        return CrossSectionMatrixSet {};
 }
 
 CrossSectionMatrixSet& Nuclide::getXSMatrixSet(XSMatrixKind kind, std::vector<XSMatrixSetType>& crossSectionMatrixSets) 

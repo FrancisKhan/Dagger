@@ -7,7 +7,7 @@ project(DLRCode
     DESCRIPTION "DLRCode"
     LANGUAGES CXX)
 
-add_executable(DaggerCode Material.cpp main.cpp)
+add_executable(DaggerCode Solver.cpp Material.cpp main.cpp)
 
 ExternalProject_Add(
     dragLibReader 

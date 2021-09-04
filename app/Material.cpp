@@ -2,6 +2,51 @@
 
 #include <map>
 
+
+MacroCrossSection Material::getMacroXS(XSKind kind, const std::vector<MacroXSType>& crossSections) 
+{
+    std::vector<MacroXSType>::const_iterator it = std::find_if(crossSections.begin(), crossSections.end(), 
+    [kind] (const MacroXSType& p) {return p.first == kind;});
+
+    if (it != crossSections.end()) 
+        return it->second;
+    else
+        return MacroCrossSection {};
+}
+
+MacroCrossSection Material::getMacroXS(XSKind kind) 
+{
+    std::vector<MacroXSType>::iterator it = std::find_if(crossSections_.begin(), crossSections_.end(), 
+    [kind] (MacroXSType &p) {return p.first == kind;});
+
+    if (it != crossSections_.end()) 
+        return it->second;
+    else
+        return MacroCrossSection {};
+}
+
+MacroCrossSectionMatrix Material::getMacroXSMatrix(XSMatrixKind kind, const std::vector<MacroXSMatrixType>& crossSectionMatrices) 
+{
+    std::vector<MacroXSMatrixType>::const_iterator it = std::find_if(crossSectionMatrices.begin(), crossSectionMatrices.end(), 
+    [kind] (const MacroXSMatrixType& p) {return p.first == kind;});
+
+    if (it != crossSectionMatrices.end()) 
+        return it->second;
+    else
+        return MacroCrossSectionMatrix {};
+}
+
+MacroCrossSectionMatrix Material::getMacroXSMatrix(XSMatrixKind kind) 
+{
+    std::vector<MacroXSMatrixType>::iterator it = std::find_if(crossSectionMatrices_.begin(), crossSectionMatrices_.end(), 
+    [kind] (MacroXSMatrixType &p) {return p.first == kind;});
+
+    if (it != crossSectionMatrices_.end()) 
+        return it->second;
+    else
+        return MacroCrossSectionMatrix {};
+}
+
 std::map<std::string, double> Material::calculateBackgroundXS()
 {
     std::map<std::string, double> backgroundXSMap;
@@ -22,7 +67,7 @@ std::map<std::string, double> Material::calculateBackgroundXS()
     return backgroundXSMap;
 }
 
-void Material::calculateMacroXSs()
+std::vector<Material::MacroXSType> Material::calculateMacroXSs()
 {
     std::map<std::string, double> backgroundXSMap = calculateBackgroundXS();
 
@@ -38,12 +83,14 @@ void Material::calculateMacroXSs()
         }
 
         MacroCrossSection macroXS(xsKind, getTemperature(), xs.getValues());
-        m_crossSections.push_back(std::pair<XSKind, MacroCrossSection>(xsKind, macroXS));
+        crossSections_.push_back(std::pair<XSKind, MacroCrossSection>(xsKind, macroXS));
         xs.deleteXS();
     }
+
+    return crossSections_;
 }
 
-void Material::calculateMacroXSMatrices()
+std::vector<Material::MacroXSMatrixType> Material::calculateMacroXSMatrices()
 {
     std::map<std::string, double> backgroundXSMap = calculateBackgroundXS();
 
@@ -60,10 +107,9 @@ void Material::calculateMacroXSMatrices()
         }
 
         MacroCrossSectionMatrix macroXSMat(xsKind, getTemperature(), xsMat.getValues());
-        m_crossSectionMatrices.push_back(std::pair<XSMatrixKind, MacroCrossSectionMatrix>(xsKind, macroXSMat));
+        crossSectionMatrices_.push_back(std::pair<XSMatrixKind, MacroCrossSectionMatrix>(xsKind, macroXSMat));
         xsMat.setToZero(nEnergyGroups, nEnergyGroups);
     }
 
-    for(auto i : backgroundXSMap)
-        std::cout << i.first << " " << i.second << std::endl; 
+    return crossSectionMatrices_;
 }

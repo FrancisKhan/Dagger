@@ -2,6 +2,7 @@
 #include "Output.h"
 #include "file_tools.h"
 #include "Material.h"
+#include "Solver.h"
 
 #include <iostream>
 #include <chrono>
@@ -26,8 +27,11 @@ int main(int argc, char** argv)
 	double temp = 300.0; // Kelvin
 
 	Material mat(temp, nucVec, dens, libNuclides);
-	mat.calculateMacroXSs();
-	mat.calculateMacroXSMatrices();
+	std::vector<Material::MacroXSType> crossSections = mat.calculateMacroXSs();
+	std::vector<Material::MacroXSMatrixType> crossSectionMatrices = mat.calculateMacroXSMatrices();
+
+	Solver solver(crossSections, crossSectionMatrices);
+	solver.calcAMatrix();
 
 	auto end = std::chrono::steady_clock::now();
 	auto diff = end - start;

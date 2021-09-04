@@ -34,17 +34,25 @@ public:
     void setLibNuclides(const std::vector < std::shared_ptr<Nuclide> >& libNuclides) {libNuclides_ = libNuclides;}
     std::vector < std::shared_ptr<Nuclide> > setLibNuclides() const {return libNuclides_;}
 
+    MacroCrossSection getMacroXS(XSKind kind);
+    MacroCrossSectionMatrix getMacroXSMatrix(XSMatrixKind kind);
+
+    static MacroCrossSection getMacroXS(XSKind kind, const std::vector<MacroXSType>& crossSections);
+    
+    static MacroCrossSectionMatrix getMacroXSMatrix(XSMatrixKind kind, 
+                                    const std::vector<MacroXSMatrixType>& crossSectionMatrices);
+
     std::map<std::string, double> calculateBackgroundXS();
-    void calculateMacroXSs();
-    void calculateMacroXSMatrices();
+    std::vector<MacroXSType> calculateMacroXSs();
+    std::vector<MacroXSMatrixType> calculateMacroXSMatrices();
 
 private:
     double temperature_;
     std::vector<std::string> nuclides_;
     std::vector<double> densities_;
 
-    std::vector<MacroXSType> m_crossSections;
-    std::vector<MacroXSMatrixType> m_crossSectionMatrices;
+    std::vector<MacroXSType> crossSections_;
+    std::vector<MacroXSMatrixType> crossSectionMatrices_;
 
     std::vector < std::shared_ptr<Nuclide> > libNuclides_;
 };
