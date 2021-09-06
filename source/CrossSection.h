@@ -22,7 +22,7 @@ public:
     std::vector<double> getValues() const {return m_values;}
     unsigned getSize() const {return m_values.size();}
     bool hasOnlyZeroes() const;
-    void deleteXS() {m_values.clear();}
+    void setToZero();
 
     CrossSection operator+(const CrossSection& rhs);
     CrossSection operator-(const CrossSection& rhs);

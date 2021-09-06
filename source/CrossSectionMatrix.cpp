@@ -1,6 +1,13 @@
 #include "CrossSectionMatrix.h"
 #include "numeric_tools.h"
 
+void CrossSectionMatrix::setToZero() 
+{
+    unsigned rows = m_values.rows();
+    unsigned cols = m_values.cols();
+    m_values = Eigen::MatrixXd::Zero(rows, cols);
+}
+
 CrossSection CrossSectionMatrix::condenseToXS() const
 {
     std::vector<double> newValues = Numerics::eigenVecTOStdVec(m_values.rowwise().sum());

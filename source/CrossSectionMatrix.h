@@ -21,7 +21,7 @@ public:
     unsigned getSize() const {return m_values.rows();}
     CrossSection condenseToXS() const;
     bool hasOnlyZeroes() const;
-    void setToZero(unsigned a, unsigned b) {m_values.resize(a, b);}
+    void setToZero();
 
     CrossSectionMatrix operator+(const CrossSectionMatrix& rhs);
     CrossSectionMatrix operator-(const CrossSectionMatrix& rhs);

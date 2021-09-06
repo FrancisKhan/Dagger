@@ -11,6 +11,7 @@ public:
     crossSections_(xs), crossSectionMatrices_(xsMat), nEnergyGroups_(crossSections_.front().second.getSize()) {;}
     
     Eigen::MatrixXd calcAMatrix();
+    Eigen::MatrixXd calcFMatrix();
   
 
 private:

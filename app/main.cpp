@@ -32,6 +32,7 @@ int main(int argc, char** argv)
 
 	Solver solver(crossSections, crossSectionMatrices);
 	solver.calcAMatrix();
+	solver.calcFMatrix();
 
 	auto end = std::chrono::steady_clock::now();
 	auto diff = end - start;

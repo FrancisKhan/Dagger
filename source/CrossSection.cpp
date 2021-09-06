@@ -1,5 +1,12 @@
 #include "CrossSection.h"
 
+void CrossSection::setToZero() 
+{
+    size_t size = m_values.size();
+    m_values.clear();
+    m_values.resize(size, 0.0);
+}
+
 bool CrossSection::hasOnlyZeroes() const
 {
     if(std::all_of(m_values.begin(), m_values.end(), [](const double i)

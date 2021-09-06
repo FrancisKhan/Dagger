@@ -79,12 +79,19 @@ std::vector<Material::MacroXSType> Material::calculateMacroXSs()
         for(const auto& nuc : libNuclides_)        
         {
             double backgroundXS = backgroundXSMap.find(nuc->getName())->second;
-            xs += nuc->getXSSet(xsKind).getXS(temperature_, Sqrt(), backgroundXS, LogLin());
+            CrossSection aaa = nuc->getXSSet(xsKind).getXS(temperature_, Sqrt(), backgroundXS, LogLin());
+            xs += aaa;
+
+            std::cout << std::scientific << std::endl;
+            std::cout << "Isotope: " << nuc->getName() << std::endl;
+            std::cout << get_name(xsKind) << " " << xs.getValues().size() << std::endl;
+            for(auto i : xs.getValues())
+                std::cout << i << std::endl;
         }
 
         MacroCrossSection macroXS(xsKind, getTemperature(), xs.getValues());
         crossSections_.push_back(std::pair<XSKind, MacroCrossSection>(xsKind, macroXS));
-        xs.deleteXS();
+        xs.setToZero();
     }
 
     return crossSections_;
@@ -108,7 +115,7 @@ std::vector<Material::MacroXSMatrixType> Material::calculateMacroXSMatrices()
 
         MacroCrossSectionMatrix macroXSMat(xsKind, getTemperature(), xsMat.getValues());
         crossSectionMatrices_.push_back(std::pair<XSMatrixKind, MacroCrossSectionMatrix>(xsKind, macroXSMat));
-        xsMat.setToZero(nEnergyGroups, nEnergyGroups);
+        xsMat.setToZero();
     }
 
     return crossSectionMatrices_;
