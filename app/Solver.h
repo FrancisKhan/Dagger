@@ -12,7 +12,7 @@ public:
     
     Eigen::MatrixXd calcAMatrix();
     Eigen::MatrixXd calcFMatrix();
-  
+    void sourceIteration(Eigen::MatrixXd &Mmatrix, Eigen::MatrixXd &Fmatrix);
 
 private:
     std::vector<Material::MacroXSType> crossSections_;

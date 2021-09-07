@@ -35,4 +35,15 @@ private:
     std::vector<double> m_values;
 };
 
+inline CrossSection operator*(const double lhs, const CrossSection& rhs)
+{
+    std::vector<double> rhsVec = rhs.getValues();
+    std::vector<double> resultVec(rhsVec.size(), 0.0);
+    std::transform(rhsVec.begin(), rhsVec.end(), resultVec.begin(), [lhs](auto k){return k * lhs;});
+
+    CrossSection xs(rhs.getTemperature(), rhs.getBackgroundXS(), resultVec);
+
+    return xs;
+}
+
 #endif
