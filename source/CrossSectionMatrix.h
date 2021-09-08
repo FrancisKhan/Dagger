@@ -41,7 +41,7 @@ inline CrossSectionMatrix operator*(const double lhs, const CrossSectionMatrix& 
 
     for(unsigned i = 0; i < rhsMat.rows(); i++)
         for(unsigned j = 0; j < rhsMat.cols(); j++)
-            resultMat(i, j) *= lhs;
+            resultMat(i, j) = lhs * rhsMat(i, j);
 
     CrossSectionMatrix xsMat(rhs.getTemperature(), rhs.getBackgroundXS(), resultMat);
     return xsMat;

@@ -14,8 +14,8 @@ Eigen::MatrixXd Solver::calcAMatrix()
 
     AMatrix -= scattL0Matrix.transpose();
 
-    out.print(TraceLevel::CRITICAL, "\n\nAMatrix: \n");
-    PrintFuncs::printMatrix(AMatrix, out, TraceLevel::CRITICAL);
+    // out.print(TraceLevel::CRITICAL, "\n\nAMatrix: \n");
+    // PrintFuncs::printMatrix(AMatrix, out, TraceLevel::CRITICAL);
 
     return AMatrix;
 }
@@ -28,11 +28,11 @@ Eigen::MatrixXd Solver::calcFMatrix()
     std::vector<double> chi      = Material::getMacroXS(XSKind::CHI, crossSections_).getValues();
 
     for(unsigned i = 0; i < FMatrix.rows(); i++)
-        for(unsigned j = 0; j < FMatrix.rows(); j++)
+        for(unsigned j = 0; j < FMatrix.cols(); j++)
             FMatrix(i, j) = chi[i] * nuSigfXS[j];
 
-    out.print(TraceLevel::CRITICAL, "\n\nFMatrix: \n");
-    PrintFuncs::printMatrix(FMatrix, out, TraceLevel::CRITICAL);
+    // out.print(TraceLevel::CRITICAL, "\n\nFMatrix: \n");
+    // PrintFuncs::printMatrix(FMatrix, out, TraceLevel::CRITICAL);
 
     return FMatrix;
 }
@@ -88,13 +88,10 @@ void Solver::sourceIteration(Eigen::MatrixXd &Mmatrix, Eigen::MatrixXd &Fmatrix)
 	Eigen::VectorXd neutronFlux = neutronFlux2 / neutronFlux2.sum(); 
 	double kFactor = kFactor2;
 
-    std::cout << std::scientific << std::endl;
-    std::cout << "Number of iteration: " << h << std::endl;
+    // std::cout << std::scientific << std::endl;
+    // std::cout << "Number of iteration: " << h << std::endl;
     std::cout << "kFactor: " << kFactor << std::endl;
-    std::cout << "Neutron flux: " << std::endl;
-    
-    for(auto i : neutronFlux)
-    {
-        std::cout << i << std::endl;
-    }
+    // std::cout << "Neutron flux: " << std::endl;
+    // for(auto i : neutronFlux)
+    //     std::cout << i << std::endl;
 }
