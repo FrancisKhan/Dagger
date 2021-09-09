@@ -471,7 +471,7 @@ std::vector<Nuclide::XSSetType> NuclideBlock::addTranspXS()
     CrossSectionSet totSet = Nuclide::getXSSet(XSKind::NTOT0, crossSectionSets);
     CrossSectionSet scatt01Set = Nuclide::getXSSet(XSKind::SCATT01, crossSectionSets);
 
-    transpSet = 3.0 * (totSet - scatt01Set);
+    transpSet = totSet - scatt01Set;
 
     return crossSectionSets;
 }
