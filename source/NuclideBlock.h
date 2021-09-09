@@ -42,7 +42,8 @@ private:
 	std::vector<double> populateXS(std::vector<double> &xsVec);
 	std::vector<Nuclide::XSSetType> addNu();
 	std::vector<Nuclide::XSSetType> addScatteringL1XS();
-	std::vector<Nuclide::XSSetType> addDiffCoeff();
+	std::vector<Nuclide::XSSetType> addTranspXS();
+	std::vector<Nuclide::XSSetType> modifyChi();
 	void additionalXSs();
 
 	std::tuple< std::vector<double>, std::vector<int32_t>, std::vector<int32_t> > 

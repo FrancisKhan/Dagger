@@ -461,21 +461,32 @@ std::vector<Nuclide::XSSetType> NuclideBlock::addScatteringL1XS()
     return crossSectionSets;
 }
 
-std::vector<Nuclide::XSSetType> NuclideBlock::addDiffCoeff()
+std::vector<Nuclide::XSSetType> NuclideBlock::addTranspXS()
 {
     std::vector<Nuclide::XSSetType> crossSectionSets = m_nuclide->getCopyOfXSSets();
 
-    CrossSectionSet& diffCoeffSet = Nuclide::getXSSet(XSKind::DIFFCOEFF, crossSectionSets);
-    diffCoeffSet.deleteXSs();
+    CrossSectionSet& transpSet = Nuclide::getXSSet(XSKind::TRANSP, crossSectionSets);
+    transpSet.deleteXSs();
 
     CrossSectionSet totSet = Nuclide::getXSSet(XSKind::NTOT0, crossSectionSets);
     CrossSectionSet scatt01Set = Nuclide::getXSSet(XSKind::SCATT01, crossSectionSets);
 
-    diffCoeffSet = 1.0 / (3.0 * (totSet - scatt01Set));
+    transpSet = 3.0 * (totSet - scatt01Set);
 
     return crossSectionSets;
 }
 
+std::vector<Nuclide::XSSetType> NuclideBlock::modifyChi()
+{
+    std::vector<Nuclide::XSSetType> crossSectionSets = m_nuclide->getCopyOfXSSets();
+
+    CrossSectionSet& chiSet   = Nuclide::getXSSet(XSKind::CHI, crossSectionSets);
+    CrossSectionSet chiSetOld = Nuclide::getXSSet(XSKind::CHI, crossSectionSets);
+    chiSet.deleteXSs();
+    chiSet = 0.5 * chiSetOld;
+
+    return crossSectionSets;
+}
 
 void NuclideBlock::additionalXSs()
 {
@@ -485,8 +496,11 @@ void NuclideBlock::additionalXSs()
     std::vector<Nuclide::XSSetType> crossSectionSets2 = addScatteringL1XS();
     m_nuclide->setXSSets(crossSectionSets2);
 
-    std::vector<Nuclide::XSSetType> crossSectionSets3 = addDiffCoeff();
+    std::vector<Nuclide::XSSetType> crossSectionSets3 = addTranspXS();
     m_nuclide->setXSSets(crossSectionSets3);
+
+    std::vector<Nuclide::XSSetType> crossSectionSets4 = modifyChi();
+    m_nuclide->setXSSets(crossSectionSets4);
 }
 
 std::shared_ptr<Nuclide> NuclideBlock::getNuclide()
