@@ -20,17 +20,20 @@ int main(int argc, char** argv)
 	library.setXSLibraryPath(target);
 	library.printLogsOnFile("output.txt", "CRITICAL");
 
-	std::vector<std::string> nucVec = {"U235", "C0"};
+	std::vector<std::string> nucVec = {"U235", "U238", "C0_GR"};
 	std::vector < std::shared_ptr<Nuclide> > libNuclides = library.readNuclides(nucVec);
 
-	std::vector<double> dens = {3.75440E-08, 5.25310E-02}; // barn
+	std::vector<double> dens = {3.75440E-06, 8.49430E-05, 5.25310E-02}; // barn
 	double temp = 300.0; // Kelvin
 
 	Material mat(temp, nucVec, dens, libNuclides);
 	std::vector<Material::MacroXSType> crossSections = mat.calculateMacroXSs();
 	std::vector<Material::MacroXSMatrixType> crossSectionMatrices = mat.calculateMacroXSMatrices();
 
-	Solver solver(crossSections, crossSectionMatrices);
+	std::map< XSKind, std::map<std::string, CrossSection> > otherGroupConstants = 
+	                                                        mat.calculateOtherGroupConstants();
+
+	Solver solver(crossSections, crossSectionMatrices, otherGroupConstants);
 	Eigen::MatrixXd AMatrix = solver.calcAMatrix();
 	Eigen::MatrixXd FMatrix = solver.calcFMatrix();
 	solver.sourceIteration(AMatrix, FMatrix);

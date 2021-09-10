@@ -45,6 +45,8 @@ public:
     std::map<std::string, double> calculateBackgroundXS();
     std::vector<MacroXSType> calculateMacroXSs();
     std::vector<MacroXSMatrixType> calculateMacroXSMatrices();
+    std::map<std::string, CrossSection> calculateOtherGroupConstants(XSKind xsKind);
+    std::map< XSKind, std::map<std::string, CrossSection> > calculateOtherGroupConstants();
 
 private:
     double temperature_;

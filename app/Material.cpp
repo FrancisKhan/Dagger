@@ -111,6 +111,46 @@ std::vector<Material::MacroXSType> Material::calculateMacroXSs()
     return crossSections_;
 }
 
+std::map<std::string, CrossSection> Material::calculateOtherGroupConstants(XSKind xsKind)
+{
+    std::map<std::string, double> backgroundXSMap = calculateBackgroundXS();
+
+    std::map<std::string, CrossSection> resultMap;
+
+    for(size_t i = 0; i < libNuclides_.size(); i++)        
+    {
+        if(libNuclides_[i]->isFissionable())
+        {
+            double backgroundXS = backgroundXSMap.find(libNuclides_[i]->getName())->second;
+            CrossSection xs(getTemperature(), backgroundXS, std::vector<double> {});
+            xs = libNuclides_[i]->getXSSet(xsKind).getXS(temperature_, Sqrt(), backgroundXS, LogLin());
+
+            if(xsKind == XSKind::NUSIGF)
+                xs = densities_[i] * xs;
+
+            resultMap.insert(std::pair<std::string, CrossSection>(libNuclides_[i]->getName(), xs));
+
+            // std::cout << std::scientific << std::endl;
+            // std::cout << "Nuclide: " << libNuclides_[i]->getName() << " xs: " << get_name(xsKind) << std::endl;
+            // for(auto i : xs.getValues())
+            //     std::cout << i << std::endl;
+        }
+    }
+
+    return resultMap;
+}
+
+std::map< XSKind, std::map<std::string, CrossSection> > Material::calculateOtherGroupConstants()
+{
+    std::map< XSKind, std::map<std::string, CrossSection> > resultMap;
+
+    resultMap.insert(std::pair<XSKind, std::map<std::string, CrossSection> >(XSKind::NU, calculateOtherGroupConstants(XSKind::NU)));
+    resultMap.insert(std::pair<XSKind, std::map<std::string, CrossSection> >(XSKind::CHI, calculateOtherGroupConstants(XSKind::CHI)));
+    resultMap.insert(std::pair<XSKind, std::map<std::string, CrossSection> >(XSKind::NUSIGF, calculateOtherGroupConstants(XSKind::NUSIGF)));
+
+    return resultMap;
+}
+
 std::vector<Material::MacroXSMatrixType> Material::calculateMacroXSMatrices()
 {
     std::map<std::string, double> backgroundXSMap = calculateBackgroundXS();
