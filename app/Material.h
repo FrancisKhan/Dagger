@@ -19,11 +19,10 @@ public:
     typedef std::pair<XSMatrixKind, MacroCrossSectionMatrix> MacroXSMatrixType;
 
     Material(double t, const std::vector<std::string> &n, const std::vector<double> &d, 
-             std::vector < std::shared_ptr<Nuclide> >& l) : 
-             temperature_(t), nuclides_(n), densities_(d), libNuclides_(l) {}
+             std::vector < std::shared_ptr<Nuclide> >& l);
 
     Material() : temperature_(0.0), nuclides_(std::vector<std::string> {}),
-                 densities_(std::vector<double> {}) {}
+                 densities_(std::vector<double> {}) {;}
     
     void setTemperature(double t) {temperature_ = t;}
     double getTemperature() const {return temperature_;} 
@@ -57,6 +56,8 @@ private:
     std::vector<MacroXSMatrixType> crossSectionMatrices_;
 
     std::vector < std::shared_ptr<Nuclide> > libNuclides_;
+
+    std::map<std::string, double> backgroundXSMap_;
 };
 
 #endif

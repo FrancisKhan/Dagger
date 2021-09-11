@@ -41,13 +41,6 @@ Eigen::MatrixXd Solver::calcFMatrix()
 		FMatrix += singleFMatrix;
 	}
 
-    // std::vector<double> nuSigfXS = Material::getMacroXS(XSKind::NUSIGF, crossSections_).getValues();
-    // std::vector<double> chi      = Material::getMacroXS(XSKind::CHI, crossSections_).getValues();
-
-    // for(unsigned i = 0; i < FMatrix.rows(); i++)
-    //     for(unsigned j = 0; j < FMatrix.cols(); j++)
-    //         FMatrix(i, j) = chi[i] * nuSigfXS[j];
-
     // out.print(TraceLevel::CRITICAL, "\n\nFMatrix: \n");
     // PrintFuncs::printMatrix(FMatrix, out, TraceLevel::CRITICAL);
 
