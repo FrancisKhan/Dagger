@@ -202,8 +202,8 @@ std::vector<double> NuclideBlock::populateXS(std::vector<double> &xsVec)
         if (inputSize < getNumberOfEnergyGroups())
         {
             std::vector<double> temp(getNumberOfEnergyGroups() - inputSize, 0.0);
-            temp.insert(temp.end(), xsVec.begin(), xsVec.end()); 
-            result = temp;
+            xsVec.insert(xsVec.end(), temp.begin(), temp.end()); 
+            result = xsVec;
         }
         else if(inputSize == getNumberOfEnergyGroups())
         {
