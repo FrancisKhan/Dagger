@@ -85,6 +85,54 @@ private:
     std::vector<CrossSection> m_XSSet;
 };
 
+inline CrossSectionSet operator+(const double lhs, const CrossSectionSet& rhs)
+{
+    std::vector<double> temperatures = rhs.getTemperatures();
+    std::vector<double> dilutions = rhs.getBackgroundXSs();
+
+    CrossSectionSet result;
+
+    for(size_t i = 0; i < temperatures.size(); i++)
+    {
+        for(size_t j = 0; j < dilutions.size(); j++)
+        {
+            std::vector<double> rhsVec = rhs.getXSNoInterp(temperatures[i], dilutions[j]).getValues();
+                
+            std::vector<double> resultVec(rhsVec.size(), 0.0);
+            std::transform(rhsVec.begin(), rhsVec.end(), resultVec.begin(), [lhs](auto k){return lhs + k;});
+
+            CrossSection crossSection(temperatures[i], dilutions[j], resultVec);
+            result.addXS(crossSection);
+        }
+    }
+
+    return result;
+}
+
+inline CrossSectionSet operator-(const double lhs, const CrossSectionSet& rhs)
+{
+    std::vector<double> temperatures = rhs.getTemperatures();
+    std::vector<double> dilutions = rhs.getBackgroundXSs();
+
+    CrossSectionSet result;
+
+    for(size_t i = 0; i < temperatures.size(); i++)
+    {
+        for(size_t j = 0; j < dilutions.size(); j++)
+        {
+            std::vector<double> rhsVec = rhs.getXSNoInterp(temperatures[i], dilutions[j]).getValues();
+                
+            std::vector<double> resultVec(rhsVec.size(), 0.0);
+            std::transform(rhsVec.begin(), rhsVec.end(), resultVec.begin(), [lhs](auto k){return lhs - k;});
+
+            CrossSection crossSection(temperatures[i], dilutions[j], resultVec);
+            result.addXS(crossSection);
+        }
+    }
+
+    return result;
+}
+
 inline CrossSectionSet operator*(const double lhs, const CrossSectionSet& rhs)
 {
     std::vector<double> temperatures = rhs.getTemperatures();

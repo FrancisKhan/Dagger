@@ -422,6 +422,39 @@ std::vector<double> NuclideBlock::readLambdas()
     return v;
 }
 
+std::vector<Nuclide::XSSetType> NuclideBlock::calcFineStructureFunction()
+{
+    std::vector<Nuclide::XSSetType> crossSectionSets = m_nuclide->getCopyOfXSSets();
+    CrossSectionSet& fineStructure = Nuclide::getXSSet(XSKind::NWT0, crossSectionSets);
+    CrossSectionSet fineStructureOld = fineStructure;
+
+    fineStructure = 1.0 + fineStructureOld;
+    
+    m_nuclide->setXSSets(crossSectionSets);
+
+    return crossSectionSets;
+}
+
+std::vector<Nuclide::XSSetType> NuclideBlock::fromRItoXS()
+{
+    std::vector<Nuclide::XSSetType> crossSectionSets = m_nuclide->getCopyOfXSSets();
+    CrossSectionSet fineStructure = Nuclide::getXSSet(XSKind::NWT0, crossSectionSets);
+
+    for(const auto& xsKind : XSKind())
+    {
+        if(xsKind > XSKind::NUSIGF) break;
+
+        CrossSectionSet& xs = Nuclide::getXSSet(xsKind, crossSectionSets);
+        CrossSectionSet xsOld = xs;
+
+        xs = xsOld / fineStructure;
+    }
+    
+    m_nuclide->setXSSets(crossSectionSets);
+
+    return crossSectionSets;
+}
+
 std::vector<Nuclide::XSSetType> NuclideBlock::addNu()
 {
     std::vector<Nuclide::XSSetType> crossSectionSets = m_nuclide->getCopyOfXSSets();
@@ -513,6 +546,8 @@ std::shared_ptr<Nuclide> NuclideBlock::getNuclide()
 	readGroupConstants();
     isNuclideFissionable();
     readLambdas();
+    calcFineStructureFunction();
+    fromRItoXS();
     additionalXSs();
     return m_nuclide;
 }
