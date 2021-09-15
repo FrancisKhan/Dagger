@@ -15,7 +15,7 @@ public:
 	CrossSectionSet(XSKind xsKind) : m_kind(xsKind) {}
 
     void addXS(const CrossSection &xs) {m_XSSet.push_back(xs);}
-    void setXS(unsigned i, CrossSection &xs) {m_XSSet[i] = xs;}
+    void setXS(unsigned i, const CrossSection &xs) {m_XSSet[i] = xs;}
     CrossSection getXSNoInterp(unsigned i) {return m_XSSet.at(i);}
     CrossSection getXSNoInterp(double t, double b) const;
     unsigned getSize() {return m_XSSet.size();}
@@ -26,6 +26,7 @@ public:
     void calcXSs();
     void deleteXSs() {m_XSSet.clear();}
     bool isEmpty() const;
+    size_t getNumberOfEnergyGroups() const {return m_XSSet.front().getSize();}
 
     CrossSectionSet operator/(const CrossSectionSet& rhs);
     CrossSectionSet operator+(const CrossSectionSet& rhs);

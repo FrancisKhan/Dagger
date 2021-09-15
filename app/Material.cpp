@@ -76,11 +76,8 @@ std::map<std::string, double> Material::calculateBackgroundXS()
 
     // std::cout << std::scientific << std::endl;
     // for(auto it = backgroundXSMap.begin(); it != backgroundXSMap.end(); it++)
-    // {
-    //   std::cout << "sigmaXS: " << it->first << " " << it->second << std::endl;
-    // }
+    //     std::cout << "sigmaXS: " << it->first << " " << it->second << std::endl;
     
-
     return backgroundXSMap;
 }
 
@@ -98,11 +95,14 @@ std::vector<Material::MacroXSType> Material::calculateMacroXSs()
                 double backgroundXS = backgroundXSMap_.find(libNuclides_[i]->getName())->second;
                 xs += densities_[i] * libNuclides_[i]->getXSSet(xsKind).getXS(temperature_, Sqrt(), backgroundXS, LogLin());
 
-                // std::vector<double> xs2 = libNuclides_[i]->getXSSet(xsKind).getXS(temperature_, Sqrt(), backgroundXS, LogLin()).getValues();
-                // std::cout << std::scientific << std::endl;
-                // std::cout << "Nuclide: " << libNuclides_[i]->getName() << " xs: " << get_name(xsKind) << std::endl;
-                // for(auto i : xs2)
-                //     std::cout << i << std::endl;
+                // if(libNuclides_[i]->getName() == "U238")
+                // {
+                //     std::vector<double> xs2 = libNuclides_[i]->getXSSet(xsKind).getXS(temperature_, Sqrt(), backgroundXS, LogLin()).getValues();
+                //     std::cout << std::scientific << std::endl;
+                //     std::cout << "Nuclide: " << libNuclides_[i]->getName() << " xs: " << get_name(xsKind) << std::endl;
+                //     for(auto i : xs2)
+                //         std::cout << i << std::endl;
+                // }
             }
         }
 
