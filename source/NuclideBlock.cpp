@@ -242,6 +242,15 @@ std::vector<Nuclide::XSSetType> NuclideBlock::readXSs()
                     CrossSection crossSection(temperatures[i], Numerics::DINF, xsVec);
                     crossSectionSet.addXS(crossSection);
                 }
+
+                // The following line is needed because the fine-structure function (NWT0) infinite
+                // dilution values are ones and they are not stored in the library
+                else if(xsKind == XSKind::NWT0)
+                {
+                    std::vector<double> xsVec(getNumberOfEnergyGroups(), 1.0);
+                    CrossSection crossSection(temperatures[i], Numerics::DINF, xsVec);
+                    crossSectionSet.addXS(crossSection);
+                }
                 else
                 {
                     std::pair<unsigned, unsigned> infDilutionBlock = readInfDilutionBlock(tempBlocks[i]);
@@ -266,10 +275,21 @@ std::vector<Nuclide::XSSetType> NuclideBlock::readXSs()
             }
             else // non-resonant isotope
             {
-                std::vector<double> xsVecPartial = readParameters(get_name(xsKind), tempBlocks[i].first, tempBlocks[i].second);
-                std::vector<double> xsVec = populateXS(xsVecPartial);
-                CrossSection crossSection(temperatures[i], Numerics::DINF, xsVec);
-                crossSectionSet.addXS(crossSection);
+                // The following line is needed because the fine-structure function (NWT0) infinite
+                // dilution values are ones and they are not stored in the library
+                if(xsKind != XSKind::NWT0)
+                {
+                    std::vector<double> xsVecPartial = readParameters(get_name(xsKind), tempBlocks[i].first, tempBlocks[i].second);
+                    std::vector<double> xsVec = populateXS(xsVecPartial);
+                    CrossSection crossSection(temperatures[i], Numerics::DINF, xsVec);
+                    crossSectionSet.addXS(crossSection);
+                }
+                else
+                {
+                    std::vector<double> xsVec(getNumberOfEnergyGroups(), 1.0);
+                    CrossSection crossSection(temperatures[i], Numerics::DINF, xsVec);
+                    crossSectionSet.addXS(crossSection);
+                }
                 
                 std::vector<double> dilutions {Numerics::DINF};
                 m_nuclide->setDilutions(dilutions);

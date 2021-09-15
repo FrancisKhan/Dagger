@@ -151,14 +151,8 @@ void CrossSectionSet::calcXSs()
 
         if(Numerics::not_equal(sigma0, Numerics::DINF))
         {
-            // The following line is needed because the fine-structure function (NWT0) infinite
-            // dilution values are ones and they are not stored in the library
-
-            std::vector<double> infValues(getNumberOfEnergyGroups(), 1.0);
-
-            if(getKind() != XSKind::NWT0)
-                infValues = getXSNoInterp(temp, Numerics::DINF).getValues();
-
+            
+            std::vector<double> infValues = getXSNoInterp(temp, Numerics::DINF).getValues();
             std::vector<double> dilValues = getXSNoInterp(i).getValues();
             std::vector<double> newValues = infValues + dilValues;
 
