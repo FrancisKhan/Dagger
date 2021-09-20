@@ -21,7 +21,7 @@ int main(int argc, char** argv)
 	library.printLogsOnFile("output.txt", "CRITICAL");
 
 	//std::vector<std::string> nucVec = {"U235", "C0_GR"};
-	std::vector<std::string> nucVec = {"U235", "U238", "C0_GR"};
+	std::vector<std::string> nucVec = {"U235", "U238", "C0"};
 	std::vector < std::shared_ptr<Nuclide> > libNuclides = library.readNuclides(nucVec);
 
 	//std::vector<double> dens = {3.75440E-07, 5.25310E-02}; // barn
@@ -37,8 +37,12 @@ int main(int argc, char** argv)
 	                                                        mat.calculateOtherGroupConstants();
 
 	Solver solver(crossSections, crossSectionMatrices, otherGroupConstants);
+
 	Eigen::MatrixXd AMatrix = solver.calcAMatrix();
+	//Eigen::MatrixXd AMatrix = solver.hardCodedAMatrix();
+	
 	Eigen::MatrixXd FMatrix = solver.calcFMatrix();
+
 	solver.sourceIteration(AMatrix, FMatrix);
 
 	auto end = std::chrono::steady_clock::now();

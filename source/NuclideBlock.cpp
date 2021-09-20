@@ -478,6 +478,19 @@ std::vector<Nuclide::XSSetType> NuclideBlock::addNu()
     return crossSectionSets;
 }
 
+std::vector<Nuclide::XSSetType> NuclideBlock::addScatteringL0XS()
+{
+    std::vector<Nuclide::XSSetType> crossSectionSets = m_nuclide->getCopyOfXSSets();
+
+    CrossSectionSet& xsScatt00Set = Nuclide::getXSSet(XSKind::SCATT00, crossSectionSets);
+    xsScatt00Set.deleteXSs();
+
+    CrossSectionMatrixSet matS0 = m_nuclide->getXSMatrixSet(XSMatrixKind::SCAT00); 
+    xsScatt00Set = matS0.condenseToXSs();
+
+    return crossSectionSets;
+}
+
 std::vector<Nuclide::XSSetType> NuclideBlock::addScatteringL1XS()
 {
     std::vector<Nuclide::XSSetType> crossSectionSets = m_nuclide->getCopyOfXSSets();
@@ -497,6 +510,22 @@ std::vector<Nuclide::XSSetType> NuclideBlock::addScatteringL1XS()
     {
         xsScatt01Set = matS1.condenseToXSs();
     } 
+
+    return crossSectionSets;
+}
+
+std::vector<Nuclide::XSSetType> NuclideBlock::addAbsXS()
+{
+    std::vector<Nuclide::XSSetType> crossSectionSets = m_nuclide->getCopyOfXSSets();
+
+    CrossSectionSet& absSet = Nuclide::getXSSet(XSKind::ABS, crossSectionSets);
+    absSet.deleteXSs();
+
+    CrossSectionSet ngSet  = Nuclide::getXSSet(XSKind::NG,  crossSectionSets);
+    CrossSectionSet n2nSet = Nuclide::getXSSet(XSKind::N2N, crossSectionSets);
+    CrossSectionSet n3nSet = Nuclide::getXSSet(XSKind::N3N, crossSectionSets);
+
+    absSet = ngSet + n2nSet + n3nSet;
 
     return crossSectionSets;
 }
@@ -533,14 +562,20 @@ void NuclideBlock::additionalXSs()
     std::vector<Nuclide::XSSetType> crossSectionSets1 = addNu();
     m_nuclide->setXSSets(crossSectionSets1);
 
-    std::vector<Nuclide::XSSetType> crossSectionSets2 = addScatteringL1XS();
+    std::vector<Nuclide::XSSetType> crossSectionSets2 = addScatteringL0XS();
     m_nuclide->setXSSets(crossSectionSets2);
 
-    std::vector<Nuclide::XSSetType> crossSectionSets3 = addTranspXS();
+    std::vector<Nuclide::XSSetType> crossSectionSets3 = addScatteringL1XS();
     m_nuclide->setXSSets(crossSectionSets3);
 
-    std::vector<Nuclide::XSSetType> crossSectionSets4 = modifyChi();
+    std::vector<Nuclide::XSSetType> crossSectionSets4 = addAbsXS();
     m_nuclide->setXSSets(crossSectionSets4);
+
+    std::vector<Nuclide::XSSetType> crossSectionSets5 = addTranspXS();
+    m_nuclide->setXSSets(crossSectionSets5);
+
+    std::vector<Nuclide::XSSetType> crossSectionSets6 = modifyChi();
+    m_nuclide->setXSSets(crossSectionSets6);
 }
 
 std::shared_ptr<Nuclide> NuclideBlock::getNuclide()

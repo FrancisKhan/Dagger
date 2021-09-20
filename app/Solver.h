@@ -15,6 +15,13 @@ public:
     
     Eigen::MatrixXd calcAMatrix();
     Eigen::MatrixXd calcFMatrix();
+
+
+    std::vector<double> hardCodedTotalXS();
+    Eigen::MatrixXd hardCodedAMatrix();
+    Eigen::MatrixXd hardCodedScattL0Matrix();
+    //Eigen::MatrixXd hardCodedFMatrix();
+
     void sourceIteration(Eigen::MatrixXd &Mmatrix, Eigen::MatrixXd &Fmatrix);
 
 private:

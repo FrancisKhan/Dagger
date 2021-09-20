@@ -4,8 +4,8 @@
 #include <iostream>
 
 enum class XSKind {NTOT0, NELAS, NINEL, N2N, N3N, N4N, NNP, 
-                   NG, NP, ND, NT, NA, NFTOT, NUSIGF, 
-                   CHI, NU, SCATT01, TRANSP, NWT0};
+                   NG, NP, ND, NT, NA, NFTOT, NUSIGF, ABS, 
+                   CHI, NU, SCATT00, SCATT01, TRANSP, NWT0};
 
 inline std::ostream& operator << (std::ostream& stm, XSKind xsKind)
 {
@@ -25,8 +25,10 @@ inline std::ostream& operator << (std::ostream& stm, XSKind xsKind)
         case XSKind::NA      : return stm << "NA";
         case XSKind::NFTOT   : return stm << "NFTOT";
         case XSKind::NUSIGF  : return stm << "NUSIGF";
+        case XSKind::ABS     : return stm << "ABS";
         case XSKind::CHI     : return stm << "CHI";
         case XSKind::NU      : return stm << "NU";
+        case XSKind::SCATT00 : return stm << "SCATT00";
         case XSKind::SCATT01 : return stm << "SCATT01";
         case XSKind::TRANSP  : return stm << "TRANSP";
         case XSKind::NWT0    : return stm << "NWT0";
@@ -52,8 +54,10 @@ inline std::string get_name(XSKind xsKind)
     case XSKind::NA      : return std::string("NA");
     case XSKind::NFTOT   : return std::string("NFTOT");
     case XSKind::NUSIGF  : return std::string("NUSIGF");
+    case XSKind::ABS     : return std::string("ABS");
     case XSKind::CHI     : return std::string("CHI");
     case XSKind::NU      : return std::string("NU");
+    case XSKind::SCATT00 : return std::string("SCATT00");
     case XSKind::SCATT01 : return std::string("SCATT01");
     case XSKind::TRANSP  : return std::string("TRANSP");
     case XSKind::NWT0    : return std::string("NWT0");
