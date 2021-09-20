@@ -40,7 +40,8 @@ private:
 	void setNumberOfEnergyGroups();
 	unsigned getNumberOfEnergyGroups() {return m_numberOfEnergyGroups;}
 	std::vector<double> populateXS(std::vector<double> &xsVec);
-	std::vector<Nuclide::XSSetType> fromRItoXS();
+	void fromRImatrixToXSmatrix();
+	void fromRItoXS();
 	std::vector<Nuclide::XSSetType> addNu();
 	std::vector<Nuclide::XSSetType> addScatteringL0XS();
 	std::vector<Nuclide::XSSetType> addScatteringL1XS();

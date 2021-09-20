@@ -20,6 +20,8 @@ public:
     CrossSectionMatrix getXSMatrixNoInterp(unsigned i);
     CrossSectionMatrix getXSMatrixNoInterp(double t, double b);
 
+    CrossSectionMatrixSet operator/(const CrossSectionSet& rhs);
+
     std::vector<double> getTemperatures();
     std::vector<double> getBackgroundXSs();
     unsigned getSize() const {return m_XSSet.size();}

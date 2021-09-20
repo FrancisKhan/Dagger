@@ -95,14 +95,14 @@ std::vector<Material::MacroXSType> Material::calculateMacroXSs()
                 double backgroundXS = backgroundXSMap_.find(libNuclides_[i]->getName())->second;
                 xs += densities_[i] * libNuclides_[i]->getXSSet(xsKind).getXS(temperature_, Sqrt(), backgroundXS, LogLin());
 
-                if(xsKind == XSKind::NTOT0)
-                {
-                    std::vector<double> xs2 = libNuclides_[i]->getXSSet(xsKind).getXS(temperature_, Sqrt(), backgroundXS, LogLin()).getValues();
-                    std::cout << std::scientific << std::endl;
-                    std::cout << "Nuclide: " << libNuclides_[i]->getName() << " xs: " << get_name(xsKind) << std::endl;
-                    for(auto i : xs2)
-                        std::cout << i << std::endl;
-                }
+                // if(xsKind == XSKind::NTOT0)
+                // {
+                //     std::vector<double> xs2 = libNuclides_[i]->getXSSet(xsKind).getXS(temperature_, Sqrt(), backgroundXS, LogLin()).getValues();
+                //     std::cout << std::scientific << std::endl;
+                //     std::cout << "Nuclide: " << libNuclides_[i]->getName() << " xs: " << get_name(xsKind) << std::endl;
+                //     for(auto i : xs2)
+                //         std::cout << i << std::endl;
+                // }
             }
         }
 
@@ -110,13 +110,13 @@ std::vector<Material::MacroXSType> Material::calculateMacroXSs()
         crossSections_.push_back(std::pair<XSKind, MacroCrossSection>(xsKind, macroXS));
         xs.setToZero();
        
-        if(xsKind == XSKind::ABS)
-        {
-            std::cout << std::scientific << std::endl;
-            std::cout << "xs: " << get_name(xsKind) << std::endl;
-            for(auto i : macroXS.getValues())
-            std::cout << i << std::endl;
-        }
+        // if(xsKind == XSKind::ABS || xsKind == XSKind::SCATT00 || xsKind == XSKind::NG)
+        // {
+        //     std::cout << std::scientific << std::endl;
+        //     std::cout << "\nxs: " << get_name(xsKind) << std::endl;
+        //     for(auto i : macroXS.getValues())
+        //     std::cout << i << std::endl;
+        // }
     }
 
     return crossSections_;
@@ -189,12 +189,12 @@ std::vector<Material::MacroXSMatrixType> Material::calculateMacroXSMatrices()
         //     PrintFuncs::printMatrix(xsMat.getValues(), out, TraceLevel::CRITICAL);
         // }
 
-        if(xsKind == XSMatrixKind::SCAT00)
-        {
-            std::cout << "xs vector: " << get_name(xsKind) << std::endl;
-            for(auto i : xsMat.condenseToXS().getValues())
-                std::cout << i << std::endl;
-        }        
+        // if(xsKind == XSMatrixKind::SCAT00)
+        // {
+        //     std::cout << "xs vector: " << get_name(xsKind) << std::endl;
+        //     for(auto i : xsMat.condenseToXS().getValues())
+        //         std::cout << i << std::endl;
+        // }        
 
         MacroCrossSectionMatrix macroXSMat(xsKind, getTemperature(), xsMat.getValues());
         crossSectionMatrices_.push_back(std::pair<XSMatrixKind, MacroCrossSectionMatrix>(xsKind, macroXSMat));

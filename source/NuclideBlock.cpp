@@ -442,7 +442,7 @@ std::vector<double> NuclideBlock::readLambdas()
     return v;
 }
 
-std::vector<Nuclide::XSSetType> NuclideBlock::fromRItoXS()
+void NuclideBlock::fromRItoXS()
 {
     std::vector<Nuclide::XSSetType> crossSectionSets = m_nuclide->getCopyOfXSSets();
     CrossSectionSet fineStructure = Nuclide::getXSSet(XSKind::NWT0, crossSectionSets);
@@ -458,8 +458,22 @@ std::vector<Nuclide::XSSetType> NuclideBlock::fromRItoXS()
     }
     
     m_nuclide->setXSSets(crossSectionSets);
+}
 
-    return crossSectionSets;
+void NuclideBlock::fromRImatrixToXSmatrix()
+{
+    std::vector<Nuclide::XSMatrixSetType> matrixSets = m_nuclide->getCopyOfXSMatrixSets();
+    std::vector<Nuclide::XSSetType> crossSectionSets = m_nuclide->getCopyOfXSSets();
+    
+    CrossSectionSet fineStructure = Nuclide::getXSSet(XSKind::NWT0, crossSectionSets);
+
+    // At the moment, done only for SCATT00
+    CrossSectionMatrixSet& mat = Nuclide::getXSMatrixSet(XSMatrixKind::SCAT00, matrixSets);
+    CrossSectionMatrixSet matOld = mat;
+
+    mat = matOld / fineStructure;
+    
+    m_nuclide->setXSMatrixSets(matrixSets);
 }
 
 std::vector<Nuclide::XSSetType> NuclideBlock::addNu()
@@ -521,11 +535,16 @@ std::vector<Nuclide::XSSetType> NuclideBlock::addAbsXS()
     CrossSectionSet& absSet = Nuclide::getXSSet(XSKind::ABS, crossSectionSets);
     absSet.deleteXSs();
 
-    CrossSectionSet ngSet  = Nuclide::getXSSet(XSKind::NG,  crossSectionSets);
-    CrossSectionSet n2nSet = Nuclide::getXSSet(XSKind::N2N, crossSectionSets);
-    CrossSectionSet n3nSet = Nuclide::getXSSet(XSKind::N3N, crossSectionSets);
+    CrossSectionSet ngSet   = Nuclide::getXSSet(XSKind::NG, crossSectionSets);
+    CrossSectionSet fissSet = Nuclide::getXSSet(XSKind::NFTOT, crossSectionSets);
+    CrossSectionSet npSet   = Nuclide::getXSSet(XSKind::NP, crossSectionSets);
+    CrossSectionSet ndSet   = Nuclide::getXSSet(XSKind::ND, crossSectionSets);
+    CrossSectionSet ntSet   = Nuclide::getXSSet(XSKind::NT, crossSectionSets);
+    CrossSectionSet naSet   = Nuclide::getXSSet(XSKind::NA, crossSectionSets);
+    CrossSectionSet n2nSet  = Nuclide::getXSSet(XSKind::N2N, crossSectionSets);
+    CrossSectionSet n3nSet  = Nuclide::getXSSet(XSKind::N3N, crossSectionSets);
 
-    absSet = ngSet + n2nSet + n3nSet;
+    absSet = ngSet + fissSet + npSet + ndSet + ntSet + naSet - n2nSet - 2.0 * n3nSet;
 
     return crossSectionSets;
 }
@@ -589,6 +608,7 @@ std::shared_ptr<Nuclide> NuclideBlock::getNuclide()
     isNuclideFissionable();
     readLambdas();
     fromRItoXS();
+    fromRImatrixToXSmatrix();
     additionalXSs();
     return m_nuclide;
 }

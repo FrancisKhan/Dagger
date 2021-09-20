@@ -6,14 +6,17 @@ Eigen::MatrixXd Solver::calcAMatrix()
 {
     Eigen::MatrixXd AMatrix = Eigen::MatrixXd::Zero(nEnergyGroups_, nEnergyGroups_);
 
-    std::vector<double> totXS = Material::getMacroXS(XSKind::NTOT0, crossSections_).getValues();
+    //std::vector<double> totXS = Material::getMacroXS(XSKind::NTOT0, crossSections_).getValues();
     Eigen::MatrixXd scattL0Matrix = Material::getMacroXSMatrix(XSMatrixKind::SCAT00, crossSectionMatrices_).getValues(); 
+
+	std::vector<double> absXS = Material::getMacroXS(XSKind::ABS, crossSections_).getValues();
+	std::vector<double> scattXS = Material::getMacroXS(XSKind::SCATT00, crossSections_).getValues();
 
 	// std::vector<double> totXS = hardCodedTotalXS();
 	// Eigen::MatrixXd scattL0Matrix = hardCodedScattL0Matrix();
 
     for(unsigned i = 0; i < AMatrix.rows(); i++)
-        AMatrix(i, i) = totXS[i];
+        AMatrix(i, i) = absXS[i] + scattXS[i];
 
     AMatrix -= scattL0Matrix.transpose();
 
@@ -102,11 +105,11 @@ void Solver::sourceIteration(Eigen::MatrixXd &Mmatrix, Eigen::MatrixXd &Fmatrix)
 	double kFactor = kFactor2;
 
     std::cout << "\nNumber of iteration: " << h << std::endl;
+	std::cout << std::scientific << std::endl;
     std::cout << "kFactor: " << kFactor << std::endl;
-	// std::cout << std::scientific << std::endl;
-    // std::cout << "Neutron flux: " << std::endl;
-    // for(auto i : neutronFlux)
-    //     std::cout << i << std::endl;
+    std::cout << "Neutron flux: " << std::endl;
+    for(auto i : neutronFlux)
+        std::cout << i << std::endl;
 }
 
 std::vector<double> Solver:: hardCodedTotalXS()

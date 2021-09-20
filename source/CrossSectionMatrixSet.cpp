@@ -3,6 +3,34 @@
 
 using namespace Numerics;
 
+CrossSectionMatrixSet CrossSectionMatrixSet::operator/(const CrossSectionSet& rhs)
+{
+    std::vector<double> temperatures = getTemperatures();
+    std::vector<double> dilutions = getBackgroundXSs();
+
+    CrossSectionMatrixSet result;
+
+    for(size_t i = 0; i < temperatures.size(); i++)
+    {
+        for(size_t j = 0; j < dilutions.size(); j++)
+        {
+            std::vector<double> rhsVec = rhs.getXSNoInterp(temperatures[i], dilutions[j]).getValues();
+            Eigen::MatrixXd lhsMat = getXSMatrixNoInterp(temperatures[i], dilutions[j]).getValues();
+                
+            Eigen::MatrixXd resultMat = Eigen::MatrixXd::Zero(rhsVec.size(), rhsVec.size());
+
+            for(unsigned i = 0; i < resultMat.rows(); i++)
+        	    for(unsigned j = 0; j < resultMat.cols(); j++)
+            	    resultMat(i, j) = lhsMat(i, j) / rhsVec[i];
+
+            CrossSectionMatrix crossSectionMatrix(temperatures[i], dilutions[j], resultMat);
+            result.addXS(crossSectionMatrix);
+        }
+    }
+
+    return result;
+}
+
 void CrossSectionMatrixSet::calcXSMatrices() 
 {
     for(unsigned i = 0; i < getSize(); i++)
