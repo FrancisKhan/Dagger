@@ -16,13 +16,8 @@ public:
     Eigen::MatrixXd calcAMatrix();
     Eigen::MatrixXd calcFMatrix();
 
-
-    std::vector<double> hardCodedTotalXS();
-    Eigen::MatrixXd hardCodedAMatrix();
-    Eigen::MatrixXd hardCodedScattL0Matrix();
-    //Eigen::MatrixXd hardCodedFMatrix();
-
-    void sourceIteration(Eigen::MatrixXd &Mmatrix, Eigen::MatrixXd &Fmatrix);
+    void sourceIteration(const Eigen::MatrixXd &Mmatrix, const Eigen::MatrixXd &Fmatrix, 
+                         double accuracy = 1.0E-7, unsigned maxIterNumber = 100);
 
 private:
     std::vector<Material::MacroXSType> crossSections_;
