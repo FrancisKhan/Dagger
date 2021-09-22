@@ -544,7 +544,9 @@ std::vector<Nuclide::XSSetType> NuclideBlock::addAbsXS()
     CrossSectionSet n2nSet  = Nuclide::getXSSet(XSKind::N2N, crossSectionSets);
     CrossSectionSet n3nSet  = Nuclide::getXSSet(XSKind::N3N, crossSectionSets);
 
-    absSet = ngSet + fissSet + npSet + ndSet + ntSet + naSet - n2nSet - 2.0 * n3nSet;
+    // opposite to many other formats like MATXS, DRAGON one does a scaling of n2n and n3n XSs
+    //absSet = ngSet + fissSet + npSet + ndSet + ntSet + naSet - n2nSet - 2.0 * n3nSet;
+    absSet = ngSet + fissSet + npSet + ndSet + ntSet + naSet + n2nSet + n3nSet;
 
     return crossSectionSets;
 }
