@@ -8,7 +8,7 @@ class Solver
 {
 public:
     Solver(const std::vector<Material::MacroXSType>& xs, const std::vector<Material::MacroXSMatrixType>& xsMat,
-           const std::map< XSKind, std::map<std::string, CrossSection> >& ogc) :
+           const std::map<XSKind, Material::XSMapType>& ogc) :
     crossSections_(xs), crossSectionMatrices_(xsMat), 
     nEnergyGroups_(crossSections_.front().second.getSize()), 
     otherGroupConstants_(ogc) {;}

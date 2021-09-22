@@ -17,6 +17,7 @@ public:
 
     typedef std::pair<XSKind, MacroCrossSection> MacroXSType;
     typedef std::pair<XSMatrixKind, MacroCrossSectionMatrix> MacroXSMatrixType;
+    typedef std::map<std::string, CrossSection> XSMapType;
 
     Material(double t, const std::vector<std::string> &n, const std::vector<double> &d, 
              std::vector < std::shared_ptr<Nuclide> >& l);
@@ -44,8 +45,8 @@ public:
     std::map<std::string, double> calculateBackgroundXS();
     std::vector<MacroXSType> calculateMacroXSs();
     std::vector<MacroXSMatrixType> calculateMacroXSMatrices();
-    std::map<std::string, CrossSection> calculateOtherGroupConstants(XSKind xsKind);
-    std::map< XSKind, std::map<std::string, CrossSection> > calculateOtherGroupConstants();
+    XSMapType calculateOtherGroupConstants(XSKind xsKind);
+    std::map<XSKind, XSMapType> calculateOtherGroupConstants();
 
 private:
     double temperature_;

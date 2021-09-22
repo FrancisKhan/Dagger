@@ -57,3 +57,11 @@ CrossSection& CrossSection::operator-=(const CrossSection& rhs)
 
     return *this;
 }
+
+CrossSection& operator*=(CrossSection& lhs, double rhs)
+{
+    for(size_t i = 0; i < lhs.m_values.size(); i++)
+        lhs.m_values[i] *= rhs;
+
+    return lhs;
+}

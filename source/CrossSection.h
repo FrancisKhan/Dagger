@@ -9,15 +9,15 @@
 class CrossSection
 {
 public:
-    CrossSection() : m_temperature(0.0), m_backgroundXS(0.0), m_values(std::vector<double> {}) {}
+    CrossSection() : temperature_(0.0), backgroundXS_(0.0), m_values(std::vector<double> {}) {}
     
 	CrossSection(double temperature, double backgroundXS, const std::vector<double> &values) :
-    m_temperature(temperature), m_backgroundXS(backgroundXS), m_values(values) {}
+    temperature_(temperature), backgroundXS_(backgroundXS), m_values(values) {}
 
-    void setTemperature(double t) {m_temperature = t;}
-    double getTemperature() const {return m_temperature;} 
-    void setBackgroundXS(double b) {m_backgroundXS = b;}
-    double getBackgroundXS() const {return m_backgroundXS;}
+    void setTemperature(double t) {temperature_ = t;}
+    double getTemperature() const {return temperature_;} 
+    void setBackgroundXS(double b) {backgroundXS_ = b;}
+    double getBackgroundXS() const {return backgroundXS_;}
     void setValues(const std::vector<double> &v) {m_values = v;}
     std::vector<double> getValues() const {return m_values;}
     unsigned getSize() const {return m_values.size();}
@@ -29,9 +29,11 @@ public:
     CrossSection& operator+=(const CrossSection& rhs);
     CrossSection& operator-=(const CrossSection& rhs);
 
+    friend CrossSection& operator*=(CrossSection& lhs, double rhs);
+
 private:
-    double m_temperature;
-    double m_backgroundXS;
+    double temperature_;
+    double backgroundXS_;
     std::vector<double> m_values;
 };
 

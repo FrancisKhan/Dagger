@@ -99,9 +99,9 @@ std::vector<Material::MacroXSType> Material::calculateMacroXSs()
     return crossSections_;
 }
 
-std::map<std::string, CrossSection> Material::calculateOtherGroupConstants(XSKind xsKind)
+Material::XSMapType Material::calculateOtherGroupConstants(XSKind xsKind)
 {
-    std::map<std::string, CrossSection> resultMap;
+    XSMapType resultMap;
 
     for(size_t i = 0; i < libNuclides_.size(); i++)        
     {
@@ -112,7 +112,7 @@ std::map<std::string, CrossSection> Material::calculateOtherGroupConstants(XSKin
             xs = libNuclides_[i]->getXSSet(xsKind).getXS(temperature_, Sqrt(), backgroundXS, Sqrt());
 
             if(xsKind == XSKind::NUSIGF)
-                xs = densities_[i] * xs;
+                xs *= densities_[i];
 
             resultMap.insert(std::pair<std::string, CrossSection>(libNuclides_[i]->getName(), xs));
         }
@@ -121,13 +121,14 @@ std::map<std::string, CrossSection> Material::calculateOtherGroupConstants(XSKin
     return resultMap;
 }
 
-std::map< XSKind, std::map<std::string, CrossSection> > Material::calculateOtherGroupConstants()
+std::map<XSKind, Material::XSMapType> Material::calculateOtherGroupConstants()
 {
-    std::map< XSKind, std::map<std::string, CrossSection> > resultMap;
+    std::map<XSKind, XSMapType> resultMap;
 
-    resultMap.insert(std::pair<XSKind, std::map<std::string, CrossSection> >(XSKind::NU, calculateOtherGroupConstants(XSKind::NU)));
-    resultMap.insert(std::pair<XSKind, std::map<std::string, CrossSection> >(XSKind::CHI, calculateOtherGroupConstants(XSKind::CHI)));
-    resultMap.insert(std::pair<XSKind, std::map<std::string, CrossSection> >(XSKind::NUSIGF, calculateOtherGroupConstants(XSKind::NUSIGF)));
+    resultMap.insert(std::pair<XSKind, XSMapType>(XSKind::NU, calculateOtherGroupConstants(XSKind::NU)));
+    resultMap.insert(std::pair<XSKind, XSMapType>(XSKind::CHI, calculateOtherGroupConstants(XSKind::CHI)));
+    resultMap.insert(std::pair<XSKind, XSMapType>(XSKind::NFTOT, calculateOtherGroupConstants(XSKind::NFTOT)));
+    resultMap.insert(std::pair<XSKind, XSMapType>(XSKind::NUSIGF, calculateOtherGroupConstants(XSKind::NUSIGF)));
 
     return resultMap;
 }

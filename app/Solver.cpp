@@ -92,8 +92,8 @@ void Solver::sourceIteration(const Eigen::MatrixXd &Mmatrix, const Eigen::Matrix
 	Eigen::VectorXd neutronFlux = neutronFlux2 / neutronFlux2.sum(); 
 	double kFactor = kFactor2;
 
-    std::cout << "\nNumber of iteration: " << h << std::endl;
-	std::cout << std::scientific << std::endl;
+    std::cout << "\nNumber of iterations: " << h << std::endl;
+	std::cout << std::scientific;
     std::cout << "kFactor: " << kFactor << std::endl;
     std::cout << "Neutron flux: " << std::endl;
     for(auto i : neutronFlux)
