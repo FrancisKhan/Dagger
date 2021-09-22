@@ -12,21 +12,21 @@ class CrossSectionSet
 {
 public:
     CrossSectionSet() {}
-	CrossSectionSet(XSKind xsKind) : m_kind(xsKind) {}
+	CrossSectionSet(XSKind xsKind) : kind_(xsKind) {}
 
-    void addXS(const CrossSection &xs) {m_XSSet.push_back(xs);}
-    void setXS(unsigned i, const CrossSection &xs) {m_XSSet[i] = xs;}
-    CrossSection getXSNoInterp(unsigned i) {return m_XSSet.at(i);}
+    void addXS(const CrossSection &xs) {XSSet_.push_back(xs);}
+    void setXS(unsigned i, const CrossSection &xs) {XSSet_[i] = xs;}
+    CrossSection getXSNoInterp(unsigned i) {return XSSet_.at(i);}
     CrossSection getXSNoInterp(double t, double b) const;
-    unsigned getSize() {return m_XSSet.size();}
-    XSKind getKind() {return m_kind;}
-    void setKind(XSKind xsKind) {m_kind = xsKind;}
+    unsigned getSize() {return XSSet_.size();}
+    XSKind getKind() {return kind_;}
+    void setKind(XSKind xsKind) {kind_ = xsKind;}
     std::vector<double> getTemperatures() const;
     std::vector<double> getBackgroundXSs() const;
     void calcXSs();
-    void deleteXSs() {m_XSSet.clear();}
+    void deleteXSs() {XSSet_.clear();}
     bool isEmpty() const;
-    size_t getNumberOfEnergyGroups() const {return m_XSSet.front().getSize();}
+    size_t getNumberOfEnergyGroups() const {return XSSet_.front().getSize();}
 
     CrossSectionSet operator/(const CrossSectionSet& rhs);
     CrossSectionSet operator+(const CrossSectionSet& rhs);
@@ -82,8 +82,8 @@ public:
     }
 
 private:
-    XSKind m_kind;
-    std::vector<CrossSection> m_XSSet;
+    XSKind kind_;
+    std::vector<CrossSection> XSSet_;
 };
 
 inline CrossSectionSet operator+(const double lhs, const CrossSectionSet& rhs)

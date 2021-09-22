@@ -130,11 +130,11 @@ CrossSectionSet CrossSectionSet::operator/(const double rhs)
 
 CrossSection CrossSectionSet::getXSNoInterp(double t, double b) const
 {
-    std::vector<CrossSection>::const_iterator it = std::find_if(m_XSSet.begin(), m_XSSet.end(), 
+    std::vector<CrossSection>::const_iterator it = std::find_if(XSSet_.begin(), XSSet_.end(), 
     [t, b] (const CrossSection &c) 
     {return Numerics::is_equal(c.getTemperature(), t) && Numerics::is_equal(c.getBackgroundXS(), b);});
 
-    if (it != m_XSSet.end())
+    if (it != XSSet_.end())
         return *it;
     else
         return CrossSection {};
@@ -168,7 +168,7 @@ std::vector<double> CrossSectionSet::getTemperatures() const
 {
     std::vector<double> result;
 
-    for(const auto& i : m_XSSet)
+    for(const auto& i : XSSet_)
         result.push_back(i.getTemperature());
 
     std::sort(result.begin(), result.end());
@@ -180,7 +180,7 @@ std::vector<double> CrossSectionSet::getBackgroundXSs() const
 {
     std::vector<double> result;
 
-    for(const auto& i : m_XSSet)
+    for(const auto& i : XSSet_)
         result.push_back(i.getBackgroundXS());
 
     std::sort(result.begin(), result.end());
@@ -191,9 +191,9 @@ std::vector<double> CrossSectionSet::getBackgroundXSs() const
 // It is unlikely that a XSSet has a XS(t_i, b_i) empty and others with values
 bool CrossSectionSet::isEmpty() const
 {
-    if(m_XSSet[0].getSize() != 0)
+    if(XSSet_[0].getSize() != 0)
     {
-        if(m_XSSet[0].hasOnlyZeroes())
+        if(XSSet_[0].hasOnlyZeroes())
             return true;
         else
             return false;

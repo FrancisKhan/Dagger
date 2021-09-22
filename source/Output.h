@@ -9,8 +9,8 @@
 class Output
 {
 public:
-    Output() : mp_logger(nullptr), m_outputName(""), 
-	m_inputPath(""), m_inputName("") {}
+    Output() : logger_(nullptr), outputName_(""), 
+	inputPath_(""), inputName_("") {}
 
     void printStart();
 	void printEnd();
@@ -19,10 +19,10 @@ public:
 	void setInputPath(std::string inputPath);
 	void setOutputPath(std::string ioutputPathName);
 	void setLevel(std::string level);
-	TraceLevel getLevel() {return m_logLevel;}
-	std::string getInputPath() {return m_inputPath;}
-	std::string getInputName() {return m_inputName;}
-	std::string getOutputName() {return m_outputName;}
+	TraceLevel getLevel() {return logLevel_;}
+	std::string getInputPath() {return inputPath_;}
+	std::string getInputName() {return inputName_;}
+	std::string getOutputName() {return outputName_;}
 
 	void print(TraceLevel level, std::string str);
 	void print(TraceLevel level, std::string str, int input);
@@ -47,13 +47,13 @@ public:
 private: 
 	void removeOldOutputFile();
 
-	std::shared_ptr<spdlog::logger> mp_logger;
-	std::string m_outputPath;
-	std::string m_outputName;
-	std::string m_inputPath;
-	std::string m_inputName;
-	std::string m_outputFullName;
-	TraceLevel m_logLevel;
+	std::shared_ptr<spdlog::logger> logger_;
+	std::string outputPath_;
+	std::string outputName_;
+	std::string inputPath_;
+	std::string inputName_;
+	std::string outputFullName_;
+	TraceLevel logLevel_;
 };
 
 extern Output out;

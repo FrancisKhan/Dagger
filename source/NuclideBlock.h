@@ -14,8 +14,8 @@ class NuclideBlock
 {
 public:
 	NuclideBlock(std::vector<std::string> &dataVec, unsigned numberOfEnergyGroups) : 
-	m_xsDataLines(dataVec), m_numberOfEnergyGroups(numberOfEnergyGroups),
-	m_nuclide(std::make_shared<Nuclide>()) {}
+	xsDataLines_(dataVec), numberOfEnergyGroups_(numberOfEnergyGroups),
+	nuclide_(std::make_shared<Nuclide>()) {}
 
 	std::shared_ptr<Nuclide> getNuclide();
 	
@@ -38,16 +38,16 @@ private:
 	void isNuclideResonant();
 	void isNuclideFissionable() const;
 	void setNumberOfEnergyGroups();
-	unsigned getNumberOfEnergyGroups() {return m_numberOfEnergyGroups;}
+	unsigned getNumberOfEnergyGroups() {return numberOfEnergyGroups_;}
 	std::vector<double> populateXS(std::vector<double> &xsVec);
 	void fromRImatrixToXSmatrix();
 	void fromRItoXS();
-	std::vector<Nuclide::XSSetType> addNu();
-	std::vector<Nuclide::XSSetType> addScatteringL0XS();
-	std::vector<Nuclide::XSSetType> addScatteringL1XS();
-	std::vector<Nuclide::XSSetType> addAbsXS();
-	std::vector<Nuclide::XSSetType> addTranspXS();
-	std::vector<Nuclide::XSSetType> modifyChi();
+	void addNu();
+	void addScatteringL0XS();
+	void addScatteringL1XS();
+	void addAbsXS();
+	void addTranspXS();
+	void modifyChi();
 	void additionalXSs();
 
 	std::tuple< std::vector<double>, std::vector<int32_t>, std::vector<int32_t> > 
@@ -56,9 +56,9 @@ private:
 
 	Eigen::MatrixXd assembleMatrixXS(XSMatrixKind xsKind, unsigned lowBound, unsigned upperBound);
 
-	std::vector<std::string> m_xsDataLines;
-	unsigned m_numberOfEnergyGroups;
-	std::shared_ptr<Nuclide> m_nuclide;
+	std::vector<std::string> xsDataLines_;
+	unsigned numberOfEnergyGroups_;
+	std::shared_ptr<Nuclide> nuclide_;
 };
 
 #endif

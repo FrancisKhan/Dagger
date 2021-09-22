@@ -13,10 +13,10 @@ class CrossSectionMatrixSet
 {
 public:
     CrossSectionMatrixSet() {}
-	CrossSectionMatrixSet(XSMatrixKind xsKind) : m_kind(xsKind) {}
+	CrossSectionMatrixSet(XSMatrixKind xsKind) : kind_(xsKind) {}
 
-    void addXS(CrossSectionMatrix &xs) {m_XSSet.push_back(xs);}
-    void setXS(unsigned i, CrossSectionMatrix &xs) {m_XSSet[i] = xs;}
+    void addXS(CrossSectionMatrix &xs) {XSSet_.push_back(xs);}
+    void setXS(unsigned i, CrossSectionMatrix &xs) {XSSet_[i] = xs;}
     CrossSectionMatrix getXSMatrixNoInterp(unsigned i);
     CrossSectionMatrix getXSMatrixNoInterp(double t, double b);
 
@@ -24,8 +24,8 @@ public:
 
     std::vector<double> getTemperatures();
     std::vector<double> getBackgroundXSs();
-    unsigned getSize() const {return m_XSSet.size();}
-    XSMatrixKind getKind() {return m_kind;}
+    unsigned getSize() const {return XSSet_.size();}
+    XSMatrixKind getKind() {return kind_;}
     bool isEmpty() const;
     void calcXSMatrices();
     CrossSectionSet condenseToXSs();
@@ -84,8 +84,8 @@ public:
     }
 
 private:
-    XSMatrixKind m_kind;
-    std::vector<CrossSectionMatrix> m_XSSet;
+    XSMatrixKind kind_;
+    std::vector<CrossSectionMatrix> XSSet_;
 };
 
 #endif

@@ -28,50 +28,50 @@ void Output::setLevel(std::string level)
 {
 	if(level == "CRITICAL")
 	{
-		mp_logger->set_level(spdlog::level::critical);
-		m_logLevel = TraceLevel::CRITICAL;
+		logger_->set_level(spdlog::level::critical);
+		logLevel_ = TraceLevel::CRITICAL;
 	}
 	else if(level == "ERR")    
 	{
-		mp_logger->set_level(spdlog::level::err);
-		m_logLevel = TraceLevel::ERR;
+		logger_->set_level(spdlog::level::err);
+		logLevel_ = TraceLevel::ERR;
 	}
 	else if(level == "WARN")
 	{
-		mp_logger->set_level(spdlog::level::warn);
-		m_logLevel = TraceLevel::WARN;
+		logger_->set_level(spdlog::level::warn);
+		logLevel_ = TraceLevel::WARN;
 	}     
 	else if(level == "INFO")    
 	{
-		mp_logger->set_level(spdlog::level::info);
-		m_logLevel = TraceLevel::INFO;
+		logger_->set_level(spdlog::level::info);
+		logLevel_ = TraceLevel::INFO;
 	} 
 	else if(level == "DEBUG")    
 	{
-		mp_logger->set_level(spdlog::level::debug);
-		m_logLevel = TraceLevel::DEBUG;
+		logger_->set_level(spdlog::level::debug);
+		logLevel_ = TraceLevel::DEBUG;
 	}
 	else if(level == "TRACE")    
 	{
-		mp_logger->set_level(spdlog::level::trace);
-		m_logLevel = TraceLevel::TRACE;
+		logger_->set_level(spdlog::level::trace);
+		logLevel_ = TraceLevel::TRACE;
 	}
 	else 
 	{
 		out.print(TraceLevel::CRITICAL, "Trace Level not recognized");
 		out.print(TraceLevel::CRITICAL, "Please use capital letters: CRITICAL, ERR, WARN, INFO, DEBUG or TRACE");
 		out.print(TraceLevel::CRITICAL, "Trace Level defaulted to CRITICAL \n");
-		mp_logger->set_level(spdlog::level::critical);
-		m_logLevel = TraceLevel::CRITICAL;
+		logger_->set_level(spdlog::level::critical);
+		logLevel_ = TraceLevel::CRITICAL;
 	}
 }
 
 std::shared_ptr<spdlog::logger> Output::getLogger() 
 {
-	if (mp_logger == nullptr)
+	if (logger_ == nullptr)
 		std::cout << "getLogger() nullprt!!" << std::endl;
 	
-	return mp_logger;
+	return logger_;
 }
 
 void Output::setInputPath(std::string inputPathName)
@@ -80,8 +80,8 @@ void Output::setInputPath(std::string inputPathName)
 	
 	if (found != std::string::npos)
 	{
-		m_inputPath = inputPathName.substr(0, found);
-		m_inputName = inputPathName.substr(found + 1);
+		inputPath_ = inputPathName.substr(0, found);
+		inputName_ = inputPathName.substr(found + 1);
 	}
 }
 
@@ -91,11 +91,11 @@ void Output::setOutputPath(std::string outputPathName)
 	
 	if (found != std::string::npos)
 	{
-		m_outputPath = outputPathName.substr(0, found);
-		m_outputName = outputPathName.substr(found + 1);
+		outputPath_ = outputPathName.substr(0, found);
+		outputName_ = outputPathName.substr(found + 1);
 	}
 	
-	m_outputFullName = outputPathName;
+	outputFullName_ = outputPathName;
 	
 	removeOldOutputFile();
 }
@@ -112,32 +112,32 @@ void Output::createLogger(Sink sink, std::string loggerName)
 	
 	if(sink == Sink::CONSOLE)
 	{
-		mp_logger = spdlog::stdout_color_mt(loggerName);
+		logger_ = spdlog::stdout_color_mt(loggerName);
 	}
 	else if (sink == Sink::FILE)
 	{
-		mp_logger = spdlog::basic_logger_mt(loggerName, m_outputFullName);
+		logger_ = spdlog::basic_logger_mt(loggerName, outputFullName_);
 	}
 	else if (sink == Sink::EMPTY)
 	{
-		mp_logger = spdlog::create<spdlog::sinks::null_sink_st>(loggerName);
+		logger_ = spdlog::create<spdlog::sinks::null_sink_st>(loggerName);
 	}
 	else // BOTH case
 	{
 		auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-		auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(m_outputFullName, true);
+		auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(outputFullName_, true);
 		spdlog::sinks_init_list sink_list = {console_sink, file_sink};
-		mp_logger = std::make_shared<spdlog::logger>(loggerName, sink_list);
+		logger_ = std::make_shared<spdlog::logger>(loggerName, sink_list);
 	}
 	
-	mp_logger->flush_on(spdlog::level::info);
+	logger_->flush_on(spdlog::level::info);
 }
 
 void Output::removeOldOutputFile()
 {
-	if (fs::exists(m_outputFullName))
+	if (fs::exists(outputFullName_))
 	{
-		std::remove(m_outputFullName.c_str());
+		std::remove(outputFullName_.c_str());
 	}
 }
 

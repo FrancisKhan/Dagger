@@ -14,14 +14,14 @@ public:
 	std::vector<std::string> readXSLibrary(std::string &input);
 	void findNuclideBLocks();
 	std::pair<unsigned, unsigned> getXSNuclideBLock(const std::string &nuclide);
-	unsigned getNumberOfEnergyGroups() {return m_numberOfEnergyGroups;}
+	unsigned getNumberOfEnergyGroups() {return numberOfEnergyGroups_;}
 	std::vector < std::shared_ptr<Nuclide> > readNuclides(std::vector<std::string> &nucVec);
 	std::shared_ptr<Nuclide> getNuclide(const std::string &nucName);
 	void setXSLibraryPath(const std::string& libraryPath);
-	std::string getXSLibraryPath() {return m_libraryPath;}
-	size_t getNumberOfNuclidesRead() {return m_nuclides.size();} 
-	std::vector<std::string> getLibraryNuclides() {return m_xsNuclides;}
-	size_t getNumberOfLibraryNuclides() {return m_xsNuclides.size();}
+	std::string getXSLibraryPath() {return libraryPath_;}
+	size_t getNumberOfNuclidesRead() {return nuclides_.size();} 
+	std::vector<std::string> getLibraryNuclides() {return xsNuclides_;}
+	size_t getNumberOfLibraryNuclides() {return xsNuclides_.size();}
 
 	void hardCodedPotXSs();
 
@@ -35,16 +35,16 @@ public:
 private:
 	void setNumberOfEnergyGroups();
 
-	std::vector<std::string> m_xsDataFileLines;
-	std::vector<std::string> m_xsNuclides;
-	std::vector<unsigned> m_xsNuclideBlocks;
-	unsigned m_numberOfEnergyGroups;
-	std::string m_libraryPath;
+	std::vector<std::string> xsDataFileLines_;
+	std::vector<std::string> xsNuclides_;
+	std::vector<unsigned> xsNuclideBlocks_;
+	unsigned numberOfEnergyGroups_;
+	std::string libraryPath_;
 
-	std::map<std::string, double> m_potXSs;
+	std::map<std::string, double> potXSs_;
 
-	std::vector < std::shared_ptr<Nuclide> > m_nuclides;
-	TraceLevel m_logLevel;
+	std::vector < std::shared_ptr<Nuclide> > nuclides_;
+	TraceLevel logLevel_;
 };
 
 #endif

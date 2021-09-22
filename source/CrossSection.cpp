@@ -2,14 +2,14 @@
 
 void CrossSection::setToZero() 
 {
-    size_t size = m_values.size();
-    m_values.clear();
-    m_values.resize(size, 0.0);
+    size_t size = values_.size();
+    values_.clear();
+    values_.resize(size, 0.0);
 }
 
 bool CrossSection::hasOnlyZeroes() const
 {
-    if(std::all_of(m_values.begin(), m_values.end(), [](const double i)
+    if(std::all_of(values_.begin(), values_.end(), [](const double i)
        {return Numerics::is_equal(i, 0.0);}))
         return true;
     else
@@ -31,8 +31,8 @@ CrossSection CrossSection::operator+(const CrossSection& rhs)
 
 CrossSection& CrossSection::operator+=(const CrossSection& rhs)
 {
-    for(size_t i = 0; i < m_values.size(); i++)
-        m_values[i] += rhs.getValues()[i];
+    for(size_t i = 0; i < values_.size(); i++)
+        values_[i] += rhs.getValues()[i];
 
     return *this;
 }
@@ -52,16 +52,16 @@ CrossSection CrossSection::operator-(const CrossSection& rhs)
 
 CrossSection& CrossSection::operator-=(const CrossSection& rhs)
 {
-   for(size_t i = 0; i < m_values.size(); i++)
-        m_values[i] -= rhs.getValues()[i];
+   for(size_t i = 0; i < values_.size(); i++)
+        values_[i] -= rhs.getValues()[i];
 
     return *this;
 }
 
 CrossSection& operator*=(CrossSection& lhs, double rhs)
 {
-    for(size_t i = 0; i < lhs.m_values.size(); i++)
-        lhs.m_values[i] *= rhs;
+    for(size_t i = 0; i < lhs.values_.size(); i++)
+        lhs.values_[i] *= rhs;
 
     return lhs;
 }

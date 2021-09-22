@@ -4,29 +4,29 @@
 
 Nuclide::Nuclide() 
 {
-    m_isResonant = false; 
+    isResonant_ = false; 
 
     for (const auto& xsKind : XSKind())
     {
         CrossSectionSet crossSectionSet(xsKind);
         Nuclide::XSSetType tempPair = std::make_pair(xsKind, crossSectionSet);
-        m_crossSectionSets.push_back(tempPair);
+        crossSectionSets_.push_back(tempPair);
     }
 
     for (const auto& xsKind : XSMatrixKind())
     {
         CrossSectionMatrixSet crossSectionMatrixSet(xsKind);
         Nuclide::XSMatrixSetType tempPair = std::make_pair(xsKind, crossSectionMatrixSet);
-        m_crossSectionMatrixSets.push_back(tempPair);
+        crossSectionMatrixSets_.push_back(tempPair);
     }
 }
 
 CrossSectionSet Nuclide::getXSSet(XSKind kind) 
 {
-    std::vector<Nuclide::XSSetType>::iterator it = std::find_if(m_crossSectionSets.begin(), m_crossSectionSets.end(), 
+    std::vector<Nuclide::XSSetType>::iterator it = std::find_if(crossSectionSets_.begin(), crossSectionSets_.end(), 
     [kind] (Nuclide::XSSetType &p) {return p.first == kind;});
 
-    if (it != m_crossSectionSets.end()) 
+    if (it != crossSectionSets_.end()) 
         return it->second;
     else
         return CrossSectionSet {};
@@ -47,10 +47,10 @@ CrossSectionSet& Nuclide::getXSSet(XSKind kind, std::vector<XSSetType>& crossSec
 
 CrossSectionMatrixSet Nuclide::getXSMatrixSet(XSMatrixKind kind) 
 {
-    std::vector<Nuclide::XSMatrixSetType>::iterator it = std::find_if(m_crossSectionMatrixSets.begin(), 
-    m_crossSectionMatrixSets.end(), [kind] (Nuclide::XSMatrixSetType &m) {return m.first == kind;});
+    std::vector<Nuclide::XSMatrixSetType>::iterator it = std::find_if(crossSectionMatrixSets_.begin(), 
+    crossSectionMatrixSets_.end(), [kind] (Nuclide::XSMatrixSetType &m) {return m.first == kind;});
 
-    if (it != m_crossSectionMatrixSets.end()) 
+    if (it != crossSectionMatrixSets_.end()) 
         return it->second;
     else
         return CrossSectionMatrixSet {};
@@ -71,13 +71,13 @@ CrossSectionMatrixSet& Nuclide::getXSMatrixSet(XSMatrixKind kind, std::vector<XS
 
 void Nuclide::calcXSSets()
 {
-    for(auto& xsSet : m_crossSectionSets)
+    for(auto& xsSet : crossSectionSets_)
        xsSet.second.calcXSs();
 }
 
 void Nuclide::calcXSMatrixSets()
 {
-    for(auto& xsMatrixSet : m_crossSectionMatrixSets)
+    for(auto& xsMatrixSet : crossSectionMatrixSets_)
        xsMatrixSet.second.calcXSMatrices();
 }
 

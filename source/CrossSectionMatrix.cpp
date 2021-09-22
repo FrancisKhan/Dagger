@@ -3,21 +3,21 @@
 
 void CrossSectionMatrix::setToZero() 
 {
-    unsigned rows = m_values.rows();
-    unsigned cols = m_values.cols();
-    m_values = Eigen::MatrixXd::Zero(rows, cols);
+    unsigned rows = values_.rows();
+    unsigned cols = values_.cols();
+    values_ = Eigen::MatrixXd::Zero(rows, cols);
 }
 
 CrossSection CrossSectionMatrix::condenseToXS() const
 {
-    std::vector<double> newValues = Numerics::eigenVecTOStdVec(m_values.rowwise().sum());
-    CrossSection xs(m_temperature, m_backgroundXS, newValues);
+    std::vector<double> newValues = Numerics::eigenVecTOStdVec(values_.rowwise().sum());
+    CrossSection xs(temperature_, backgroundXS_, newValues);
     return xs;
 }
 
 bool CrossSectionMatrix::hasOnlyZeroes() const
 {
-    if(Numerics::is_equal(m_values.maxCoeff(), 0.0))
+    if(Numerics::is_equal(values_.maxCoeff(), 0.0))
         return true;
     else
         return false;
@@ -61,7 +61,7 @@ CrossSectionMatrix& CrossSectionMatrix::operator+=(const CrossSectionMatrix& rhs
 
     for(unsigned i = 0; i < rhsMat.rows(); i++)
         for(unsigned j = 0; j < rhsMat.cols(); j++)
-            m_values(i, j) += rhsMat(i, j);
+            values_(i, j) += rhsMat(i, j);
 
     return *this;
 }
@@ -72,7 +72,7 @@ CrossSectionMatrix& CrossSectionMatrix::operator-=(const CrossSectionMatrix& rhs
 
     for(unsigned i = 0; i < rhsMat.rows(); i++)
         for(unsigned j = 0; j < rhsMat.cols(); j++)
-            m_values(i, j) -= rhsMat(i, j);
+            values_(i, j) -= rhsMat(i, j);
 
     return *this;
 }

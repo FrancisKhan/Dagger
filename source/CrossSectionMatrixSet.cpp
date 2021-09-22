@@ -52,11 +52,11 @@ void CrossSectionMatrixSet::calcXSMatrices()
 
 CrossSectionMatrix CrossSectionMatrixSet::getXSMatrixNoInterp(double t, double b)
 {
-    std::vector<CrossSectionMatrix>::iterator it = std::find_if(m_XSSet.begin(), m_XSSet.end(), 
+    std::vector<CrossSectionMatrix>::iterator it = std::find_if(XSSet_.begin(), XSSet_.end(), 
     [t, b] (CrossSectionMatrix &c) 
     {return Numerics::is_equal(c.getTemperature(), t) && Numerics::is_equal(c.getBackgroundXS(), b);});
 
-    if (it != m_XSSet.end())
+    if (it != XSSet_.end())
         return *it;
     else
         return CrossSectionMatrix {};
@@ -64,8 +64,8 @@ CrossSectionMatrix CrossSectionMatrixSet::getXSMatrixNoInterp(double t, double b
 
 CrossSectionMatrix CrossSectionMatrixSet::getXSMatrixNoInterp(unsigned i)
 {
-    if(!m_XSSet.empty())
-        return m_XSSet.at(i);
+    if(!XSSet_.empty())
+        return XSSet_.at(i);
     else
         return CrossSectionMatrix {};
 }
@@ -74,7 +74,7 @@ std::vector<double> CrossSectionMatrixSet::getTemperatures()
 {
     std::vector<double> result;
 
-    for(const auto& i : m_XSSet)
+    for(const auto& i : XSSet_)
         result.push_back(i.getTemperature());
 
     std::sort(result.begin(), result.end());
@@ -86,7 +86,7 @@ std::vector<double> CrossSectionMatrixSet::getBackgroundXSs()
 {
     std::vector<double> result;
 
-    for(const auto& i : m_XSSet)
+    for(const auto& i : XSSet_)
         result.push_back(i.getBackgroundXS());
 
     std::sort(result.begin(), result.end());
@@ -98,7 +98,7 @@ CrossSectionSet CrossSectionMatrixSet::condenseToXSs()
 {
     CrossSectionSet xsSet;
 
-    for(const auto& s : m_XSSet)
+    for(const auto& s : XSSet_)
         xsSet.addXS(s.condenseToXS());
 
     return xsSet;
@@ -107,9 +107,9 @@ CrossSectionSet CrossSectionMatrixSet::condenseToXSs()
 // It is unlikely that a XSSet has a XS(t_i, b_i) empty and others with values
 bool CrossSectionMatrixSet::isEmpty() const
 {
-    if(m_XSSet[0].getSize() != 0)
+    if(XSSet_[0].getSize() != 0)
     {
-        if(m_XSSet[0].hasOnlyZeroes())
+        if(XSSet_[0].hasOnlyZeroes())
             return true;
         else
             return false;

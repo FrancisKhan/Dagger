@@ -7,18 +7,18 @@
 class CrossSectionMatrix
 {
 public:
-    CrossSectionMatrix() : m_temperature(0.0), m_backgroundXS(0.0) {}
+    CrossSectionMatrix() : temperature_(0.0), backgroundXS_(0.0) {}
     
 	CrossSectionMatrix(double temperature, double backgroundXS, const Eigen::MatrixXd& values) :
-    m_temperature(temperature), m_backgroundXS(backgroundXS), m_values(values) {}
+    temperature_(temperature), backgroundXS_(backgroundXS), values_(values) {}
 
-    void setTemperature(double t) {m_temperature = t;}
-    double getTemperature() const {return m_temperature;}
-    void setBackgroundXS(double b) {m_backgroundXS = b;}
-    double getBackgroundXS() const {return m_backgroundXS;}
-    void setValues(Eigen::MatrixXd &m) {m_values = m;}
-    Eigen::MatrixXd getValues() const {return m_values;}
-    unsigned getSize() const {return m_values.rows();}
+    void setTemperature(double t) {temperature_ = t;}
+    double getTemperature() const {return temperature_;}
+    void setBackgroundXS(double b) {backgroundXS_ = b;}
+    double getBackgroundXS() const {return backgroundXS_;}
+    void setValues(Eigen::MatrixXd &m) {values_ = m;}
+    Eigen::MatrixXd getValues() const {return values_;}
+    unsigned getSize() const {return values_.rows();}
     CrossSection condenseToXS() const;
     bool hasOnlyZeroes() const;
     void setToZero();
@@ -29,9 +29,9 @@ public:
     CrossSectionMatrix& operator-=(const CrossSectionMatrix& rhs);
 
 private:
-    double m_temperature;
-    double m_backgroundXS;
-    Eigen::MatrixXd m_values;
+    double temperature_;
+    double backgroundXS_;
+    Eigen::MatrixXd values_;
 };
 
 inline CrossSectionMatrix operator*(const double lhs, const CrossSectionMatrix& rhs)
