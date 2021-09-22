@@ -11,12 +11,12 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
 
-    - name: Checkout Dagger Repository
+    - name: Checkout Dogged Repository
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
 
-    - name: Compile Dagger Library
+    - name: Compile Dogged Library
       run: |
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON .
         make |& tee build-output.txt ; ( exit ${PIPESTATUS[0]} )
@@ -42,12 +42,12 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
 
-    - name: Checkout Dagger Repository
+    - name: Checkout Dogged Repository
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
 
-    - name: Compile Dagger Example Executable
+    - name: Compile Dogged Example Executable
       working-directory: ./app
       run: |
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON .

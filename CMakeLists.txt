@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.10)
 
-project(Dagger
+project(Dogged
     VERSION 1.0
     DESCRIPTION "Dragon Advanced Generic multi-Group library Reader"
     LANGUAGES CXX)

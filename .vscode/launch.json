@@ -9,7 +9,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/tests/gtest_Dagger",
+            "program": "${workspaceFolder}/tests/gtest_Dogged",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -26,10 +26,10 @@
         },
 
         {
-            "name": "gdb Dagger",
+            "name": "gdb Dogged",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/app/DaggerCode",
+            "program": "${workspaceFolder}/app/DoggedCode",
             "args": ["./output.txt"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

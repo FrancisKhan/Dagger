@@ -50,7 +50,7 @@ _deps
 
 app/.vscode/
 DartConfiguration.tcl
-app/DaggerCode
+app/DoggedCode
 dragLibReader-lib/
 external/eigen-lib
 external/spdlog-lib
@@ -63,7 +63,7 @@ external/lib/
 external/include/
 external/bin/
 external/share/
-tests/gtest_Dagger
+tests/gtest_Dogged
 draglibendfb7r0.gz
 Pu239.txt
 **build
