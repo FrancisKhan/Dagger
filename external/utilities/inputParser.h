@@ -7,11 +7,12 @@
 
 namespace InputParser
 {
-	std::string removeSpaces(std::string &input);
+	std::string removeUnwantedCharacters(std::string &input);
 	std::string removeLeadingSpaces(std::string &input);
     std::string removeTrailingSpaces(std::string &input);
+	std::string removeLeftArrow(std::string &input);
 
-	std::vector<unsigned> findLine(std::vector<std::string> &dataVec, const std::string &key, unsigned lowerBound = 0, 
+	std::vector<unsigned> findLine(const std::vector<std::string> &dataVec, const std::string &key, unsigned lowerBound = 0, 
 	unsigned upperBound = std::numeric_limits<unsigned>::max());
 
 	std::string findKeyword(std::string toSearch, unsigned lowLimit = 0, 
@@ -22,6 +23,8 @@ namespace InputParser
 	
 	bool isKeywordPresent(std::vector<std::string> &dataVec, const std::string &key, unsigned lowerBound = 0, 
 	unsigned upperBound = std::numeric_limits<unsigned>::max());
+
+	bool isKeywordPresentInString(const std::string &key, const std::string& line);
 }
 
 #endif

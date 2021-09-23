@@ -64,7 +64,7 @@ external/include/
 external/bin/
 external/share/
 tests/gtest_Dogged
-draglibendfb7r0.gz
+draglib*
 Pu239.txt
 **build
 **__pycache__

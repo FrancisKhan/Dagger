@@ -1,6 +1,6 @@
 # Tests need to be added as executables first
 add_executable(gtest_Dogged mathsTests.cpp XSTests.cpp XSMatrixTests.cpp FileToolsTests.cpp
-               XSMatrixOpsTests.cpp)
+               XSMatrixOpsTests.cpp XSTestsJeff.cpp)
 
 
 set(CMAKE_CXX_STANDARD 17)

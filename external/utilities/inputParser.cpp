@@ -21,13 +21,25 @@ namespace InputParser
 		return input;
 	}
 
-	std::string removeSpaces(std::string &input)
+	std::string removeLeftArrow(std::string &input)
+	{
+		std::string key = "<-";
+		std::string::size_type i = input.find(key); 
+		
+		if (i != std::string::npos) 
+			input.erase(i, key.length());
+		
+		return input;
+	}
+
+	std::string removeUnwantedCharacters(std::string &input)
     {
-		std::string result = removeLeadingSpaces(input);
-	    return removeTrailingSpaces(result);
+		std::string result1 = removeLeadingSpaces(input);
+		std::string result2 = removeLeftArrow(result1);
+	    return removeTrailingSpaces(result2);
     }
 
-    std::vector<unsigned> findLine(std::vector<std::string> &dataVec, const std::string &key, 
+    std::vector<unsigned> findLine(const std::vector<std::string> &dataVec, const std::string &key, 
 								   unsigned inputLowerBound, unsigned inputUpperBound)
     {
         std::vector<unsigned> result {};
@@ -123,5 +135,13 @@ namespace InputParser
 			return false;
 		else
 			return true;
+    }
+
+	bool isKeywordPresentInString(const std::string &key, const std::string& line)
+    {
+        if(line.find(key) != std::string::npos)
+    		return true;
+		else
+			return false;
     }
 }

@@ -114,7 +114,7 @@ namespace File
         std::string line;
         while (std::getline(fileData, line))
         {
-            data.push_back(InputParser::removeSpaces(line));
+            data.push_back(InputParser::removeUnwantedCharacters(line));
         }
 
         fileData.close();
@@ -153,7 +153,7 @@ namespace File
 
             std::string line;
             while (std::getline(instream, line))
-                result.push_back(InputParser::removeSpaces(line));
+                result.push_back(InputParser::removeUnwantedCharacters(line));
 
             file.close(); // cleanup
         }

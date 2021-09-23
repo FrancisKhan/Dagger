@@ -39,3 +39,10 @@ TEST(FileToolsTests, CompressDecompressFile)
     File::removeFile(newFile);
     EXPECT_TRUE(areEqual);
 }
+
+TEST(testaaa, testaaa1)
+{
+    std::string line = "->       1      12       0       1                                              ";
+    std::string key  = "->       1      12       0       1";
+	std::cout << "Test: " << InputParser::isKeywordPresentInString(key, line) << std::endl;
+} 
