@@ -2,9 +2,9 @@ cmake_minimum_required (VERSION 3.10)
 
 include(${CMAKE_ROOT}/Modules/ExternalProject.cmake)
 
-project(DLRCode
+project(DoggedCode
     VERSION "1.0"
-    DESCRIPTION "DLRCode"
+    DESCRIPTION "DoggedCode"
     LANGUAGES CXX)
 
 add_executable(DoggedCode Solver.cpp Material.cpp main.cpp)
@@ -15,6 +15,8 @@ ExternalProject_Add(
     URL https://github.com/FrancisKhan/DragLibReader/archive/refs/heads/master.zip
     BUILD_IN_SOURCE ON
 )
+
+target_compile_features(DoggedCode PRIVATE cxx_std_17)
 
 SET(LIB_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/dragLibReader-lib/src/dragLibReader)
 

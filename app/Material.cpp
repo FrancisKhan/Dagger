@@ -68,9 +68,13 @@ std::map<std::string, double> Material::calculateBackgroundXS()
 
     for(size_t i = 0; i < libNuclides_.size(); i++)
     {
-        double backgroundXS = (backgroundXSSum - densities_[i] * libNuclides_[i]->getPotXS()) / densities_[i];
+        double backgroundXS = backgroundXSSum / densities_[i] - libNuclides_[i]->getPotXS();
         backgroundXSMap.insert(std::pair<std::string, double>(libNuclides_[i]->getName(), backgroundXS));
     }
+
+    // std::cout << std::scientific;
+    // for(auto const& [key, val] : backgroundXSMap) 
+    //     std::cout << key << " " << val << std::endl;
     
     return backgroundXSMap;
 }
@@ -154,3 +158,14 @@ std::vector<Material::MacroXSMatrixType> Material::calculateMacroXSMatrices()
 
     return crossSectionMatrices_;
 }
+
+// void Material::printXSBdependency()
+// {
+//     for(auto i : libNuclides_[0]->getDilutions())        
+//     {
+//        std::vector<double> xs = libNuclides_[0]->getXSSet(XSKind::NG).getXSNoInterp(2.93000000E+02, i).getValues();
+
+//         std::cout << std::scientific;
+//         std::cout << i << " " << xs[74] << std::endl;
+//     }
+// }

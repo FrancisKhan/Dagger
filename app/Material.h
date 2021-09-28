@@ -48,6 +48,8 @@ public:
     XSMapType calculateOtherGroupConstants(XSKind xsKind);
     std::map<XSKind, XSMapType> calculateOtherGroupConstants();
 
+    // void printXSBdependency();
+
 private:
     double temperature_;
     std::vector<std::string> nuclides_;

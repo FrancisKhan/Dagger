@@ -180,7 +180,7 @@ NuclideBlock::readDilutionBlocks(std::pair<unsigned, unsigned> &block)
 std::pair<unsigned, unsigned> NuclideBlock::readInfDilutionBlock(std::pair<unsigned, unsigned> &block)
 {
     const std::string key1 = "->      -4       0       0       0";
-    const std::string key2 = "->       3      12       2     172"; 
+    const std::string key2 = "->       3      12       2     " + std::to_string(getNumberOfEnergyGroups()); 
 
     std::vector<unsigned> key1Lines = InputParser::findLine(xsDataLines_, key1, block.first, block.second);
 

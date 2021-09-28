@@ -20,9 +20,9 @@ int main(int argc, char** argv)
 	library.setXSLibraryPath(target);
 	library.printLogsOnFile("output.txt", "CRITICAL");
 
+	double temp = 300.0; // Kelvin
 	std::vector<std::string> nucVec = {"U235" , "U238", "C0_GR"};
 	std::vector<double> dens = {3.75440E-06, 8.49430E-05, 5.25310E-02}; // barn
-	double temp = 300.0; // Kelvin
 
 	std::vector < std::shared_ptr<Nuclide> > libNuclides = library.readNuclides(nucVec);
 

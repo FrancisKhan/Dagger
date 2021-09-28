@@ -212,25 +212,6 @@ namespace Numerics
         std::vector<double> result(v.data(), v.data() + v.rows() * v.cols());
         return result;
     }
-
-    inline double linLinInterpolation(double x, double x0, double x1, double y0, double y1)
-    {
-        double a = (x1 - x) / (x1 - x0);
-        double b = (x - x0) / (x1 - x0);
-        return (a * y0 + b * y1);
-    }
-
-    inline double sqrtInterpolation(double x, double x0, double x1, double y0, double y1)
-    {
-        double a = (sqrt(x1) - sqrt(x)) / (sqrt(x1) - sqrt(x0));
-        double b = (sqrt(x) - sqrt(x0)) / (sqrt(x1) - sqrt(x0));
-        return (a * y0 + b * y1);
-    }
-
-    inline double logLinInterpolation(double x, double x0, double x1, double y0, double y1)
-    {
-        return (y0 + (log(x) - log(x0)) * (y1 - y0) / (log(x1) - log(x0)));
-    }
 }
 
 #endif
