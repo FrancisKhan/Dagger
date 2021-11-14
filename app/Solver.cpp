@@ -11,6 +11,8 @@ Eigen::MatrixXd Solver::calcAMatrix()
 	std::vector<double> absXS   = Material::getMacroXS(XSKind::ABS, crossSections_).getValues();
 	std::vector<double> scattXS = Material::getMacroXS(XSKind::SCATT00, crossSections_).getValues();
 
+	// std::vector<double> totXS   = Material::getMacroXS(XSKind::NTOT0, crossSections_).getValues();
+
     for(unsigned i = 0; i < AMatrix.rows(); i++)
         AMatrix(i, i) = absXS[i] + scattXS[i];
 
@@ -92,10 +94,10 @@ void Solver::sourceIteration(const Eigen::MatrixXd &Mmatrix, const Eigen::Matrix
 	Eigen::VectorXd neutronFlux = neutronFlux2 / neutronFlux2.sum(); 
 	double kFactor = kFactor2;
 
-    std::cout << "\nNumber of iterations: " << h << std::endl;
+    // std::cout << "\nNumber of iterations: " << h << std::endl;
 	std::cout << std::scientific;
     std::cout << "kFactor: " << kFactor << std::endl;
-    std::cout << "Neutron flux: " << std::endl;
-    for(auto i : neutronFlux)
-        std::cout << i << std::endl;
+    // std::cout << "Neutron flux: " << std::endl;
+    // for(auto i : neutronFlux)
+    //     std::cout << i << std::endl;
 }

@@ -70,6 +70,20 @@ std::vector<double> NuclideBlock::readParameters(const std::string &key, unsigne
     return result;
 }
 
+std::pair<unsigned, unsigned> NuclideBlock::readResInterval(const std::vector<double> &vec)
+{
+    std::pair<unsigned, unsigned> result;
+
+    unsigned inputSize = vec.size();
+
+    unsigned zerosCount = 0;
+    for(auto i : vec)
+        if(Numerics::is_equal(i, 0.0))
+            zerosCount++;
+
+    return std::make_pair(zerosCount, inputSize);
+}
+
 void NuclideBlock::setNumberOfEnergyGroups()
 {
     nuclide_->setEnergyGroupsNumber(numberOfEnergyGroups_);   
@@ -268,8 +282,9 @@ std::vector<Nuclide::XSSetType> NuclideBlock::readXSs()
                 for(size_t j = 0; j < dilutions.size() - 1; j++) // don't look for infinite dilution
                 {
                     std::vector<double> xsVecPartial = readParameters(get_name(xsKind), dilutionBlocks[j].first, dilutionBlocks[j].second);
+                    std::pair<unsigned, unsigned> resInterval = readResInterval(xsVecPartial);
                     std::vector<double> xsVec = populateXS(xsVecPartial);
-                    CrossSection crossSection(temperatures[i], dilutions[j], xsVec);
+                    CrossSection crossSection(temperatures[i], dilutions[j], xsVec, resInterval);
                     crossSectionSet.addXS(crossSection);
                 }
             }
@@ -578,6 +593,64 @@ void NuclideBlock::modifyChi()
     nuclide_->setXSSets(crossSectionSets);
 }
 
+void NuclideBlock::calcFineStructureFunc()
+{
+    std::vector<Nuclide::XSSetType> crossSectionSets = nuclide_->getCopyOfXSSets();
+
+    CrossSectionSet fineStrucSet = Nuclide::getXSSet(XSKind::NWT0, crossSectionSets);
+    //fineStrucSet.deleteXSs();
+
+    CrossSectionSet totSet = Nuclide::getXSSet(XSKind::NTOT0, crossSectionSets);
+    CrossSectionMatrixSet matS0 = nuclide_->getXSMatrixSet(XSMatrixKind::SCAT00); 
+
+    std::vector<double> fineStructure(getNumberOfEnergyGroups(), 1.0);
+    std::vector<double> energyGroups = getWimsEnergyGroups();
+    std::vector<double> uGroups = fromEnergiesToLethargies(getWimsEnergyGroups());
+    
+    for(auto t : totSet.getTemperatures())
+    {
+        for(auto b : totSet.getBackgroundXSs())
+        {
+            CrossSection totXS = totSet.getXSNoInterp(t, b);
+            std::vector<double> totXSvec = totXS.getValues();
+            Eigen::MatrixXd S0Mat = matS0.getXSMatrixNoInterp(t, b).getValues();
+
+            std::vector<double> origFineStructure = fineStrucSet.getXSNoInterp(t, b).getValues();
+
+            for(size_t g = 0; g < getNumberOfEnergyGroups(); g++)
+            {
+                double scattSum = 0.0;
+                for(size_t h = 0; h <= g; h++)
+                {
+                    double factor = (uGroups[h + 1] - uGroups[h]) / (uGroups[g + 1] - uGroups[g]);
+                    scattSum += factor * S0Mat(h, g);
+                }
+
+                // std::cout << std::scientific;
+                // std::cout << "g: " << g << " t: " << t << " b: " << b << std::endl;
+                // std::cout << "totXS[g]: " << totXS[g] << " scattSum: " << scattSum << std::endl;
+
+                if(g >= totXS.getResonanceInterval().first && g < totXS.getResonanceInterval().second)
+                    fineStructure[g] = 1.0 - ((1.0 / b) * (totXSvec[g] - scattSum));
+                //fineStructure[g] = totXS[g] - scattSum;
+            }
+
+            // std::cout << std::scientific;
+
+            // std::cout << "res interval: " << totXS.getResonanceInterval().first << " " 
+            //                               << totXS.getResonanceInterval().second << std::endl;
+
+            // std::cout << "fineStructure: " << t << " " << b << std::endl;
+            // for(size_t i = 0; i < fineStructure.size(); i++)
+            //     std::cout << i << " " << fineStructure[i] << " " << origFineStructure[i] << std::endl;
+
+            // exit(-1);
+        }
+    }
+
+    nuclide_->setXSSets(crossSectionSets);
+}
+
 void NuclideBlock::additionalXSs()
 {
     addNu();
@@ -601,5 +674,194 @@ std::shared_ptr<Nuclide> NuclideBlock::getNuclide()
     fromRItoXS();
     fromRImatrixToXSmatrix();
     additionalXSs();
+    //calcFineStructureFunc();
     return nuclide_;
 }
+
+std::vector<double> NuclideBlock::fromEnergiesToLethargies(const std::vector<double>& vec)
+{
+    std::vector<double> resultVec(vec.size(), 0.0);
+    double first = vec.front();
+    std::transform(vec.begin(), vec.end(), resultVec.begin(), [first](auto i){return log(first / i);});
+    return resultVec;
+}
+
+std::vector<double> NuclideBlock::getWimsEnergyGroups()
+{
+    std::vector<double> vec {1.9640300000E+01,
+    1.7332500000E+01,
+    1.4918200000E+01,
+    1.3840300000E+01,
+    1.1618300000E+01,
+    1.0000000000E+01,
+    8.1873100000E+00,
+    6.7032000000E+00,
+    6.0653100000E+00,
+    5.4881200000E+00,
+    4.4932900000E+00,
+    3.6787900000E+00,
+    3.0119400000E+00,
+    2.4659700000E+00,
+    2.2313000000E+00,
+    2.0189700000E+00,
+    1.6529900000E+00,
+    1.3533500000E+00,
+    1.2245600000E+00,
+    1.1080300000E+00,
+    1.0025900000E+00,
+    9.0718000000E-01,
+    8.2085000000E-01,
+    6.0810100000E-01,
+    5.5023200000E-01,
+    4.9787100000E-01,
+    4.5049200000E-01,
+    4.0762200000E-01,
+    3.0197400000E-01,
+    2.7323700000E-01,
+    2.4723500000E-01,
+    1.8315600000E-01,
+    1.2277300000E-01,
+    1.1109000000E-01,
+    8.2297500000E-02,
+    6.7379500000E-02,
+    5.5165600000E-02,
+    4.0867700000E-02,
+    3.6978600000E-02,
+    2.9283000000E-02,
+    2.7394400000E-02,
+    2.4787500000E-02,
+    1.6615600000E-02,
+    1.5034400000E-02,
+    1.1137800000E-02,
+    9.1188200000E-03,
+    7.4658600000E-03,
+    5.5308500000E-03,
+    5.0045000000E-03,
+    3.5266200000E-03,
+    3.3546300000E-03,
+    2.2486700000E-03,
+    2.0346800000E-03,
+    1.5073300000E-03,
+    1.4338200000E-03,
+    1.2341000000E-03,
+    1.0103900000E-03,
+    9.1424200000E-04,
+    7.4851800000E-04,
+    6.7728700000E-04,
+    4.5399900000E-04,
+    3.7170300000E-04,
+    3.0432500000E-04,
+    2.0399500000E-04,
+    1.4862500000E-04,
+    1.3674200000E-04,
+    9.1660900000E-05,
+    7.5673600000E-05,
+    6.7904000000E-05,
+    5.5595100000E-05,
+    5.1578000000E-05,
+    4.8251600000E-05,
+    4.5517400000E-05,
+    4.0169000000E-05,
+    3.7266500000E-05,
+    3.3720100000E-05,
+    3.0511300000E-05,
+    2.7607700000E-05,
+    2.4980500000E-05,
+    2.2603300000E-05,
+    1.9454800000E-05,
+    1.5928300000E-05,
+    1.3709600000E-05,
+    1.1224500000E-05,
+    9.9055500000E-06,
+    9.1898100000E-06,
+    8.3152900000E-06,
+    7.5239800000E-06,
+    6.1601200000E-06,
+    5.3464300000E-06,
+    5.0434800000E-06,
+    4.1292500000E-06,
+    4.0000000000E-06,
+    3.3807500000E-06,
+    3.3000000000E-06,
+    2.7679200000E-06,
+    2.7200000000E-06,
+    2.6000000000E-06,
+    2.5500000000E-06,
+    2.3600000000E-06,
+    2.1300000000E-06,
+    2.1000000000E-06,
+    2.0200000000E-06,
+    1.9300000000E-06,
+    1.8400000000E-06,
+    1.7550000000E-06,
+    1.6700000000E-06,
+    1.5900000000E-06,
+    1.5000000000E-06,
+    1.4750000000E-06,
+    1.4449800000E-06,
+    1.3700000000E-06,
+    1.3375000000E-06,
+    1.3000000000E-06,
+    1.2350000000E-06,
+    1.1700000000E-06,
+    1.1500000000E-06,
+    1.1253500000E-06,
+    1.1100000000E-06,
+    1.0970000000E-06,
+    1.0710000000E-06,
+    1.0450000000E-06,
+    1.0350000000E-06,
+    1.0200000000E-06,
+    9.9600000000E-07,
+    9.8600000000E-07,
+    9.7200000000E-07,
+    9.5000000000E-07,
+    9.3000000000E-07,
+    9.1000000000E-07,
+    8.6000000000E-07,
+    8.5000000000E-07,
+    7.9000000000E-07,
+    7.8000000000E-07,
+    7.0500000000E-07,
+    6.2500000000E-07,
+    5.4000000000E-07,
+    5.0000000000E-07,
+    4.8500000000E-07,
+    4.3300000000E-07,
+    4.0000000000E-07,
+    3.9100000000E-07,
+    3.5000000000E-07,
+    3.2000000000E-07,
+    3.1450000000E-07,
+    3.0000000000E-07,
+    2.8000000000E-07,
+    2.4800000000E-07,
+    2.2000000000E-07,
+    1.8900000000E-07,
+    1.8000000000E-07,
+    1.6000000000E-07,
+    1.4000000000E-07,
+    1.3400000000E-07,
+    1.1500000000E-07,
+    1.0000000000E-07,
+    9.5000000000E-08,
+    8.0000000000E-08,
+    7.7000000000E-08,
+    6.7000000000E-08,
+    5.8000000000E-08,
+    5.0000000000E-08,
+    4.2000000000E-08,
+    3.5000000000E-08,
+    3.0000000000E-08,
+    2.5000000000E-08,
+    2.0000000000E-08,
+    1.5000000000E-08,
+    1.0000000000E-08,
+    6.9000000000E-09,
+    5.0000000000E-09,
+    3.0000000000E-09,
+    1.0000000000E-11};
+
+    return vec;
+}
+

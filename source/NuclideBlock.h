@@ -50,6 +50,12 @@ private:
 	void modifyChi();
 	void additionalXSs();
 
+	std::pair<unsigned, unsigned> readResInterval(const std::vector<double> &vec);
+
+	void calcFineStructureFunc();
+	std::vector<double> getWimsEnergyGroups();
+	std::vector<double> fromEnergiesToLethargies(const std::vector<double>& vec);
+
 	std::tuple< std::vector<double>, std::vector<int32_t>, std::vector<int32_t> > 
 	readMatrixComponents(XSMatrixKind xsKind, unsigned lowBound, unsigned upperBound);
 	std::pair<std::string, std::string> getMatrixKeys(XSMatrixKind xsKind);

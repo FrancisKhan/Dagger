@@ -153,12 +153,14 @@ void CrossSectionSet::calcXSs()
         {
             
             std::vector<double> infValues = getXSNoInterp(temp, Numerics::DINF).getValues();
-            std::vector<double> dilValues = getXSNoInterp(i).getValues();
+            CrossSection dilXS = getXSNoInterp(i);
+            std::vector<double> dilValues = dilXS.getValues();
             std::vector<double> newValues = infValues + dilValues;
 
             //debugCalcXS(newValues, infValues, dilValues, temp, sigma0);
 
-            CrossSection xs(temp, sigma0, newValues);
+            std::pair<unsigned, unsigned> resInterval = dilXS.getResonanceInterval();
+            CrossSection xs(temp, sigma0, newValues, resInterval);
             setXS(i, xs);
         }
     }

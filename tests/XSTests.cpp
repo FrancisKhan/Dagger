@@ -17,11 +17,12 @@ class XSTests : public ::testing::Test
   	static void SetUpTestSuite() 
 	{
     	library_ = new Library;
-		url_ = new std::string("https://www.polymtl.ca/merlin/downloads/libraries/ascii/draglibendfb7r0.gz");
+		url_ = new std::string("http://merlin.polymtl.ca/downloads/libraries/ascii/draglibendfb7r0.gz");
     	target_ =  new std::string(File::getPrePath() + "draglibendfb7r0.gz");
 		library_->downloadLibrary(*url_, *target_);
 		library_->setXSLibraryPath(*target_);
 		nucVec_ = new std::vector<std::string> {"Pu239", "La139", "U238"};
+		// nucVec_ = new std::vector<std::string> {"U238"};
 		nuclides_ = new std::vector < std::shared_ptr<Nuclide> > {library_->readNuclides(*nucVec_)};
   	}
 

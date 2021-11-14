@@ -17,7 +17,7 @@ class XSMatrixTests : public ::testing::Test
   	static void SetUpTestSuite() 
 	{
     	library_ = new Library;
-		url_ = new std::string("https://www.polymtl.ca/merlin/downloads/libraries/ascii/draglibendfb7r0.gz");
+		url_ = new std::string("http://merlin.polymtl.ca/downloads/libraries/ascii/draglibendfb7r0.gz");
     	target_ =  new std::string(File::getPrePath() + "draglibendfb7r0.gz");
 		library_->downloadLibrary(*url_, *target_);
 		library_->setXSLibraryPath(*target_);

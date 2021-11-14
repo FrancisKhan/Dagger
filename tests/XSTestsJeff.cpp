@@ -17,7 +17,7 @@ class XSTestsJeff : public ::testing::Test
   	static void SetUpTestSuite() 
 	{
     	library_ = new Library;
-		url_ = new std::string("http://www.polymtl.ca/merlin/downloads/libraries/ascii/draglibshem281_Jeff3.3.gz");
+		url_ = new std::string("http://merlin.polymtl.ca/downloads/libraries/ascii/draglibshem281_Jeff3.3.gz");
     	target_ =  new std::string(File::getPrePath() + "draglibshem281_Jeff3.3.gz");
 		library_->downloadLibrary(*url_, *target_);
 		library_->setXSLibraryPath(*target_);
