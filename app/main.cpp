@@ -13,7 +13,7 @@ int main(int argc, char** argv)
 
 	Library library;
 
-	std::string url = "https://www.polymtl.ca/merlin/downloads/libraries/ascii/draglibendfb7r0.gz";
+	std::string url = "http://merlin.polymtl.ca/downloads/libraries/ascii/draglibendfb7r0.gz";
     std::string target = File::getCurrentPath() + "/draglibendfb7r0.gz";
 
 	library.downloadLibrary(url, target);

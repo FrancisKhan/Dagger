@@ -597,8 +597,8 @@ void NuclideBlock::calcFineStructureFunc()
 {
     std::vector<Nuclide::XSSetType> crossSectionSets = nuclide_->getCopyOfXSSets();
 
-    CrossSectionSet fineStrucSet = Nuclide::getXSSet(XSKind::NWT0, crossSectionSets);
-    //fineStrucSet.deleteXSs();
+    CrossSectionSet& fineStrucSet = Nuclide::getXSSet(XSKind::NWT0, crossSectionSets);
+    fineStrucSet.deleteXSs();
 
     CrossSectionSet totSet = Nuclide::getXSSet(XSKind::NTOT0, crossSectionSets);
     CrossSectionMatrixSet matS0 = nuclide_->getXSMatrixSet(XSMatrixKind::SCAT00); 
@@ -615,7 +615,10 @@ void NuclideBlock::calcFineStructureFunc()
             std::vector<double> totXSvec = totXS.getValues();
             Eigen::MatrixXd S0Mat = matS0.getXSMatrixNoInterp(t, b).getValues();
 
-            std::vector<double> origFineStructure = fineStrucSet.getXSNoInterp(t, b).getValues();
+            unsigned firstResGroup = totXS.getResonanceInterval().first;
+            unsigned lastResGroup  = totXS.getResonanceInterval().second;
+
+            //std::vector<double> origFineStructure = fineStrucSet.getXSNoInterp(t, b).getValues();
 
             for(size_t g = 0; g < getNumberOfEnergyGroups(); g++)
             {
@@ -626,13 +629,8 @@ void NuclideBlock::calcFineStructureFunc()
                     scattSum += factor * S0Mat(h, g);
                 }
 
-                // std::cout << std::scientific;
-                // std::cout << "g: " << g << " t: " << t << " b: " << b << std::endl;
-                // std::cout << "totXS[g]: " << totXS[g] << " scattSum: " << scattSum << std::endl;
-
-                if(g >= totXS.getResonanceInterval().first && g < totXS.getResonanceInterval().second)
+                if(g >= firstResGroup && g < lastResGroup)
                     fineStructure[g] = 1.0 - ((1.0 / b) * (totXSvec[g] - scattSum));
-                //fineStructure[g] = totXS[g] - scattSum;
             }
 
             // std::cout << std::scientific;
@@ -641,8 +639,10 @@ void NuclideBlock::calcFineStructureFunc()
             //                               << totXS.getResonanceInterval().second << std::endl;
 
             // std::cout << "fineStructure: " << t << " " << b << std::endl;
+            // std::cout << "fineStructure size : " << fineStructure.size() << std::endl;
+
             // for(size_t i = 0; i < fineStructure.size(); i++)
-            //     std::cout << i << " " << fineStructure[i] << " " << origFineStructure[i] << std::endl;
+            //     std::cout << i << " " << fineStructure[i] << std::endl;
 
             // exit(-1);
         }
