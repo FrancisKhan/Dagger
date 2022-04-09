@@ -15,6 +15,7 @@
 
 #include <limits>
 #include <vector>
+#include <iostream>
 
 namespace Numerics
 {
@@ -158,6 +159,13 @@ namespace Numerics
         return a;
     }
 
+    template <typename T>
+    inline std::vector<T>& operator-(std::vector<T>& a)
+    {
+        std::transform(a.begin(), a.end(), a.begin(), [](auto& i) {return -i;});
+        return a;
+    }
+
     template<typename T>
     std::vector<T> slice(std::vector<T> const &v, int m, int n) 
     {
@@ -212,6 +220,59 @@ namespace Numerics
         std::vector<double> result(v.data(), v.data() + v.rows() * v.cols());
         return result;
     }
+
+    // https://www.geeksforgeeks.org/multiply-two-polynomials-2/
+	inline std::vector<double> multiply_poly(std::vector<double>& a, 
+	                                  std::vector<double>& b)
+	{
+	   size_t m = a.size();
+	   size_t n = b.size();
+
+	   std::vector<double> result(m + n - 1, 0.0);
+  
+	   for (size_t i = 0; i < m; i++) 
+	     for (size_t j = 0; j < n; j++) 
+	           result[i + j] += a[i] * b[j];
+
+	   return result; 
+	}
+
+	// product of (x + a1)(x + a2)(x + a3)... 
+	inline std::vector<double> prod_poly(std::vector<double>& a)
+	{
+	    std::vector<double> result = {1.0};
+
+		for(auto& a_i : a)
+		{
+	        std::vector<double> temp = {a_i, 1.0};
+			result = multiply_poly(result, temp);
+		}
+
+		return result;
+	}
+
+    inline std::vector<double> prod_poly_i(std::vector<double>& a, size_t i)
+	{
+	    std::vector<double> result = {1.0};
+
+		for(size_t j = 0; j < a.size(); j++)
+		{
+			if (j == i) continue;
+	        std::vector<double> temp = {a[j], 1.0};
+			result = multiply_poly(result, temp);
+		}
+
+		return result;
+	}
+
+    inline double evalPolFunction(std::vector<double>& vec, double x)
+	{
+	    double result = 0.0;
+		for(size_t j = 0; j < vec.size(); j++)
+			result += vec[j] * pow(x, j);
+
+		return result;
+	}
 }
 
 #endif

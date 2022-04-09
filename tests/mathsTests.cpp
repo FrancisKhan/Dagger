@@ -2,6 +2,7 @@
 
 #include "gtest/gtest.h"
 #include "numeric_tools.h"
+#include "Interpolation.h"
 
 using namespace Numerics;
 
@@ -177,4 +178,64 @@ TEST(vectorOpOverloading, divEqual2)
 	{
         FAIL() << "Expected std::overflow_error";
     }
+}
+
+TEST(LagrangeInterpolation, mult1)
+{
+    std::vector<double>   a = {-1.0, -2.0, -3.0};
+
+	std::vector<double> res = Numerics::prod_poly(a);
+
+    std::vector<double> ref = {-6.0, 11.0, -6.0, 1.0};
+
+    bool areEqual = std::equal(ref.begin(), ref.end(), res.begin());
+    EXPECT_TRUE(areEqual);
+}
+
+TEST(LagrangeInterpolation, mult2)
+{
+    std::vector<double> a = {-1.0, -2.0, -3.0};
+
+	std::vector<double> res = Numerics::prod_poly_i(a, 0);
+
+    std::vector<double> ref = {6.0, -5.0, 1.0};
+
+    bool areEqual = std::equal(ref.begin(), ref.end(), res.begin());
+    EXPECT_TRUE(areEqual);
+}
+
+TEST(LagrangeInterpolation, polFunc)
+{
+    std::vector<double> funcVec = {0.0, 0.0, 1.0};
+
+    double result = evalPolFunction(funcVec, 2.5);
+
+    double ref = 6.25;
+    EXPECT_DOUBLE_EQ(result, ref);
+}
+
+TEST(LagrangeInterpolation, threePoints)
+{
+    std::vector<double> x = {1.0, 2.0, 3.0};
+    std::vector<double> y = {1.0, 4.0, 9.0};
+
+    Lagrange lagrange;
+    lagrange.setIntervals(x, y);
+    double result = lagrange(2.5);
+
+    double ref = 6.25;
+    EXPECT_DOUBLE_EQ(result, ref);
+}
+
+TEST(LagrangeInterpolation, fourPoints)
+{
+    std::vector<double> x = {1.0,  2.0,  3.0,  4.0};
+    std::vector<double> y = {1.0,  8.0, 27.0, 64.0};
+
+    Lagrange lagrange;
+    lagrange.setIntervals(x, y);
+    double result = lagrange(2.5);
+
+    double ref = 15.625;
+    EXPECT_DOUBLE_EQ(result, ref);
 }

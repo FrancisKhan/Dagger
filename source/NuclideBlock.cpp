@@ -597,7 +597,7 @@ void NuclideBlock::calcFineStructureFunc()
 {
     std::vector<Nuclide::XSSetType> crossSectionSets = nuclide_->getCopyOfXSSets();
 
-    CrossSectionSet& fineStrucSet = Nuclide::getXSSet(XSKind::NWT0, crossSectionSets);
+    CrossSectionSet fineStrucSet = Nuclide::getXSSet(XSKind::NWT0, crossSectionSets);
     fineStrucSet.deleteXSs();
 
     CrossSectionSet totSet = Nuclide::getXSSet(XSKind::NTOT0, crossSectionSets);
@@ -618,33 +618,46 @@ void NuclideBlock::calcFineStructureFunc()
             unsigned firstResGroup = totXS.getResonanceInterval().first;
             unsigned lastResGroup  = totXS.getResonanceInterval().second;
 
-            //std::vector<double> origFineStructure = fineStrucSet.getXSNoInterp(t, b).getValues();
+            std::vector<double> origFineStructure = Nuclide::getXSSet(XSKind::NWT0, crossSectionSets).getXSNoInterp(t, b).getValues();
 
-            for(size_t g = 0; g < getNumberOfEnergyGroups(); g++)
+            // for(size_t g = 0; g < getNumberOfEnergyGroups(); g++)
+            // {
+            //     double scattSum = 0.0;
+            //     for(size_t h = 0; h <= g; h++)
+            //     {
+            //         double factor = (uGroups[h + 1] - uGroups[h]) / (uGroups[g + 1] - uGroups[g]);
+            //         scattSum += factor * S0Mat(h, g);
+            //     }
+
+            //     if(g >= firstResGroup && g < lastResGroup)
+            //         fineStructure[g] = 1.0 - ((1.0 / b) * (totXSvec[g] - scattSum));
+            // }
+
+            for(size_t g = firstResGroup; g < lastResGroup; g++)
             {
                 double scattSum = 0.0;
-                for(size_t h = 0; h <= g; h++)
+                for(size_t h = firstResGroup; h <= g; h++)
                 {
                     double factor = (uGroups[h + 1] - uGroups[h]) / (uGroups[g + 1] - uGroups[g]);
                     scattSum += factor * S0Mat(h, g);
                 }
 
-                if(g >= firstResGroup && g < lastResGroup)
-                    fineStructure[g] = 1.0 - ((1.0 / b) * (totXSvec[g] - scattSum));
+                fineStructure[g] = 1.0 - ((1.0 / b) * (totXSvec[g] - scattSum));
             }
 
-            // std::cout << std::scientific;
+            std::cout << std::scientific;
 
-            // std::cout << "res interval: " << totXS.getResonanceInterval().first << " " 
-            //                               << totXS.getResonanceInterval().second << std::endl;
+            std::cout << "res interval: " << totXS.getResonanceInterval().first << " " 
+                                          << totXS.getResonanceInterval().second << std::endl;
 
-            // std::cout << "fineStructure: " << t << " " << b << std::endl;
-            // std::cout << "fineStructure size : " << fineStructure.size() << std::endl;
+            std::cout << "fineStructure: " << t << " " << b << std::endl;
+            std::cout << "fineStructure size : " << fineStructure.size() << std::endl;
 
-            // for(size_t i = 0; i < fineStructure.size(); i++)
-            //     std::cout << i << " " << fineStructure[i] << std::endl;
+            for(size_t i = 0; i < fineStructure.size(); i++)
+                std::cout << i << " " << fineStructure[i] 
+                          << " " << origFineStructure[i] << std::endl;
 
-            // exit(-1);
+            exit(-1);
         }
     }
 
@@ -671,10 +684,10 @@ std::shared_ptr<Nuclide> NuclideBlock::getNuclide()
 	readGroupConstants();
     isNuclideFissionable();
     readLambdas();
-    fromRItoXS();
-    fromRImatrixToXSmatrix();
+    //fromRItoXS();
+    //fromRImatrixToXSmatrix();
     additionalXSs();
-    //calcFineStructureFunc();
+    calcFineStructureFunc();
     return nuclide_;
 }
 

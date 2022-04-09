@@ -21,8 +21,9 @@ class XSTests : public ::testing::Test
     	target_ =  new std::string(File::getPrePath() + "draglibendfb7r0.gz");
 		library_->downloadLibrary(*url_, *target_);
 		library_->setXSLibraryPath(*target_);
-		nucVec_ = new std::vector<std::string> {"Pu239", "La139", "U238"};
-		// nucVec_ = new std::vector<std::string> {"U238"};
+		//nucVec_ = new std::vector<std::string> {"Pu239", "La139", "U238"};
+		//nucVec_ = new std::vector<std::string> {"U238"};
+		nucVec_ = new std::vector<std::string> {"U235"};
 		nuclides_ = new std::vector < std::shared_ptr<Nuclide> > {library_->readNuclides(*nucVec_)};
   	}
 

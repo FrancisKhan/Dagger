@@ -5,7 +5,9 @@ include(${CMAKE_ROOT}/Modules/ExternalProject.cmake)
 ExternalProject_Add(
     eigen 
     PREFIX "eigen-lib"
-    URL https://gitlab.com/libeigen/eigen/-/archive/master/eigen-master.tar.gz
+    #URL https://gitlab.com/libeigen/eigen/-/archive/master/eigen-master.tar.gz
+    GIT_REPOSITORY git@gitlab.com:libeigen/eigen.git
+    GIT_TAG origin/3.3
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
     INSTALL_COMMAND ""
