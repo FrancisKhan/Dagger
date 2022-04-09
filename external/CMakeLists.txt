@@ -5,9 +5,8 @@ include(${CMAKE_ROOT}/Modules/ExternalProject.cmake)
 ExternalProject_Add(
     eigen 
     PREFIX "eigen-lib"
-    #URL https://gitlab.com/libeigen/eigen/-/archive/master/eigen-master.tar.gz
-    GIT_REPOSITORY git@gitlab.com:libeigen/eigen.git
-    GIT_TAG origin/3.3
+    GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+    GIT_TAG origin/3.4
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
     INSTALL_COMMAND ""
@@ -53,7 +52,7 @@ ExternalProject_Add(
 ExternalProject_Add(
     zlib 
     PREFIX "zlib-lib"
-    URL https://zlib.net/zlib-1.2.11.tar.gz
+    URL https://zlib.net/zlib-1.2.12.tar.gz
     SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/zlib-lib/src/zlib
     CMAKE_ARGS
         ${GLOBAL_DEFAULT_ARGS}
